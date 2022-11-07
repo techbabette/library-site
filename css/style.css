@@ -64,15 +64,13 @@ body{
 .card-body{
   background-color: #333333;
 }
-#event-div{
-  gap: 10px;
-}
 .mk-event-holder{
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 10px;
   gap: 10px;
 }
 .mk-clear{
