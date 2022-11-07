@@ -57,6 +57,7 @@ body{
   height: 65vh;
   width: 90vw;
   border-radius: 2%;
+  padding-top: 2px;
   border: 2px solid #333333;
   text-align: center;
   overflow-y:scroll;
@@ -117,7 +118,6 @@ footer{
   .mk-introduction{
       width: 100vw;
       height: 18vh;
-      border-radius: 0%;
   }
   .mk-card-holder{
     margin-bottom: 0%;
@@ -127,6 +127,7 @@ footer{
   }
   .mk-events{
     width: 80vw;
+    padding-top: 5px;
   }
 }
   @media screen and (min-width: 768px){
