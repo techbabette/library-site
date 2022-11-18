@@ -4,7 +4,8 @@ var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var holder = document.querySelector('.dropdown-menu');
 var prefix = ""
-if(sPage === "index.html" || sPage===""){
+console.log(sPage);
+if(sPage === "index.html"){
    prefix = "pages/";
 }
 let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
@@ -24,7 +25,6 @@ if(sPage === "knjige.html"){
    }
    books = [new book("Francuski jezik", "Jezici", "Biljana Aksentijević"), new book("Umeće ratovanja", "Istorijska_dela", "Sun Tzu"), new book('Intelektom Ispred Svih', 'Popularna_psihologija', 'Henrik Feksevs'), new book('Brojevi ne lažu', 'Popularna_nauka', 'Vaclav Smit')];
    if(urlParams.has('kategorija')){
-      console.log("Ovde smo!");
       let kategorija = urlParams.get('kategorija')
       books = books.filter(book => book.category === String(kategorija));
       document.getElementById('mk-book-category').innerHTML = kategorija.replace("_"," ") ;
