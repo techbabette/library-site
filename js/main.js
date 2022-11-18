@@ -5,7 +5,7 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var holder = document.querySelector('.dropdown-menu');
 var prefix = ""
 console.log(sPage);
-if(sPage === "index.html"){
+if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
 }
 let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
