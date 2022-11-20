@@ -64,5 +64,5 @@ if(sPage === "knjiga.html"){
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
    console.log(currentBook);
-   document.querySelector('.mk-events').innerHTML += `<div style="width:100%"><h2>${currentBook.name.replaceAll("_", " ")}</h2><hr></div><p>${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: ${currentBook.author}</p><p>Datum izdavanja:</p><p>Dostupnost: ${currentBook.copies} kopije</p></div>`
+   document.querySelector('.mk-events').innerHTML += `<div style="width:100%"><h2>${currentBook.name.replaceAll("_", " ")}</h2><hr></div><p style="padding:10%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: ${currentBook.author}</p><p>Datum izdavanja:</p><p>Dostupnost: ${currentBook.copies} kopije</p></div>`
 }
