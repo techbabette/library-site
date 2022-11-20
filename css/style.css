@@ -26,7 +26,7 @@ body{
   justify-content: space-around;
 }
 .nav-link, .navbar-brand{
-  color: #f7bd2f;
+  color: #f7bd2f !important;
 }
 .active{
   color: #f5af05 !important;
@@ -62,6 +62,9 @@ body{
   text-align: center;
   overflow-y:scroll;
 }
+.card{
+  border: none;
+}
 .card-body{
   background-color: #333333;
 }
@@ -89,6 +92,13 @@ body{
 .mk-logo h2{
   font-size: 16px;
   display: inline;
+}
+a:link {
+  color:#f7bd2f !important;
+  text-decoration: none;
+}
+a:visited{
+  color: #f7bd2f !important;
 }
 .mk-logo a{
 text-decoration: none;

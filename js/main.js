@@ -1,10 +1,16 @@
-var categories = ['Popularna_nauka', 'Popularna_psihologija', 'Jezici', 'Istorijska_dela'];
+var categories = ['Jezici', 'Popularna_nauka', 'Popularna_psihologija', 'Istorijska_dela'];
 //Actual good code
 var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var holder = document.querySelector('.dropdown-menu');
 var prefix = ""
-console.log(sPage);
+function book(name, category, author, description){
+   var name, category, author;
+   this.name = name;
+   this.category = category;
+   this.author = author;
+   this.description = description;
+}
 if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
 }
@@ -17,28 +23,56 @@ for(category of categories){
 if(sPage === "knjige.html"){
    const queryString = window.location.search;
    const urlParams = new URLSearchParams(queryString);
-   function book(name, category, author){
+   function book(name, category, author, description){
       var name, category, author;
       this.name = name;
       this.category = category;
       this.author = author;
+      this.description = description;
    }
-   books = [new book("Francuski jezik", "Jezici", "Biljana Aksentijević"), new book("Umeće ratovanja", "Istorijska_dela", "Sun Tzu"), new book('Intelektom Ispred Svih', 'Popularna_psihologija', 'Henrik Feksevs'), new book('Brojevi ne lažu', 'Popularna_nauka', 'Vaclav Smit')];
+   //Initializing all books
+   var books = 
+   [new book("Francuski_jezik", "Jezici", "Biljana Aksentijević", "Udžbenik iz francuskog"),
+   new book("Umeće_ratovanja", "Istorijska_dela", "Sun Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje."),
+   new book('Intelektom_Ispred_Svih', 'Popularna_psihologija', 'Henrik Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati."),
+   new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav Smit', "Kako da bolje shvatite moderni svet \\nMoj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts")];
+   //If the category paramater is set, filter the books by category, else show all books
    if(urlParams.has('kategorija')){
       let kategorija = urlParams.get('kategorija')
       books = books.filter(book => book.category === String(kategorija));
-      document.getElementById('mk-book-category').innerHTML = kategorija.replace("_"," ") ;
+      document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
    }
+   //Dynamically generate the books
    var columns = document.querySelectorAll(".mk-event-holder")
    for(let i = 0; i<books.length;i++){
       let currentBook = books[i];
+      let bookDescription = currentBook.description.substr(0,30);
       let columnPosition = i % 4;
-      let element = `<div class="card" style="width: 90%;">
-      <img src="../imgs/${currentBook.name}.jpg" class="card-img-top" alt="${currentBook.name}">
+      if (currentBook.description.length > 30){
+         bookDescription += "...";
+      }
+      let element = `
+      <a href="knjiga.html?knjiga=${currentBook.name}">
+      <div class="card" style="width: 90%;">
       <div class="card-body">
-          <h5 class="card-title">${currentBook.name}</h5>
+          <h5 class="card-title">${currentBook.name.replaceAll("_", " ")}</h5>
+          <p class="card-text">${bookDescription}</p>
           <p class="card-text">${currentBook.author}</p>
-      </div>`
+      </div>
+      </a>`
       columns[columnPosition].innerHTML += element;
    }
+}
+if(sPage === "knjiga.html"){
+   const queryString = window.location.search;
+   const urlParams = new URLSearchParams(queryString);
+   const urlBook = urlParams.get('knjiga')
+   const books = 
+   [new book("Francuski_jezik", "Jezici", "Biljana Aksentijević", "Udžbenik iz francuskog"),
+   new book("Umeće_ratovanja", "Istorijska_dela", "Sun Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje."),
+   new book('Intelektom_Ispred_Svih', 'Popularna_psihologija', 'Henrik Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati."),
+   new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav Smit', "Kako da bolje shvatite moderni svet \nMoj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts")];
+   let currentBook = books.filter(book => book.name === urlBook)[0] 
+   console.log(currentBook);
+   document.querySelector('.mk-events').innerHTML += `<h2>${currentBook.name.replaceAll("_", " ")}</h2><hr><p>${currentBook.description.replaceAll("\n", '</br>')}</p>`
 }
