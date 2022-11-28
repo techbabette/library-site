@@ -66,8 +66,21 @@ body{
 .card{
   border: none;
 }
+.mk-card-limit{
+  width: 90%;
+}
 .card-body{
   background-color: #333333;
+}
+.book{
+  min-height: 25vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.book:hover{
+  transform: scale(1.05);
 }
 .mk-event-holder{
   height: 100%;
