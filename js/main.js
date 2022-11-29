@@ -4,6 +4,7 @@ var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var holder = document.querySelector('.dropdown-menu');
 var prefix = ""
+
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
    this.name = name;
@@ -12,6 +13,18 @@ function book(name, category, author, description, copies, releaseDate){
    this.description = description;
    this.copies = copies;
    this.releaseDate = releaseDate;
+}
+function limitToFullWords(text, length){
+   let textSplit = text.split(" ");
+   text = "";
+   for(let word of textSplit){
+      if(word.length + text.length <= length) text += word + ' ';
+      else{
+         text = text.trim() + '...';
+         break;
+      }
+   }
+   return text;
 }
 function fillColumns(elementList, columns, numberOfColumns){
    for(let element in elementList){
@@ -68,9 +81,9 @@ if(sPage === "knjige.html"){
    //Prepare the books to be displayed
    for(let i = 0; i<books.length;i++){
       let currentBook = books[i];
-      let bookDescription = currentBook.description.substr(0,30);
+      let bookDescription = currentBook.description;
       if (currentBook.description.length > 30){
-         bookDescription += "...";
+         bookDescription = limitToFullWords(currentBook.description, 30);
       }
       elementList.push(`
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
