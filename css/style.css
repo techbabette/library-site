@@ -50,7 +50,6 @@ body{
 }
 .mk-holder{
   position: relative;
-  background-color: #333333;
   color: #f5af05;
   min-height: 65vh;
   width: 100vw;
@@ -65,11 +64,16 @@ body{
 .mk-card-limit{
   width: 90%;
 }
+#mk-book-category{
+  color: #333333;
+}
 .book{
   min-height: 25vh;
+  color: white;
+  background-color: #333333;
 }
 .book:hover{
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 .mk-event-holder{
   height: 100%;

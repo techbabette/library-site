@@ -13,7 +13,7 @@ function book(name, category, author, description, copies, releaseDate){
    this.copies = copies;
    this.releaseDate = releaseDate;
 }
-function fillColumns(elementList, columns){
+function fillColumns(elementList, columns, numberOfColumns){
    for(let element in elementList){
       columns[element % 4].innerHTML += elementList[element];
    }
@@ -75,7 +75,7 @@ if(sPage === "knjige.html"){
       elementList.push(`
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="../imgs/dani_knjiga.jpg" class="card-img-top" alt="...">
+      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
       <div class="card-body ">
           <h5 class="card-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text">${bookDescription}</p>
