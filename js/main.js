@@ -13,9 +13,24 @@ function book(name, category, author, description, copies, releaseDate){
    this.copies = copies;
    this.releaseDate = releaseDate;
 }
-function fillColumns(element, columns){
-
+function fillColumns(elementList, columns){
+   for(let element in elementList){
+      columns[element % 4].innerHTML += elementList[element];
+   }
 }
+function generateFooter(){
+   let links = new Array('https://www.facebook.com/','https://www.twitter.com/','https://www.linkedin.com/', 'sitemap.xml');
+   let names = new Array('facebook', 'twitter', 'linkedin', 'sitemap');
+   let icons = new Array('icomoon-free:facebook', 'la:twitter', 'mdi:linkedin', 'bx:sitemap')
+   let columns = document.getElementsByClassName("icon-holder");
+   let elementList = new Array();
+   for(let i = 0; i < links.length; i++){
+   elementList.push(
+      `<a class="text-light" href="${links[i]}" ><span class="iconify" id="${names[i]}-icon" data-icon="${icons[i]}"></span></a>`)
+   };
+   fillColumns(elementList, columns);
+}
+generateFooter();
 //Initializing all books
 var books = 
 [new book("Francuski_jezik", "Jezici", "Biljana Aksentijević", "Udžbenik iz francuskog", 2),
@@ -48,26 +63,29 @@ if(sPage === "knjige.html"){
       document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
    }
    //Dynamically generate the books
-   var columns = document.querySelectorAll(".mk-event-holder")
+   let columns = document.querySelectorAll(".mk-event-holder")
+   let elementList = new Array();
+   //Prepare the books to be displayed
    for(let i = 0; i<books.length;i++){
       let currentBook = books[i];
       let bookDescription = currentBook.description.substr(0,30);
-      let columnPosition = i % 4;
       if (currentBook.description.length > 30){
          bookDescription += "...";
       }
-      let element
-      element.push(`
-      <a href="knjiga.html?knjiga=${currentBook.name}">
-      <div class="card mk-card-limit">
-      <div class="card-body book">
+      elementList.push(`
+      <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
+      <div class="card book mk-card-limit">
+      <img src="../imgs/dani_knjiga.jpg" class="card-img-top" alt="...">
+      <div class="card-body ">
           <h5 class="card-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text">${bookDescription}</p>
           <p class="card-text">${currentBook.author}</p>
       </div>
+      </div>
       </a>`)
-      columns[columnPosition].innerHTML += element;
    }
+   //Display the books
+   fillColumns(elementList, columns);
 }
 if(sPage === "knjiga.html"){
    const queryString = window.location.search;
@@ -75,5 +93,5 @@ if(sPage === "knjiga.html"){
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
    console.log(currentBook);
-   document.querySelector('.mk-events').innerHTML += `<div style="width:100%"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: ${currentBook.author}</p><p>Godina izdavanja: ${currentBook.releaseDate}</p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" style="width:100%;">Rezerviši</button></a></div>`
+   document.querySelector('.mk-holder').innerHTML += `<div style="width:100%"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: ${currentBook.author}</p><p>Godina izdavanja: ${currentBook.releaseDate}</p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" style="width:100%;">Rezerviši</button></a></div>`
 }
