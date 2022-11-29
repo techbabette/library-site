@@ -5,6 +5,9 @@
 body{
   overflow-x:hidden;
 }
+hr{
+  color: black;
+}
 .navbar{
   min-height: 8vh;
 }
@@ -50,7 +53,6 @@ body{
 }
 .mk-holder{
   position: relative;
-  color: #f5af05;
   min-height: 65vh;
   width: 100vw;
   border-radius: 2%;
@@ -65,7 +67,11 @@ body{
   width: 90%;
 }
 #mk-book-category{
-  color: #333333;
+  color: black;
+  font-weight: bold;
+}
+.card-title{
+  font-weight: bold;
 }
 .book{
   min-height: 25vh;
