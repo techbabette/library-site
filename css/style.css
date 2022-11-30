@@ -80,6 +80,21 @@ hr{
 .book:hover{
   transform: scale(1.02);
 }
+#bookPage{
+  padding: 20px;
+  background-color: #333333;
+  border: 2px solid white;
+  color: white;
+  border-radius: 1.5%;
+  text-align: center;
+  width: 100%;
+}
+#bookImage{
+  border: 2px solid white;
+}
+#bookInfo{
+  margin-top: 10px;
+}
 .mk-event-holder{
   height: 100%;
   display: flex;
@@ -150,6 +165,12 @@ footer{
   .mk-holder{
     width: 80vw;
     padding-top: 5px;
+  }
+  #bookInfo{
+    margin-top: 0px;
+  }
+  #bookPage{
+    width: 75%;
   }
 }
   @media screen and (min-width: 768px){
