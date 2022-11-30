@@ -72,6 +72,7 @@ if(sPage === "knjige.html"){
    //If the category paramater is set, filter the books by category, else show all books
    if(urlParams.has('kategorija')){
       let kategorija = urlParams.get('kategorija')
+      document.title = kategorija.replaceAll("_", " ");
       books = books.filter(book => book.category === String(kategorija));
       document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
    }
@@ -106,6 +107,7 @@ if(sPage === "knjiga.html"){
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
    console.log(currentBook);
+   document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
    document.querySelector('#bookInfo').innerHTML += `<div style="width:100%"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: ${currentBook.author}</p><p>Godina izdavanja: ${currentBook.releaseDate}</p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" style="width:100%;">Rezerviši</button></a></div>`
 }
