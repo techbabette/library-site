@@ -48,12 +48,13 @@ function getRandomInt(max){
    return Math.floor(Math.random() * max);
 }
 
-function bookToElement(currentBook, size){
+function bookToElement(currentBook, prefix, size){
    let bookDescription = currentBook.description;
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
    }
-   return(`
+   if(prefix == undefined){
+      return(`
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
@@ -63,7 +64,20 @@ function bookToElement(currentBook, size){
           <p class="card-text">${currentBook.author}</p>
       </div>
       </div>
-      </a>`);
+      </a>`)
+   }
+   else{
+      return(`
+      <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      <div class="card book mk-card-limit">
+      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
+      <div class="card-body book-body">
+          <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
+          <p class="card-text">${bookDescription}</p>
+          <p class="card-text">${currentBook.author}</p>
+      </div>
+      </div>
+      </a>`)};
 }
 function moveBooks(columns, direction){
    let tempColumn;
@@ -122,7 +136,7 @@ if(sPage === "index.html" || sPage.length === 0){
       };
    }
    for(let i = 0; i < elementList.length; i++){
-      elementList[i] = bookToElement(elementList[i]);
+      elementList[i] = bookToElement(elementList[i], prefix);
    }
    fillColumns(elementList, columns, numberOfColumns)
    document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(columns, -1)});

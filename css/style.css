@@ -76,6 +76,7 @@ hr{
   min-height: 25vh;
   color: white;
   background-color: #333333;
+  border: 1px solid #333333;
 }
 .book:hover{
   transform: scale(1.02);
@@ -93,7 +94,7 @@ hr{
   color: #f5af05;
 }
 .book-body{
-  min-height: 30vh;
+  min-height: 20vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -151,6 +152,13 @@ footer .row{
   margin: 0%;
   width: 100%;
 }
+.moveButton{
+  box-shadow: none;
+  display: none;
+}
+#mostPopularBooks{
+  width: 100%;
+}
 footer{
   height: 15vh;
 }
@@ -202,5 +210,11 @@ footer{
     .mk-holder{
       min-height: 60vh;
       border-radius: 1%;
+    }
+    .moveButton{
+      display: block;
+    }
+    #mostPopularBooks{
+      width: 83.33%;
     }
 }
