@@ -13,7 +13,7 @@ hr{
 }
 .mk-page{
     position: relative;
-    height: 92vh;
+    min-height: 92vh;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -88,6 +88,9 @@ hr{
   border-radius: 1.5%;
   text-align: center;
   width: 100%;
+}
+.book-title{
+  color: #f5af05;
 }
 #bookImage{
   border: 2px solid white;
