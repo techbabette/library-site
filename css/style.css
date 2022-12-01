@@ -34,6 +34,9 @@ hr{
 .nav-link:hover{
   color: #d2946b !important;
 }
+.dropdown-menu{
+  background-color: #333333 !important;
+}
 #landing-page{
   padding: 0px;
   background-image: url(../imgs/main.jpg);

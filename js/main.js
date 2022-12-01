@@ -70,7 +70,7 @@ function bookToElement(currentBook, prefix, size){
       return(`
       <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
+      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
       <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text">${bookDescription}</p>
