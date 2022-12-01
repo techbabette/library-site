@@ -92,11 +92,23 @@ hr{
 .book-title{
   color: #f5af05;
 }
+.book-body{
+  min-height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 #bookImage{
   border: 2px solid white;
 }
 #bookInfo{
   margin-top: 10px;
+}
+#event-div{
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 .mk-event-holder{
   height: 100%;

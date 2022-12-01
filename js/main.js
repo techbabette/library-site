@@ -48,7 +48,7 @@ function getRandomInt(max){
    return Math.floor(Math.random() * max);
 }
 
-function bookToElement(currentBook){
+function bookToElement(currentBook, size){
    let bookDescription = currentBook.description;
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
@@ -57,7 +57,7 @@ function bookToElement(currentBook){
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
-      <div class="card-body ">
+      <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text">${bookDescription}</p>
           <p class="card-text">${currentBook.author}</p>
@@ -125,8 +125,8 @@ if(sPage === "index.html" || sPage.length === 0){
       elementList[i] = bookToElement(elementList[i]);
    }
    fillColumns(elementList, columns, numberOfColumns)
-   //document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(columns, -1)});
-   //document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(columns, 1)});
+   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(columns, -1)});
+   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(columns, 1)});
 }
 let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
 holder.innerHTML += element;
