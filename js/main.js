@@ -47,7 +47,6 @@ generateFooter();
 function getRandomInt(max){
    return Math.floor(Math.random() * max);
 }
-
 function bookToElement(currentBook, prefix, size){
    let bookDescription = currentBook.description;
    if (currentBook.description.length > 30){
@@ -79,38 +78,24 @@ function bookToElement(currentBook, prefix, size){
       </div>
       </a>`)};
 }
+let bookId = 0;
 function moveBooks(columns, direction){
-   let tempColumn;
-   let prevColumn;
-   console.log("Called");
    if(direction === 1){
+      bookId++;
       for(let i = 0; i<columns.length; i++){
-         if(i === 0){
-            prevColumn = columns[i].innerHTML;
-            columns[i].innerHTML = columns[columns.length - 1].innerHTML;
-         }
-         else{
-            tempColumn = columns[i].innerHTML
-            columns[i].innerHTML = prevColumn;
-            prevColumn = tempColumn;
-         }
+         console.log((i+bookId)%books.length);
+         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length], "pages/");
       }
+      console.log("Break");
    }
    if(direction === -1){
-      console.log("Here!");
-      let firstColumn = columns[0].innerHTML;
-      for(let i = columns.length - 1; i>=0; i--){
-         console.log("Here!!!");
-         if(i === columns.length - 1){
-            prevColumn = columns[i].innerHTML
-            columns[i].innerHTML = firstColumn;
-         }
-         else{
-            tempColumn = columns[i].innerHTML
-            columns[i].innerHTML = prevColumn;
-            prevColumn = tempColumn;
-         }
+      bookId--;
+      if(bookId < 0)bookId = books.length - columns.length;
+      for(let i = 0; i<columns.length; i++){
+         console.log((i+bookId)%books.length);
+         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length], "pages/");
       }
+      console.log("Break");
    }
 }
 //Initializing all books
@@ -118,7 +103,10 @@ var books =
 [new book("Francuski_jezik", "Jezici", "Biljana Aksentijević", "Udžbenik iz francuskog", 2),
 new book("Umeće_ratovanja", "Istorijska_dela", "Sun Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3),
 new book('Intelektom_Ispred_Svih', 'Popularna_psihologija', 'Henrik Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, "2011"),
-new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav Smit', "Kako da bolje shvatite moderni svet. Moj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts", 2)];
+new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav Smit', "Kako da bolje shvatite moderni svet. Moj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts", 2),
+new book("Umeće_ratovanja", "Istorijska_dela", "Sun Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3),
+new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan Bosnić", "„Nema grada na svetu oko koga su se jagmili toliki narodi, pod čijim su se bedemima vodile tolike bitke, koji je toliko puta menjao vlasnika i pedeset puta uništavan da bi se svih pedeset puta ponovo iz istorijskog groba podigao – kao što je naš Beograd. Pa zar ta činjenica što je taj grad srpski ni najmanje o Srbima ne govori?“ – Borislav Pekić", 2, "2019")
+];
 //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
@@ -127,13 +115,7 @@ if(sPage === "index.html" || sPage.length === 0){
    let elementList = new Array();
    let bookList = new Array();
    for(let i = 0; i < numberOfColumns; i++) {
-      let randomInt = getRandomInt(books.length);
-      if(elementList.includes(books[randomInt])){
-         i--;
-      }
-      else {
-         elementList.push(books[randomInt]);
-      };
+      elementList.push(books[i]);
    }
    for(let i = 0; i < elementList.length; i++){
       elementList[i] = bookToElement(elementList[i], prefix);
