@@ -144,7 +144,7 @@ if(sPage === "index.html" || sPage.length === 0){
    countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
    countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
    countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
-   countTo(document.querySelector("#leNum"), 131, 1000, 5000000);
+   countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
 }
 let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
 holder.innerHTML += element;
