@@ -25,6 +25,13 @@ hr{
   align-items: center;
   justify-content: space-around;
 }
+.mk-full-page{
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
 .nav-link, .navbar-brand{
   color: #f7bd2f !important;
 }
@@ -93,11 +100,14 @@ hr{
   text-align: center;
   width: 100%;
 }
+.book-prev{
+  border: 1px solid #f7bd2f;
+}
 .book-title{
   color: #f5af05;
 }
 .book-body{
-  min-height: 20vh;
+  min-height: 30vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -111,7 +121,6 @@ hr{
 }
 #event-div{
   flex-direction: row;
-  align-items: center;
   justify-content: center;
 }
 .mk-event-holder{
@@ -158,6 +167,11 @@ footer .row{
 .moveButton{
   box-shadow: none;
   display: none;
+}
+#popular-div{
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 #mostPopularBooks{
   width: 100%;

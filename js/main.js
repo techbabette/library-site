@@ -56,10 +56,11 @@ function bookToElement(currentBook, prefix, size){
       return(`
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
-      <div class="card-body book-body">
+      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top book-prev" alt="...">
+      <div class="card-body ${size} book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
-          <p class="card-text">${bookDescription}</p>
+          <p class="card-text"><em>${bookDescription}</em></p>
+          <p class="card-text">${currentBook.category.replaceAll("_", " ")}</p>
           <p class="card-text">${currentBook.author}</p>
       </div>
       </div>
@@ -69,10 +70,11 @@ function bookToElement(currentBook, prefix, size){
       return(`
       <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top" alt="...">
+      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
-          <p class="card-text">${bookDescription}</p>
+          <p class="card-text"><em>${bookDescription}</em></p>
+          <p class="card-text">${currentBook.category.replaceAll("_", " ")}</p>
           <p class="card-text">${currentBook.author}</p>
       </div>
       </div>
@@ -102,9 +104,8 @@ function moveBooks(columns, direction){
 var books = 
 [new book("Francuski_jezik", "Jezici", "Biljana Aksentijević", "Udžbenik iz francuskog", 2),
 new book("Umeće_ratovanja", "Istorijska_dela", "Sun Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3),
-new book('Intelektom_Ispred_Svih', 'Popularna_psihologija', 'Henrik Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, "2011"),
+new book('Intelektom_ispred_svih', 'Popularna_psihologija', 'Henrik Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, "2011"),
 new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav Smit', "Kako da bolje shvatite moderni svet. Moj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts", 2),
-new book("Umeće_ratovanja", "Istorijska_dela", "Sun Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3),
 new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan Bosnić", "„Nema grada na svetu oko koga su se jagmili toliki narodi, pod čijim su se bedemima vodile tolike bitke, koji je toliko puta menjao vlasnika i pedeset puta uništavan da bi se svih pedeset puta ponovo iz istorijskog groba podigao – kao što je naš Beograd. Pa zar ta činjenica što je taj grad srpski ni najmanje o Srbima ne govori?“ – Borislav Pekić", 2, "2019")
 ];
 //If currently on index page
