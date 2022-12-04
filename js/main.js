@@ -47,6 +47,21 @@ generateFooter();
 function getRandomInt(max){
    return Math.floor(Math.random() * max);
 }
+function countTo(element, from, to, timeToLoad){
+   let interval = timeToLoad/Math.abs(to - from);
+   let step = to > from ? 1 : -1;
+   if(from === to){
+       element.textContent = from;
+       return;
+   }
+   let counter = setInterval(function(){
+       from += step;
+       element.textContent = from;
+       if(from == to){
+           clearInterval(counter);
+       }
+   }, interval);
+}
 function bookToElement(currentBook, prefix, size){
    let bookDescription = currentBook.description;
    if (currentBook.description.length > 30){
@@ -60,7 +75,7 @@ function bookToElement(currentBook, prefix, size){
       <div class="card-body ${size} book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text"><em>${bookDescription}</em></p>
-          <p class="card-text">${currentBook.category.replaceAll("_", " ")}</p>
+          <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
           <p class="card-text">${currentBook.author}</p>
       </div>
       </div>
@@ -74,7 +89,7 @@ function bookToElement(currentBook, prefix, size){
       <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text"><em>${bookDescription}</em></p>
-          <p class="card-text">${currentBook.category.replaceAll("_", " ")}</p>
+          <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
           <p class="card-text">${currentBook.author}</p>
       </div>
       </div>
@@ -124,6 +139,12 @@ if(sPage === "index.html" || sPage.length === 0){
    fillColumns(elementList, columns, numberOfColumns)
    document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(columns, -1)});
    document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(columns, 1)});
+   let timeToLoad = 2500;
+   countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
+   countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
+   countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
+   countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
+   countTo(document.querySelector("#leNum"), 131, 1000, 5000000);
 }
 let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
 holder.innerHTML += element;

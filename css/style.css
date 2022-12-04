@@ -11,6 +11,9 @@ hr{
 .navbar{
   min-height: 8vh;
 }
+.mk-light-yellow{
+  color: #f7bd2f;
+}
 .mk-page{
     position: relative;
     min-height: 92vh;
@@ -27,6 +30,7 @@ hr{
 }
 .mk-full-page{
   min-height: 100vh;
+  padding: 0px;
   position: relative;
   display: flex;
   align-items: center;
@@ -74,6 +78,35 @@ hr{
 }
 .mk-card-limit{
   width: 90%;
+}
+.info-holder{
+  background-color: #333333;
+  padding: 20px;
+}
+.info-block{
+  background-color: #333333;
+  color: #f5af05;
+  display: flex;
+  border-top: 1px solid #f5af05;
+  border-bottom: 1px solid #f5af05;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 25vh;
+}
+#lib-desc{
+  background-color: #333333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #f5af05;
+  padding: 20px;
+}
+#libHist{
+  margin-top: 20px;
+  text-align: center;
 }
 #mk-book-category{
   color: black;
@@ -152,8 +185,11 @@ a:link {
   color:#f7bd2f !important;
   text-decoration: none;
 }
+a:hover{
+  color: #333333 !important;
+}
 a:visited{
-  color: #f7bd2f !important;
+  color: #f7bd2f;
 }
 .mk-logo a{
 text-decoration: none;
