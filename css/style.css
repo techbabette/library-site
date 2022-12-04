@@ -35,6 +35,7 @@ hr{
   display: flex;
   align-items: center;
   justify-content: space-around;
+  padding: 10px 0px 10px 0px;
 }
 .nav-link, .navbar-brand{
   color: #f7bd2f !important;
@@ -255,6 +256,9 @@ footer{
   }
 }
   @media screen and (min-width: 768px){
+    .mk-full-page{
+      padding: 0px;
+    }
     .mk-collapsable-page{
         min-height: 92vh;
     }
