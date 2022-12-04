@@ -115,6 +115,17 @@ hr{
 .card-title{
   font-weight: bold;
 }
+.bat{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.moveButton{
+  box-shadow: none;
+  display: none;
+  background-color: #333333;
+  color: aliceblue;
+}
 .book{
   min-height: 25vh;
   color: white;
@@ -200,17 +211,11 @@ footer .row{
   margin: 0%;
   width: 100%;
 }
-.moveButton{
-  box-shadow: none;
-  display: none;
-}
 #popular-div{
+  text-align: center;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-}
-#mostPopularBooks{
-  width: 100%;
+  justify-content: space-around;
 }
 footer{
   height: 15vh;
@@ -266,8 +271,5 @@ footer{
     }
     .moveButton{
       display: block;
-    }
-    #mostPopularBooks{
-      width: 83.33%;
     }
 }
