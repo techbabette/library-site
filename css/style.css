@@ -14,6 +14,9 @@ hr{
 .mk-light-yellow{
   color: #f7bd2f;
 }
+.mk-yellow{
+  color: #f5af05;
+}
 .mk-page{
     position: relative;
     min-height: 92vh;
@@ -43,8 +46,11 @@ hr{
 .active{
   color: #f5af05 !important;
 }
-.nav-link:hover{
-  color: #d2946b !important;
+.nav-link:hover, .navbar-brand:hover{
+  color: #f5af05 !important;
+}
+.dropdown-item:active{
+  background-color: white !important;
 }
 .dropdown-menu{
   background-color: #333333 !important;
@@ -110,7 +116,7 @@ hr{
   text-align: center;
 }
 #mk-book-category{
-  color: black;
+  color: #333333;
   font-weight: bold;
 }
 .card-title{
@@ -159,7 +165,7 @@ hr{
   align-items: center;
 }
 #bookImage{
-  border: 2px solid white;
+  border: 2px solid #f7bd2f;
 }
 #bookInfo{
   margin-top: 10px;
@@ -198,6 +204,9 @@ a:link {
   text-decoration: none;
 }
 a:hover{
+  color: #f5af05;
+}
+.dropdown-menu a:hover{
   color: #333333 !important;
 }
 a:visited{
