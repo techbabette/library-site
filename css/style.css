@@ -138,9 +138,12 @@ a.active{
   color: white;
   background-color: #333333;
   border: 1px solid #333333;
+  transform: scale(1.0);
+  transition: 0.2s;
 }
 .book:hover{
   transform: scale(1.02);
+  transition: 0.2s;
 }
 #bookPage{
   padding: 20px;
