@@ -23,9 +23,14 @@ hr{
   align-items: center;
   justify-content: space-around;
 }
+.mk-flex-column-center{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .mk-page{
     min-height: 92vh;
-
 }
 .mk-solo-page{
   min-height: 77vh;
@@ -85,12 +90,8 @@ a.active{
 .info-block{
   background-color: #333333;
   color: #f5af05;
-  display: flex;
   border-top: 1px solid #f5af05;
   border-bottom: 1px solid #f5af05;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
   height: 25vh;
 }
@@ -113,11 +114,6 @@ a.active{
 }
 .card-title{
   font-weight: bold;
-}
-.bat{
-  display: flex;
-  align-content: center;
-  justify-content: center;
 }
 .moveButton{
   box-shadow: none;
@@ -171,19 +167,11 @@ a.active{
 }
 .mk-event-holder{
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 10px;
   gap: 10px;
 }
 .mk-book-holder{
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 10px;
   gap: 10px;
 }
