@@ -17,27 +17,22 @@ hr{
 .mk-yellow{
   color: #f5af05;
 }
-.mk-page{
-    position: relative;
-    min-height: 92vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
-.mk-solo-page{
+.page{
   position: relative;
   display: flex;
-  min-height: 77vh;
   align-items: center;
   justify-content: space-around;
+}
+.mk-page{
+    min-height: 92vh;
+
+}
+.mk-solo-page{
+  min-height: 77vh;
 }
 .mk-full-page{
   min-height: 100vh;
   padding: 0px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
   padding: 10px 0px 10px 0px;
 }
 .nav-link, .navbar-brand{
@@ -45,9 +40,6 @@ hr{
 }
 a.active{
   color: #e7c776 !important;
-}
-.nav-link:hover, .navbar-brand:hover{
-  color: #f5af05 !important;
 }
 .dropdown-item:active{
   background-color: white !important;
