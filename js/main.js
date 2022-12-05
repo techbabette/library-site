@@ -78,7 +78,7 @@ function bookToElement(currentBook, prefix, size){
       return(`
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top book-prev" alt="...">
+      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt=${currentBook.name.replaceAll("_", " ")} class="card-img-top book-prev" alt="...">
       <div class="card-body ${size} book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text"><em>${bookDescription}</em></p>
@@ -92,7 +92,7 @@ function bookToElement(currentBook, prefix, size){
       return(`
       <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" class="card-img-top book-prev" alt="...">
+      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt=${currentBook.name.replaceAll("_", " ")} class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text"><em>${bookDescription}</em></p>

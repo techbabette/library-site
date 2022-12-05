@@ -43,8 +43,8 @@ hr{
 .nav-link, .navbar-brand{
   color: #f7bd2f !important;
 }
-.active{
-  color: #f5af05 !important;
+a.active{
+  color: #e7c776 !important;
 }
 .nav-link:hover, .navbar-brand:hover{
   color: #f5af05 !important;
@@ -209,7 +209,6 @@ hr{
   display: inline;
 }
 a:link {
-  color:#f7bd2f !important;
   text-decoration: none;
 }
 a:hover{
