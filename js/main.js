@@ -193,7 +193,7 @@ if(sPage === "knjige.html"){
       document.getElementById('mk-book-category').innerHTML = "Knjige iz " + Math.abs(year) + (year < 0 ? " PNE" : "") + ". godine";
    }
    //Dynamically generate the books
-   let columns = document.querySelectorAll(".mk-event-holder")
+   let columns = document.querySelectorAll(".mk-book-holder")
    let elementList = new Array();
    //Prepare the books to be displayed
    for(let i = 0; i<books.length;i++){
