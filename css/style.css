@@ -161,6 +161,51 @@ a.active{
 #bookInfo{
   margin-top: 10px;
 }
+.mk-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+.mk-modal-content {
+  margin: 15% auto;
+  color: #f7bd2f !important;
+  background-color: #333333;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+  border-radius: 1%;
+}
+#openModal:focus{
+  background-color: #f5af05;
+}
+form{
+  color: #f7bd2f;
+  text-align: center;
+}
+.mk-send{
+  background-color: #f7bd2f;
+  color: #333333;
+}
+.mk-send:hover, .mk-send:focus {
+  background-color: #f5af05;
+  color: #333333;
+} 
+.form-check-input:checked{
+  background-color: #f5af05;
+}
+.mk-delivery{
+  flex-direction: row;margin-left: 10px;
+}
+#reserveStart{
+  display: block;
+  margin: 0% auto;
+}
 #event-div{
   flex-direction: row;
   justify-content: center;
@@ -227,6 +272,49 @@ footer{
   align-items: center;
   text-align: center;
 }
+@media screen and (min-width: 768px){
+  .mk-full-page{
+    padding: 0px;
+  }
+  .mk-collapsable-page{
+      min-height: 92vh;
+  }
+  .mk-solo-page{
+    min-height: 84vh;
+  }
+  footer{
+      margin-top: 0vh;
+      height: 8vh;
+  }
+  .mk-holder{
+    min-height: 60vh;
+    border-radius: 1%;
+  }
+  .mk-sorted-book-holder{
+    margin-top: 0px;
+  }
+  .mk-modal-content{
+    width: 90%;
+  }
+  .moveButton{
+    display: block;
+  }
+  .mk-delivery{
+    margin-left: 0px;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: space-around;
+  }
+  #delivery{
+    display: inline;
+  }
+  form{
+    text-align: left;
+  }
+  #reserveStart{
+    display: inline;
+  }
+}
 @media screen and (min-width: 992px) {
   .navbar{
       height: 8vh;
@@ -242,6 +330,9 @@ footer{
   .mk-card-holder{
     margin-bottom: 0%;
   }
+  .mk-modal-content{
+    width: 40%;
+  }
   .mk-responsive-width{
     width: 75%;
   }
@@ -255,29 +346,4 @@ footer{
   #bookPage{
     width: 75%;
   }
-}
-  @media screen and (min-width: 768px){
-    .mk-full-page{
-      padding: 0px;
-    }
-    .mk-collapsable-page{
-        min-height: 92vh;
-    }
-    .mk-solo-page{
-      min-height: 84vh;
-    }
-    footer{
-        margin-top: 0vh;
-        height: 8vh;
-    }
-    .mk-holder{
-      min-height: 60vh;
-      border-radius: 1%;
-    }
-    .mk-sorted-book-holder{
-      margin-top: 0px;
-    }
-    .moveButton{
-      display: block;
-    }
 }

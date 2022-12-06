@@ -208,5 +208,18 @@ if(sPage === "knjiga.html"){
    console.log(currentBook);
    document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
-   document.querySelector('#bookInfo').innerHTML += `<div class="w-100 mk-yellow"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a></p><p>Godina izdavanja: <a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>${Math.abs(currentBook.releaseDate)} ${currentBook.releaseDate < 0 ? "PNE" : ""}</a></p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" style="width:100%;">Rezerviši</button></a></div>`
+   document.querySelector('#bookInfo').innerHTML += `<div class="w-100 mk-yellow"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a></p><p>Godina izdavanja: <a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>${Math.abs(currentBook.releaseDate)} ${currentBook.releaseDate < 0 ? "PNE" : ""}</a></p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" id="openModal" style="width:100%;">Rezerviši</button></a></div>`
+   $('#openModal').click(function(event) {
+      event.preventDefault();
+      $("#myModal").show("fast")
+   });; 
+   $('.mk-close').click(function(event){
+      event.preventDefault();
+      $("#myModal").hide("fast")
+   }) 
+   $(window).click(function(event){
+      console.log(event.target);
+      if (event.target === $('#myModal')[0])
+      $("#myModal").hide("fast")
+   })
 }
