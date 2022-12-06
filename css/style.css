@@ -181,6 +181,14 @@ a.active{
   width: 90%;
   border-radius: 1%;
 }
+#openModal{
+  background-color: #f7bd2f;
+  color: #333333;
+  border: 1px solid #333333;
+}
+#openModal:hover{
+  background-color: #f5af05;
+}
 #openModal:focus{
   background-color: #f5af05;
 }
