@@ -200,6 +200,9 @@ form{
   color: #f7bd2f;
   text-align: center;
 }
+input{
+  text-align: center;
+}
 .mk-send{
   background-color: #f7bd2f;
   color: #333333;
@@ -218,9 +221,11 @@ form{
   display: block;
   width: 100%;
   margin: 0% auto;
+  margin-top: 8px;
 }
 #length{
   width: 100%;
+  margin-top: 8px;
 }
 #event-div{
   flex-direction: row;
@@ -366,5 +371,8 @@ footer{
   }
   #bookPage{
     width: 75%;
+  }
+  input{
+    text-align: left;
   }
 }
