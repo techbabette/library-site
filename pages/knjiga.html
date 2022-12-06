@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <link rel="icon" type="image/x-icon" href="../imgs/favicon.ico">
-    <title>Document</title>
+    <title>Knjiga</title>
 </head>
 <body>
     <header class="container-fluid">
@@ -43,16 +43,16 @@
       <div class="mk-modal-content">
         <form class="row">
           <div class="mb-3 col-12">
-            <label for="exampleInputEmail1" class="form-label">Email adresa</label>
+            <label for="exampleInputEmail1" class="form-label">Email adresa<span class="mk-red">*</span></label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
             <div id="emailHelp" class="form-text mk-yellow">Nikada nećemo deliti Vašu email adresu</div>
           </div>
           <div class="mb-3 col-md-7">
-            <label for="Address" class="form-label">Adresa</label>
+            <label for="Address" class="form-label">Adresa<span class="mk-red">*</span></label>
             <input type="text" class="form-control" id="Address">
           </div>
           <div class="mb-3 form-check m-0 col-md-5">
-            <p >Preuzimanje</p>
+            <p >Preuzimanje<span class="mk-red">*</span></p>
             <div class="mk-delivery row">
                 <div class="col-6">
                 <input name="delivery" id="personal" value="0" type="radio" class="form-check-input">
@@ -65,11 +65,11 @@
             </div>
           </div>
           <div class="mb-3 col-md-5">
-            <label for="reserveStart">Rezervisati od</label>
+            <label for="reserveStart">Rezervisati od<span class="mk-red">*</span></label>
             <input type="date" id="reserveStart" name="reserveStart"/>
           </div>
           <div class="mb-3 col-md-7">
-              <label for="length">Broj dana rezervacije</label>
+              <label for="length">Broj dana rezervacije<span class="mk-red">*</span></label>
               <input type="number" id="length" name="quantity" min="1" value="20" max="40"/>
           </div>
           <div class="col-12 mk-modal-buttons">

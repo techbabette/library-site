@@ -40,6 +40,9 @@ hr{
   padding: 0px;
   padding: 10px 0px 10px 0px;
 }
+.mk-red{
+  color: red;
+}
 .nav-link, .navbar-brand{
   color: #f7bd2f !important;
 }
