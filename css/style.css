@@ -181,6 +181,10 @@ a.active{
   width: 90%;
   border-radius: 1%;
 }
+.mk-modal-buttons{
+  display: flex;
+  justify-content: space-between;
+}
 #openModal{
   background-color: #f7bd2f;
   color: #333333;
@@ -212,7 +216,11 @@ form{
 }
 #reserveStart{
   display: block;
+  width: 100%;
   margin: 0% auto;
+}
+#length{
+  width: 100%;
 }
 #event-div{
   flex-direction: row;
@@ -308,10 +316,9 @@ footer{
     display: block;
   }
   .mk-delivery{
-    margin-left: 0px;
     flex-direction: row;
-    justify-content: space-around;
-    align-content: space-around;
+    justify-content: space-between;
+    align-content: space-between;
   }
   #delivery{
     display: inline;
@@ -321,6 +328,12 @@ footer{
   }
   #reserveStart{
     display: inline;
+  }
+  .mk-modal-buttons{
+    display: block;
+  }
+  .mk-close{
+    margin-left: 10px;
   }
 }
 @media screen and (min-width: 992px) {
