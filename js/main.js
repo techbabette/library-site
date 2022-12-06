@@ -167,9 +167,6 @@ if(sPage === "index.html" || sPage.length === 0){
    countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
    countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
 }
-if(sPage === "dešavanja.html"){
-   
-}
 if(sPage === "knjige.html"){
    const queryString = window.location.search;
    const urlParams = new URLSearchParams(queryString);

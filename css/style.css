@@ -191,6 +191,9 @@ a.active{
   font-size: 16px;
   display: inline;
 }
+a{
+  color: #f7bd2f !important;
+}
 a:link {
   text-decoration: none;
 }
@@ -199,9 +202,6 @@ a:hover{
 }
 .dropdown-menu a:hover{
   color: #333333 !important;
-}
-a:visited{
-  color: #f7bd2f;
 }
 .mk-logo a{
 text-decoration: none;
