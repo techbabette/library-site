@@ -54,6 +54,40 @@ function generateFooter(){
 function getRandomInt(max){
    return Math.floor(Math.random() * max);
 }
+let addressBool;
+function addressRequired(req){
+   let address = document.querySelector("#addDesc");
+   addressBool = req;
+   if(req){address.innerHTML = `Adresa<span class="mk-red">*</span>`;}
+   else{address.innerHTML = `Adresa`;}
+}
+function checkForm(){
+   let deliveryRadios = $("input[name='delivery']");
+   let reserveStart = $("#reserveStart");
+   let firstName = document.querySelector("#firstName");
+   let email = document.querySelector("#email");
+   console.log(email);
+   let reEmail = /^[A-Z]$/
+
+   let reAddress = /^(([A-ZŠĐĆČ][[a-zšđćč]\d\.\-]+)|([\d]+\.?))(\s[\w\d]+){0,7}\s(([\d]{1,3}((\/?(([\d]{1,2}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
+
+   checkFormRegex(firstName, reEmail, "Pogresan mejl");
+   checkFormRegex(address, reAddress, "Pogresna adresa");
+}
+function checkFormRegex(element, test, message){
+   let errorHolder = element.nextElementSibling;
+   if(test.test(element.value)){
+      element.classList.add("success");
+      element.classList.remove("failure");
+      errorHolder.setAttribute("hidden", "hidden");
+   }
+   else{
+      element.classList.remove("success");
+      element.classList.add("failure");
+      errorHolder.innerText = message;
+      errorHolder.removeAttribute("hidden");
+   }
+}
 function countTo(element, from, to, timeToLoad){
    let interval = timeToLoad/Math.abs(to - from);
    let step = to > from ? 1 : -1;
@@ -218,8 +252,14 @@ if(sPage === "knjiga.html"){
       $("#myModal").hide("fast")
    }) 
    $(window).click(function(event){
-      console.log(event.target);
       if (event.target === $('#myModal')[0])
       $("#myModal").hide("fast")
    })
+   $(".mk-send").click(function(event){
+      event.preventDefault();
+      checkForm();
+   })
+   let deliveryRadios = $("input[name='delivery']");
+   deliveryRadios[0].addEventListener("click",function(){addressRequired(false)});
+   deliveryRadios[1].addEventListener("click",function(){addressRequired(true)});
 }

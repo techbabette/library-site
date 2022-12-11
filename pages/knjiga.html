@@ -42,21 +42,27 @@
     <div id="myModal" class="mk-modal">
       <div class="mk-modal-content">
         <form class="row">
-          <div class="mb-3 col-12">
-            <label for="exampleInputEmail1" class="form-label">Email adresa<span class="mk-red">*</span></label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text mk-yellow">Nikada nećemo deliti Vašu email adresu</div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="firstName" class="form-label">Ime<span class="mk-red">*</span></label>
+            <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp">
+            <div id="firstNameError" hidden="hidden" class="form-text mk-red"></div>
+          </div>
+          <div class="mb-3 col-12 col-md-6">
+            <label for="lastName" class="form-label">Prezime<span class="mk-red">*</span></label>
+            <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp">
+            <div id="lastNameError" hidden="hidden" class="form-text mk-red"></div>
           </div>
           <div class="mb-3 col-md-7">
-            <label for="Address" class="form-label">Adresa<span class="mk-red">*</span></label>
-            <input type="text" class="form-control" id="Address">
+            <label for="address" id="addDesc" class="form-label">Adresa</label>
+            <input type="text" class="form-control" id="address">
+            <div hidden="hidden" class="form-text mk-yellow mk-red"></div>
           </div>
           <div class="mb-3 form-check m-0 col-md-5">
-            <p >Preuzimanje<span class="mk-red">*</span></p>
+            <p>Preuzimanje<span class="mk-red">*</span></p>
             <div class="mk-delivery row">
                 <div class="col-6">
                 <input name="delivery" id="personal" value="0" type="radio" class="form-check-input">
-                <label class="form-check-label" for="personal">Lično</label>
+                <label class="form-check-label" checked="checked" for="personal">Lično</label>
                 </div>
                 <div class="col-6">
                 <input name="delivery" id="delivered" value="1" type="radio" class="form-check-input">

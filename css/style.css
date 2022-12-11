@@ -164,6 +164,9 @@ a.active{
 #bookInfo{
   margin-top: 10px;
 }
+.success{
+  border: 2px solid green;
+}
 .mk-modal {
   display: none;
   position: fixed;
