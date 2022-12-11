@@ -57,38 +57,137 @@ function getRandomInt(max){
 let addressBool;
 function addressRequired(req){
    let address = document.querySelector("#addDesc");
+   let addressInput = document.querySelector("#address")
    addressBool = req;
-   if(req){address.innerHTML = `Adresa<span class="mk-red">*</span>`;}
-   else{address.innerHTML = `Adresa`;}
+   if(req){
+      address.innerHTML = `Adresa<span class="mk-red">*</span>`;
+      addressInput.setAttribute("required", "required");
+      addressInput.removeAttribute("disabled");
+      addressInput.classList.remove("success");
+   }
+   else{
+      address.innerHTML = `Adresa`;
+      removeError(addressInput);
+      addressInput.setAttribute("disabled", "disabled");
+      addressInput.value = "";
+      addressInput.removeAttribute("required");
+   }
 }
 function checkForm(){
-   let deliveryRadios = $("input[name='delivery']");
-   let reserveStart = $("#reserveStart");
+   let success = 0;
+   let deliveryRadios = document.getElementsByName("delivery");;
    let firstName = document.querySelector("#firstName");
-   let email = document.querySelector("#email");
+   let lastName = document.querySelector("#lastName");
+   let reName = /^[A-ZŠĆČĐ][a-zšđčć]{2,13}(\s[A-ZŠĆČĐ][a-zšđčć]{2,13}){0,3}$/
+   let radioSelected;
+
+   success += checkFormRegex(firstName, reName, "Pogrešno ime");
+   success += checkFormRegex(lastName, reName, "Pogrešno prezime");
+   
+   for(let radio of deliveryRadios){
+      if(radio.checked){
+         radioSelected = radio.value;
+         break;
+      }
+   }
+   addressBool = radioSelected>0? true:false;
+   if(radioSelected == null){
+      let errorHolder = deliveryRadios[0].parentNode.parentNode.lastElementChild;
+      errorHolder.innerText = 'Morate odabrati način preuzimanja'
+      errorHolder.removeAttribute("hidden");
+      success -= 1;
+   }
+   else{
+      console.log(radioSelected);
+      let errorHolder = deliveryRadios[0].parentNode.parentNode.lastElementChild;
+      errorHolder.setAttribute("hidden", "hidden");
+   }
+   success += checkAddress();
+   success += checkDate();
+   success += checkLength();
+   console.log(success);
+   if(success == 0){
+      showSuccess();
+   }
+   else{
+      hideSuccess();
+   }
+}
+function showSuccess(){
+   let element = document.querySelector("#successAlert");
+   element.innerText = "Uspešno ste rezervisali knjigu";
+   element.removeAttribute("hidden");
+}
+function hideSuccess(){
+   let element = document.querySelector("#successAlert");
+   element.setAttribute("hidden", "hidden");
+}
+function checkLength(){
+   let reserveLength = document.querySelector("#length");
+   console.log(reserveLength.value);
+   if(reserveLength.value == ""){
+      displayError(reserveLength,"Morate odabrati trajanje rezervacije [1-40]");
+      return -1;
+   }
+   if(reserveLength.value < 0 || reserveLength.value > 40){
+      displayError(reserveLength,"Broj ne pripada opsegu od 1 do 40");
+      return -1;
+   }
+   removeError(reserveLength);
+   return 0;
+}
+function checkAddress(){
+   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))(\.)?$/
    let address = document.querySelector("#address");
-   console.log(email);
-   let reEmail = /^[A-Z]$/
-   let reName
-
-   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
-
-   checkFormRegex(firstName, reEmail, "Pogrešno ime");
-   checkFormRegex(address, reAddress, "Pogrešna adresa");
+   if(addressBool){
+      if(address.value === ""){
+         displayError(address,"Adresa ne sme biti prazna za preuzimanje dostavom");
+         return -1;
+      }
+      else{
+         return checkFormRegex(address, reAddress, "Pogrešna adresa");
+      }
+   }
+   return 0;
+}
+function checkDate(){
+   if(reserveStart.value === ""){
+      displayError(reserveStart, "Morate odabrati datum početka rezerve");
+      return -1;
+   }
+   let inputDate = new Date(reserveStart.value);
+   let currentDate = new Date()
+   if(inputDate < currentDate){
+      displayError(reserveStart, "Datum rezerve ne može biti u prošlosti")
+      return -1;
+   }
+   else{
+      removeError(reserveStart);
+      return 0;
+   }
+}
+function displayError(element, message){
+   let errorHolder = element.nextElementSibling;
+   element.classList.add("failure");
+   element.classList.remove("success");
+   errorHolder.innerText = message;
+   errorHolder.removeAttribute("hidden");
+}
+function removeError(element){
+   let errorHolder = element.nextElementSibling;
+   errorHolder.setAttribute("hidden", "hidden");
+   element.classList.remove("failure");
+   element.classList.add("success");
 }
 function checkFormRegex(element, test, message){
    let errorHolder = element.nextElementSibling;
-   console.log(element.value);
    if(test.test(element.value)){
-      element.classList.add("success");
-      element.classList.remove("failure");
-      errorHolder.setAttribute("hidden", "hidden");
+      removeError(element);
+      return 0;
    }
    else{
-      element.classList.remove("success");
-      element.classList.add("failure");
-      errorHolder.innerText = message;
-      errorHolder.removeAttribute("hidden");
+      displayError(element, message);
+      return -1;
    }
 }
 function countTo(element, from, to, timeToLoad){
@@ -267,7 +366,27 @@ if(sPage === "knjiga.html"){
       checkForm();
    })
    let deliveryRadios = $("input[name='delivery']");
-
-   deliveryRadios[0].addEventListener("click",function(){addressRequired(false)});
-   deliveryRadios[1].addEventListener("click",function(){addressRequired(true)});
+   deliveryRadios[0].addEventListener("click",function(){addressRequired(true)});
+   deliveryRadios[1].addEventListener("click",function(){addressRequired(false)});
+   let reName = /^[A-ZŠĆČĐ][a-zšđčć]{2,13}(\s[A-ZŠĆČĐ][a-zšđčć]{2,13}){0,3}$/
+   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
+   let firstName = document.querySelector("#firstName")
+   let lastName = document.querySelector("#lastName")
+   let address = document.querySelector("#address")
+   let reserveDate = document.querySelector("#reserveStart");
+   let radioSelected;
+   for(let radio of deliveryRadios){
+      if(radio.checked){
+         radioSelected = radio.value;
+         console.log(radio.value);
+         break;
+      }
+   }
+   addressBool = radioSelected>0? true:false;
+   console.log(addressBool);
+   addressRequired(addressBool);
+   firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Morate uneti ime");})
+   lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Morate uneti prezime");})
+   address.addEventListener("blur", function(){checkAddress()});
+   reserveDate.addEventListener('blur', checkDate);
 }

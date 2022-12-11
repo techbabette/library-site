@@ -223,11 +223,23 @@ input{
 .mk-delivery{
   flex-direction: row;margin-left: 10px;
 }
+#deliveryError{
+  padding-left: 0px;
+}
 #reserveStart{
   display: block;
   width: 100%;
   margin: 0% auto;
   margin-top: 8px;
+}
+.success{
+  border: 2px solid green !important;
+}
+.failure{
+  border: 2px solid red;
+}
+.error-alert{
+  margin-bottom: 0px;
 }
 #length{
   width: 100%;

@@ -44,44 +44,48 @@
         <form class="row">
           <div class="mb-3 col-12 col-md-6">
             <label for="firstName" class="form-label">Ime<span class="mk-red">*</span></label>
-            <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp">
-            <div id="firstNameError" hidden="hidden" class="form-text mk-red"></div>
+            <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp"/>
+            <p id="firstNameError" hidden="hidden" class="form-text mk-red error-alert"></p>
           </div>
           <div class="mb-3 col-12 col-md-6">
             <label for="lastName" class="form-label">Prezime<span class="mk-red">*</span></label>
-            <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp">
-            <div id="lastNameError" hidden="hidden" class="form-text mk-red"></div>
+            <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp"/>
+            <p id="lastNameError" hidden="hidden" class="form-text mk-red error-alert"></p>
           </div>
           <div class="mb-3 col-md-7">
-            <label for="address" id="addDesc" class="form-label">Adresa</label>
+            <label for="address" id="addDesc" class="form-label">Adresa<span class="mk-red">*</span></label>
             <input type="text" class="form-control" id="address">
-            <div hidden="hidden" class="form-text mk-yellow mk-red"></div>
+            <p hidden="hidden" class="form-text mk-red error-alert"></p>
           </div>
           <div class="mb-3 form-check m-0 col-md-5">
             <p>Preuzimanje<span class="mk-red">*</span></p>
             <div class="mk-delivery row">
                 <div class="col-6">
-                <input name="delivery" id="personal" value="0" type="radio" class="form-check-input">
-                <label class="form-check-label" checked="checked" for="personal">Lično</label>
-                </div>
+                  <input name="delivery" checked="checked" id="delivered" value="1" type="radio" class="form-check-input"/>
+                  <label class="form-check-label" for="delivered">Dostava</label>
+                  </div>
                 <div class="col-6">
-                <input name="delivery" id="delivered" value="1" type="radio" class="form-check-input">
-                <label class="form-check-label" for="delivered">Dostava</label>
-                </div>
+                  <input name="delivery" id="personal" value="0" type="radio" class="form-check-input">
+                  <label class="form-check-label" for="personal">Lično</label>
+                  </div>
+                <p id="deliveryError" hidden="hidden" class="form-text mk-red error-alert"></p>
             </div>
           </div>
           <div class="mb-3 col-md-5">
             <label for="reserveStart">Rezervisati od<span class="mk-red">*</span></label>
             <input type="date" id="reserveStart" name="reserveStart"/>
+            <p hidden="hidden" class="form-text mk-red error-alert"></p>
           </div>
           <div class="mb-3 col-md-7">
               <label for="length">Broj dana rezervacije<span class="mk-red">*</span></label>
               <input type="number" id="length" name="quantity" min="1" value="20" max="40"/>
+              <p hidden="hidden" class="form-text mk-red error-alert"></p>
           </div>
           <div class="col-12 mk-modal-buttons">
             <button class="btn mk-send">Rezerviši</button>
             <button type="submit" class="mk-close btn btn-danger">Odustani</button>
           </div>
+          <p hidden="hidden" id="successAlert" class="form-text mk-yellow error-alert">Tekst</p>
         </form>
       </div>
     </div>
