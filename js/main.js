@@ -380,6 +380,7 @@ if(sPage === "knjiga.html"){
    let lastName = document.querySelector("#lastName")
    let address = document.querySelector("#address")
    let reserveDate = document.querySelector("#reserveStart");
+   let length = document.querySelector("#length");
    let radioSelected;
    for(let radio of deliveryRadios){
       if(radio.checked){
@@ -393,6 +394,7 @@ if(sPage === "knjiga.html"){
    addressRequired(addressBool);
    firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Ime sme da sadrži samo slova i ne sme biti prazno");})
    lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Prezime sme da sadrži samo slova i ne sme biti prazno");})
-   address.addEventListener("blur", function(){checkAddress()});
+   address.addEventListener("blur", checkAddress);
    reserveDate.addEventListener('blur', checkDate);
+   length.addEventListener('blur', checkLength);
 }
