@@ -69,11 +69,12 @@ function checkForm(){
    let address = document.querySelector("#address");
    console.log(email);
    let reEmail = /^[A-Z]$/
+   let reName
 
-   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,3}((\/(([\d]{1,2}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
+   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
 
-   checkFormRegex(firstName, reEmail, "Pogresan mejl");
-   checkFormRegex(address, reAddress, "Pogresna adresa");
+   checkFormRegex(firstName, reEmail, "Pogrešno ime");
+   checkFormRegex(address, reAddress, "Pogrešna adresa");
 }
 function checkFormRegex(element, test, message){
    let errorHolder = element.nextElementSibling;
@@ -266,6 +267,7 @@ if(sPage === "knjiga.html"){
       checkForm();
    })
    let deliveryRadios = $("input[name='delivery']");
+
    deliveryRadios[0].addEventListener("click",function(){addressRequired(false)});
    deliveryRadios[1].addEventListener("click",function(){addressRequired(true)});
 }
