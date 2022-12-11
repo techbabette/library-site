@@ -137,7 +137,7 @@ function checkLength(){
    return 0;
 }
 function checkAddress(){
-   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))(\.)?$/
+   let reAddress = /^(([A-ZŠĐČĆŽ][\wŠĐŽĆČščćđž\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđž\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))(\.)?$/
    let address = document.querySelector("#address");
    if(addressBool){
       if(address.value === ""){
