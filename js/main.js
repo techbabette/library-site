@@ -70,7 +70,7 @@ function checkForm(){
    console.log(email);
    let reEmail = /^[A-Z]$/
 
-   let reAddress = /^(([A-Z][\w\d\.\-]+)|([\d]+\.?))(\s{1}[\w\d\.\-]+){0,7}\s(([\d]{1,3}((\/(([\d]{1,2}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
+   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,3}((\/(([\d]{1,2}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
 
    checkFormRegex(firstName, reEmail, "Pogresan mejl");
    checkFormRegex(address, reAddress, "Pogresna adresa");
