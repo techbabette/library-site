@@ -242,6 +242,7 @@ if(sPage === "knjiga.html"){
    console.log(currentBook);
    document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
+<<<<<<< Updated upstream
    document.querySelector('#bookInfo').innerHTML += `<div class="w-100 mk-yellow"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a></p><p>Godina izdavanja: <a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>${Math.abs(currentBook.releaseDate)} ${currentBook.releaseDate < 0 ? "PNE" : ""}</a></p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" id="openModal" style="width:100%;">Rezerviši</button></a></div>`
    $('#openModal').click(function(event) {
       event.preventDefault();
@@ -262,4 +263,11 @@ if(sPage === "knjiga.html"){
    let deliveryRadios = $("input[name='delivery']");
    deliveryRadios[0].addEventListener("click",function(){addressRequired(false)});
    deliveryRadios[1].addEventListener("click",function(){addressRequired(true)});
+=======
+   $("#book-title").innerHTML = currentBook.replaceAll("_", " ");
+   $('#book-description').innerHTML = currentBook.description;
+   $('#author-field').innerHTML = currentBook.author.replaceAll("_", " ");
+   $('date-field').innerHTML = currentBook.releaseDate
+   document.querySelector('#bookInfo').innerHTML += `<div style="width:100%"><h2>${currentBook.name.replaceAll("_", " ")}</h2></div><p style="padding: 5%;">${currentBook.description.replaceAll("\n", '</br>')}</p><div><p>Autor: ${currentBook.author}</p><p>Godina izdavanja: ${currentBook.releaseDate}</p><p>Dostupnost: ${currentBook.copies} kopije</p><a href='rezervacije.html?Knjiga=${currentBook.name}'><button class="btn btn-light" style="width:100%;">Rezerviši</button></a></div>`
+>>>>>>> Stashed changes
 }
