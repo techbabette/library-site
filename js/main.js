@@ -344,6 +344,13 @@ if(sPage === "knjiga.html"){
    console.log(currentBook);
    document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
+   $('#bookImage')
+    .wrap('<span style="display:inline-block"></span>')
+    .css('display', 'block')
+    .parent()
+    .zoom({
+      url: $(this).find('img').attr('data-zoom')
+    });
    document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
    document.querySelector('#book-description').innerHTML = currentBook.description;
    document.querySelector('#author-field').innerHTML = "Autor: " +  ` <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a>`;
