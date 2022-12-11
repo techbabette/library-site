@@ -81,9 +81,6 @@ function checkForm(){
    let reName = /^[A-ZŠĆČĐ][a-zšđčć]{2,13}(\s[A-ZŠĆČĐ][a-zšđčć]{2,13}){0,3}$/
    let radioSelected;
 
-   success += checkFormRegex(firstName, reName, "Pogrešno ime");
-   success += checkFormRegex(lastName, reName, "Pogrešno prezime");
-   
    for(let radio of deliveryRadios){
       if(radio.checked){
          radioSelected = radio.value;
@@ -91,6 +88,10 @@ function checkForm(){
       }
    }
    addressBool = radioSelected>0? true:false;
+   if(firstName.value == ""){displayError(firstName, "Ime ne sme biti prazno")
+   success--};
+   if(lastName.value == ""){displayError(lastName, "Prezime ne sme biti prazno")
+   success--};
    if(radioSelected == null){
       let errorHolder = deliveryRadios[0].parentNode.parentNode.lastElementChild;
       errorHolder.innerText = 'Morate odabrati način preuzimanja'
@@ -385,8 +386,8 @@ if(sPage === "knjiga.html"){
    addressBool = radioSelected>0? true:false;
    console.log(addressBool);
    addressRequired(addressBool);
-   firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Morate uneti ime");})
-   lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Morate uneti prezime");})
+   firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Ime sme da sadrži samo slova i ne sme biti prazno");})
+   lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Prezime sme da sadrži samo slova i ne sme biti prazno");})
    address.addEventListener("blur", function(){checkAddress()});
    reserveDate.addEventListener('blur', checkDate);
 }
