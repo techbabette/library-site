@@ -349,6 +349,9 @@ footer{
   form{
     text-align: left;
   }
+  input{
+    text-align: left;
+  }
   #reserveStart{
     display: inline;
   }

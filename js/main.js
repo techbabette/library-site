@@ -60,13 +60,13 @@ function addressRequired(req){
    let addressInput = document.querySelector("#address")
    addressBool = req;
    if(req){
-      address.innerHTML = `Adresa<span class="mk-red">*</span>`;
+      address.innerHTML = `Adresa (ulica i broj)<span class="mk-red">*</span>`;
       addressInput.setAttribute("required", "required");
       addressInput.removeAttribute("disabled");
       addressInput.classList.remove("success");
    }
    else{
-      address.innerHTML = `Adresa`;
+      address.innerHTML = `Adresa (ulica i broj)`;
       removeError(addressInput);
       addressInput.setAttribute("disabled", "disabled");
       addressInput.value = "";
@@ -78,7 +78,6 @@ function checkForm(){
    let deliveryRadios = document.getElementsByName("delivery");;
    let firstName = document.querySelector("#firstName");
    let lastName = document.querySelector("#lastName");
-   let reName = /^[A-ZŠĆČĐ][a-zšđčć]{2,13}(\s[A-ZŠĆČĐ][a-zšđčć]{2,13}){0,3}$/
    let radioSelected;
 
    for(let radio of deliveryRadios){
@@ -146,7 +145,7 @@ function checkAddress(){
          return -1;
       }
       else{
-         return checkFormRegex(address, reAddress, "Pogrešna adresa");
+         return checkFormRegex(address, reAddress, "Adresa ne odgovara formatu, primer: 'Kralja Aleksandra 13'");
       }
    }
    return 0;
@@ -370,7 +369,6 @@ if(sPage === "knjiga.html"){
    deliveryRadios[0].addEventListener("click",function(){addressRequired(true)});
    deliveryRadios[1].addEventListener("click",function(){addressRequired(false)});
    let reName = /^[A-ZŠĆČĐ][a-zšđčć]{2,13}(\s[A-ZŠĆČĐ][a-zšđčć]{2,13}){0,3}$/
-   let reAddress = /^(([A-ZŠĐČĆ][\wŠĐŽĆČščćđ\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđ\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))$/
    let firstName = document.querySelector("#firstName")
    let lastName = document.querySelector("#lastName")
    let address = document.querySelector("#address")
