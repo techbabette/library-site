@@ -210,7 +210,7 @@ function bookToElement(currentBook, prefix, size){
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
    }
-   if(prefix == undefined){
+   if(prefix != undefined){
       return(`
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
