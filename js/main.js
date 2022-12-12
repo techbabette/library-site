@@ -3,7 +3,6 @@ var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 window.onload = function(){
    var categories = ['Jezici', 'Popularna_nauka', 'Popularna_psihologija', 'Istorijska_dela'];
-   if(sPage === "index.html" || sPage.length === 0) prefix = "pages/";
    var holder = document.querySelector('.dropdown-menu');
    let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
    holder.innerHTML += element;
@@ -34,15 +33,21 @@ function limitToFullWords(text, length){
    }
    return text;
 }
+function negativeToBCE(year){
+   return Math.abs(year) + (year < 0 ? ". P.N.E." : ".")
+}
 function fillColumns(elementList, columns, numberOfColumns){
+   for(let column of columns){
+      column.innerHTML = "";
+   }
    for(let element in elementList){
       columns[element % numberOfColumns].innerHTML += elementList[element];
    }
 }
 function generateFooter(){
-   let links = new Array('https://www.facebook.com/','https://www.twitter.com/','https://www.linkedin.com/', 'sitemap.xml');
-   let names = new Array('facebook', 'twitter', 'linkedin', 'sitemap');
-   let icons = new Array('icomoon-free:facebook', 'la:twitter', 'mdi:linkedin', 'bx:sitemap')
+   let links = new Array('https://www.facebook.com/','https://www.twitter.com/','#', 'sitemap.xml');
+   let names = new Array('facebook', 'twitter', 'fa-light', 'sitemap');
+   let icons = new Array('icomoon-free:facebook', 'la:twitter', 'fa-file', 'bx:sitemap')
    let columns = document.getElementsByClassName("icon-holder");
    let elementList = new Array();
    for(let i = 0; i < links.length; i++){
@@ -50,6 +55,28 @@ function generateFooter(){
       `<a class="text-light" href="${links[i]}" ><span class="iconify" id="${names[i]}-icon" data-icon="${icons[i]}"></span></a>`)
    };
    fillColumns(elementList, columns, 4);
+}
+let numberOfBooksToLoad = 0;
+function generateBooks(columns, numberOfColumns, numberOfBooks){
+   let elementList = new Array();
+   let returnCode = false;
+   for(let i = 0; i<numberOfBooks;i++){
+      if(i>=books.length){returnCode = true; break;}
+      if(i== books.length - 1){returnCode = true;}
+      let currentBook = books[i];
+      elementList.push(bookToElement(currentBook));
+   }
+   fillColumns(elementList, columns, numberOfColumns);
+   return returnCode;
+}
+function loadMore(){
+   let columns = document.querySelectorAll(".mk-book-holder")
+   let button = document.querySelector("#loadMore")
+   numberOfBooksToLoad += 4;
+   console.log(numberOfBooksToLoad);
+   if(generateBooks(columns, columns.length, numberOfBooksToLoad)){
+      button.setAttribute("hidden", "hidden");
+   }
 }
 function getRandomInt(max){
    return Math.floor(Math.random() * max);
@@ -205,17 +232,17 @@ function countTo(element, from, to, timeToLoad){
        }
    }, interval);
 }
-function bookToElement(currentBook, prefix, size){
+function bookToElement(currentBook){
    let bookDescription = currentBook.description;
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
    }
    if(prefix != undefined){
       return(`
-      <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt=${currentBook.name.replaceAll("_", " ")} class="card-img-top book-prev" alt="...">
-      <div class="card-body ${size} book-body">
+      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
+      <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text"><em>${bookDescription}</em></p>
           <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
@@ -226,9 +253,9 @@ function bookToElement(currentBook, prefix, size){
    }
    else{
       return(`
-      <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
-      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt=${currentBook.name.replaceAll("_", " ")} class="card-img-top book-prev" alt="...">
+      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
           <p class="card-text"><em>${bookDescription}</em></p>
@@ -244,7 +271,7 @@ function moveBooks(columns, direction){
       bookId++;
       for(let i = 0; i<columns.length; i++){
          console.log((i+bookId)%books.length);
-         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length], "pages/");
+         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length]);
       }
       console.log("Break");
    }
@@ -253,33 +280,37 @@ function moveBooks(columns, direction){
       if(bookId < 0)bookId = books.length - columns.length;
       for(let i = 0; i<columns.length; i++){
          console.log((i+bookId)%books.length);
-         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length], "pages/");
+         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length]);
       }
       console.log("Break");
    }
 }
 //Initializing all books
 var books = 
-[new book("Francuski_jezik", "Jezici", "Biljana_Aksentijević", "Udžbenik iz francuskog", 2, 2022),
+[
+new book('Manipulacija_i_moć', 'Popularna_psihologija', 'Henrik_Feksevs', 'Želite da odmah primetite da vas neko laže? Flertujete na pravi način? Prodate svoju priču svima? Naravno, reći ćete, ko ne želi da poseduje ove veštine? Henrik Feksevs je fascinantna ličnost. Neki bi ga mogli opisati kao pomalo luckastog ekscentrika, ali ako pročitate njegovu knjigu, otkrićete da on savršeno dobro zna o čemu priča. A uz to je i duhovit.Verovatno se pitate da li je ova knjiga praktični vodič za iluzioniste? Ili možda priručnik za mađioničare početnike? Ili čak neki ezoterijski tekst? Ne, ova knjiga nije ništa od toga. Ona je namenjena svima koji žele da čitaju misli, bez potrebe da budu čarobnjaci. Položaj tela, intonacija govora, korak, pogled i pokreti otkrivaju naša osećanja. Često će ti neverbalni signali biti u direktnom sukobu sa porukom koju izražavamo rečima. ', 5, 2022),
+new book("Francuski_jezik", "Jezici", "Biljana_Aksentijević", "Udžbenik iz francuskog", 2, 2021),
+new book('Prosvećeni_svet', 'Popularna_nauka','Steven Pinker', 'U ovoj elegantnoj proceni stanja čovečanstva na početku trećeg milenijuma, kognitivni psiholog, intelektualac i mislilac Stiven Pinker poziva nas da se odaljimo od zastrašujućih naslova kojima smo zasuti i crnih proročanstava „stručnjaka“, koji igraju na kartu naših psihološki uslovljenih predrasuda. Umesto toga, on predlaže da jednostavno pratimo podatke. Pinker pokazuje da su život, zdravlje, prosperitet, sigurnost, mir, znanje i sreća u porastu, ne samo na Zapadu, već u čitavom svetu. Taj napredak nije rezultat neke kosmičke sile. To je dar prosvetiteljstva, uverenja da razum i nauka mogu da dovedu do procvata čovečanstva.', 2, 2019),
+new book("Homo_Deus", 'Popularna_nauka', 'Juval_Noa_Harari','Šta će sada biti prioritetni problemi čovečanstva umesto gladi, bolesti i rata? Kakvu ćemo sudbinu nameniti ljudskom rodu, kao samoproklamovani bogovi planete Zemlje, koje korake ćemo preduzimati da to ostvarimo? Homo Deus istražuje projekte, snove i noćne more koji će oblikovati dvadeset prvi vek – od prevazilaženja smrti do stvaranja veštačkog života. Pred nama su osnovna pitanja na koja moramo da damo odgovore: u kom pravcu ćemo se dalje kretati? I kako ćemo zaštititi ovaj krhki svet od sopstvenih destruktivnih moći? Pred nama je sledeća faza evolucije: Homo Deus.', 3, 2022),
+new book('Sapijens', 'Istorijska_dela', 'Juval_Noa_Harari', 'Pre stotinu hiljada godina na Zemlji je živelo najmanje šest ljudskih vrsta. Danas postoji samo jedna – homo sapijens. Kako je naša vrsta uspela da pobedi u bici za prevlast? Zašto su naši preci lovci-sakupljači udružili snage da bi gradili gradove i osnivali carstva? Kako smo počeli da verujemo u bogove, nacije i ljudska prava, u novac, knjige i zakone; kako smo pali u ropstvo birokratije, radnog vremena i konzumerizma? Kako će naš svet izgledati u budućnosti?', 3, 2022),
 new book("Umeće_ratovanja", "Istorijska_dela", "Sun_Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3, -500),
-new book('Intelektom_ispred_svih', 'Popularna_psihologija', 'Henrik Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, 2022),
+new book('Intelektom_ispred_svih', 'Popularna_psihologija', 'Henrik_Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, 2022),
 new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav_Smit', "Kako da bolje shvatite moderni svet. Moj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts", 2, 2020),
-new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan_Bosnić", "„Nema grada na svetu oko koga su se jagmili toliki narodi, pod čijim su se bedemima vodile tolike bitke, koji je toliko puta menjao vlasnika i pedeset puta uništavan da bi se svih pedeset puta ponovo iz istorijskog groba podigao – kao što je naš Beograd. Pa zar ta činjenica što je taj grad srpski ni najmanje o Srbima ne govori?“ – Borislav Pekić", 2, 2019)
+new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan_Bosnić", "„Nema grada na svetu oko koga su se jagmili toliki narodi, pod čijim su se bedemima vodile tolike bitke, koji je toliko puta menjao vlasnika i pedeset puta uništavan da bi se svih pedeset puta ponovo iz istorijskog groba podigao – kao što je naš Beograd. Pa zar ta činjenica što je taj grad srpski ni najmanje o Srbima ne govori?“ – Borislav Pekić", 2, 2019),
+new book('Isus_to_nije_rekao','Istorijska_dela','Bart_D._Erman', 'Rafinirano, ali i na jedan krajnje izazovan način, Erman iznosi dokaze o tome kako je puno omiljenih biblijskih priča i široko prihvaćenih verovanja koje se odnose na Isusovu božanstvenost, Trojstvo, božansko poreklo i nadahnutost Biblije, nastalo kao plod namernih i slučajnih izmena načinjenih od strane drevnih pisara - a ove izmene su, pak, dramatično uticale na sve naredne verzije Biblije.', 1, 2019),
+new book("Nemački_za_neupućene", 'Jezici', 'Wendy Foster', 'Guten Tag! Ukoliko želite da naučite nemački jezik – bilo radi posla, putovanja ili zabave – Nemački za neupućene će zadovoljiti sve vaše potrebe. Pored poglavlja koja objašnjavaju gramatiku i njenu primenu, knjiga sadrži i dijaloge koji će vam omogućiti da koristite i govorite nemački jezik kao maternji. Osim toga, ona sadrži i CD koji pruža dodatne mogućnosti za vežbanje govornog jezika. ', 1, 2018)
 ];
 //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
    let popularColumns = document.querySelectorAll(".pop")
    let numberOfColumns = popularColumns.length;
-   let elementList = new Array();
-   for(let i = 0; i < numberOfColumns; i++){
-      elementList[i] = bookToElement(books[i], prefix);
-   }
-   fillColumns(elementList, popularColumns, numberOfColumns)
+   generateBooks(popularColumns, popularColumns.length, popularColumns.length);
    elementList = new Array();
    recentColumns = document.querySelectorAll(".rec")
    numberOfColumns = recentColumns.length;
-   let sortedBooks = books.sort(function(a ,b){
+   let copyOfBooks = new Array(...books);
+   books = books.sort(function(a ,b){
       if(a.releaseDate > b.releaseDate){
          console.log("Sorted");
          return -1
@@ -290,10 +321,8 @@ if(sPage === "index.html" || sPage.length === 0){
       }
       else return 0;
    })
-   for(let i = 0; i < numberOfColumns; i++){
-      elementList[i] = bookToElement(sortedBooks[i], prefix);
-   }
-   fillColumns(elementList, recentColumns, numberOfColumns)
+   generateBooks(recentColumns, recentColumns.length, recentColumns.length);
+   books = copyOfBooks;
    let timeToLoad = 2500;
    document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularColumns, -1)});
    document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularColumns, 1)});
@@ -306,6 +335,7 @@ if(sPage === "index.html" || sPage.length === 0){
 if(sPage === "knjige.html"){
    const queryString = window.location.search;
    const urlParams = new URLSearchParams(queryString);
+   const loadMoreButton = document.querySelector("#loadMore");
    //If the category paramater is set, filter the books by category, else show all books
    if(urlParams.has('kategorija')){
       let kategorija = urlParams.get('kategorija')
@@ -321,20 +351,15 @@ if(sPage === "knjige.html"){
    }
    if(urlParams.has('godina')){
       let year = urlParams.get('godina');
-      document.title = "Knjige iz " + year.replaceAll("_", " ") + ". godine";
+      document.title = "Knjige iz " + negativeToBCE(year) + ". godine";
       books = books.filter(book => book.releaseDate === parseInt(year));
-      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + Math.abs(year) + (year < 0 ? " PNE" : "") + ". godine";
+      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
    }
    //Dynamically generate the books
    let columns = document.querySelectorAll(".mk-book-holder")
-   let elementList = new Array();
    //Prepare the books to be displayed
-   for(let i = 0; i<books.length;i++){
-      let currentBook = books[i];
-      elementList.push(bookToElement(currentBook));
-   }
-   //Display the books
-   fillColumns(elementList, columns, 4);
+   loadMore();
+   loadMoreButton.addEventListener("click", loadMore);
 }
 if(sPage === "knjiga.html"){
    const queryString = window.location.search;
@@ -342,20 +367,20 @@ if(sPage === "knjiga.html"){
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
    console.log(currentBook);
-   document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
+   document.title = currentBook.name.replaceAll("_", " ");
    $('#bookImage')
-    .wrap('<span style="display:inline-block"></span>')
+    .wrap('<span class="zoom-span"></span>')
     .css('display', 'block')
     .parent()
     .zoom({
-      url: $(this).find('img').attr('data-zoom')
+      url: `../imgs/${currentBook.name.toLowerCase()}.jpg`
     });
    document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
    document.querySelector('#book-description').innerHTML = currentBook.description;
    document.querySelector('#author-field').innerHTML = "Autor: " +  ` <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a>`;
    document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
-   document.querySelector('#date-field').innerHTML = "Godina izdavanja: " + `<a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>` +Math.abs(currentBook.releaseDate)  + (currentBook.releaseDate < 0 ? "PNE" : "") + "</a>"
+   document.querySelector('#date-field').innerHTML = "Godina izdavanja: " + `<a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>` + negativeToBCE(currentBook.releaseDate) + "</a>"
    $('#openModal').click(function(event) {
       event.preventDefault();
       $("#myModal").show("fast")
