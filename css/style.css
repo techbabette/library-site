@@ -158,11 +158,15 @@ a.active{
   justify-content: space-between;
   align-items: center;
 }
-#bookImage{
-  border: 2px solid #f7bd2f;
+.zoom-span{
+  border: 2px solid #f7bd2f !important;
+  display:inline-block;
 }
 #bookInfo{
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .success{
   border: 2px solid green;

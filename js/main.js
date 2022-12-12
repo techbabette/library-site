@@ -12,6 +12,9 @@ window.onload = function(){
    holder.innerHTML += element;
    }
    generateFooter();
+   if(sPage === knjiga.html){
+      
+   }
 }
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
@@ -34,15 +37,18 @@ function limitToFullWords(text, length){
    }
    return text;
 }
+function negativeToBCE(year){
+   return Math.abs(year) + (year < 0 ? ". P.N.E." : ".")
+}
 function fillColumns(elementList, columns, numberOfColumns){
    for(let element in elementList){
       columns[element % numberOfColumns].innerHTML += elementList[element];
    }
 }
 function generateFooter(){
-   let links = new Array('https://www.facebook.com/','https://www.twitter.com/','https://www.linkedin.com/', 'sitemap.xml');
-   let names = new Array('facebook', 'twitter', 'linkedin', 'sitemap');
-   let icons = new Array('icomoon-free:facebook', 'la:twitter', 'mdi:linkedin', 'bx:sitemap')
+   let links = new Array('https://www.facebook.com/','https://www.twitter.com/','#', 'sitemap.xml');
+   let names = new Array('facebook', 'twitter', 'fa-light', 'sitemap');
+   let icons = new Array('icomoon-free:facebook', 'la:twitter', 'fa-file', 'bx:sitemap')
    let columns = document.getElementsByClassName("icon-holder");
    let elementList = new Array();
    for(let i = 0; i < links.length; i++){
@@ -321,9 +327,9 @@ if(sPage === "knjige.html"){
    }
    if(urlParams.has('godina')){
       let year = urlParams.get('godina');
-      document.title = "Knjige iz " + year.replaceAll("_", " ") + ". godine";
+      document.title = "Knjige iz " + negativeToBCE(year) + ". godine";
       books = books.filter(book => book.releaseDate === parseInt(year));
-      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + Math.abs(year) + (year < 0 ? " PNE" : "") + ". godine";
+      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
    }
    //Dynamically generate the books
    let columns = document.querySelectorAll(".mk-book-holder")
@@ -342,20 +348,20 @@ if(sPage === "knjiga.html"){
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
    console.log(currentBook);
-   document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
+   document.title = currentBook.name.replaceAll("_", " ");
    $('#bookImage')
-    .wrap('<span style="display:inline-block"></span>')
+    .wrap('<span class="zoom-span"></span>')
     .css('display', 'block')
     .parent()
     .zoom({
-      url: $(this).find('img').attr('data-zoom')
+      url: `../imgs/${currentBook.name.toLowerCase()}.jpg`
     });
    document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
    document.querySelector('#book-description').innerHTML = currentBook.description;
    document.querySelector('#author-field').innerHTML = "Autor: " +  ` <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a>`;
    document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
-   document.querySelector('#date-field').innerHTML = "Godina izdavanja: " + `<a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>` +Math.abs(currentBook.releaseDate)  + (currentBook.releaseDate < 0 ? "PNE" : "") + "</a>"
+   document.querySelector('#date-field').innerHTML = "Godina izdavanja: " + `<a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>` + negativeToBCE(currentBook.releaseDate) + "</a>"
    $('#openModal').click(function(event) {
       event.preventDefault();
       $("#myModal").show("fast")
