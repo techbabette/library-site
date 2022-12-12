@@ -56,21 +56,27 @@ function generateFooter(){
    };
    fillColumns(elementList, columns, 4);
 }
-let numberOfBooksToLoad = 4;
+let numberOfBooksToLoad = 0;
 function generateBooks(columns, numberOfColumns, numberOfBooks){
    let elementList = new Array();
+   let returnCode = false;
    for(let i = 0; i<numberOfBooks;i++){
-      if(i>=books.length)break;
+      if(i>=books.length){returnCode = true; break;}
+      if(i== books.length - 1){returnCode = true;}
       let currentBook = books[i];
       elementList.push(bookToElement(currentBook));
    }
    fillColumns(elementList, columns, numberOfColumns);
+   return returnCode;
 }
 function loadMore(){
    let columns = document.querySelectorAll(".mk-book-holder")
+   let button = document.querySelector("#loadMore")
    numberOfBooksToLoad += 4;
    console.log(numberOfBooksToLoad);
-   generateBooks(columns, columns.length, numberOfBooksToLoad);
+   if(generateBooks(columns, columns.length, numberOfBooksToLoad)){
+      button.setAttribute("hidden", "hidden");
+   }
 }
 function getRandomInt(max){
    return Math.floor(Math.random() * max);
@@ -289,7 +295,8 @@ new book("Umeće_ratovanja", "Istorijska_dela", "Sun_Tzu", "Sun Tzuova knjiga Um
 new book('Intelektom_ispred_svih', 'Popularna_psihologija', 'Henrik_Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, 2022),
 new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav_Smit', "Kako da bolje shvatite moderni svet. Moj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts", 2, 2020),
 new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan_Bosnić", "„Nema grada na svetu oko koga su se jagmili toliki narodi, pod čijim su se bedemima vodile tolike bitke, koji je toliko puta menjao vlasnika i pedeset puta uništavan da bi se svih pedeset puta ponovo iz istorijskog groba podigao – kao što je naš Beograd. Pa zar ta činjenica što je taj grad srpski ni najmanje o Srbima ne govori?“ – Borislav Pekić", 2, 2019),
-new book('Isus_to_nije_rekao','Istorijska_dela','Bart_D._Erman', 'Rafinirano, ali i na jedan krajnje izazovan način, Erman iznosi dokaze o tome kako je puno omiljenih biblijskih priča i široko prihvaćenih verovanja koje se odnose na Isusovu božanstvenost, Trojstvo, božansko poreklo i nadahnutost Biblije, nastalo kao plod namernih i slučajnih izmena načinjenih od strane drevnih pisara - a ove izmene su, pak, dramatično uticale na sve naredne verzije Biblije.', 1, 2019)
+new book('Isus_to_nije_rekao','Istorijska_dela','Bart_D._Erman', 'Rafinirano, ali i na jedan krajnje izazovan način, Erman iznosi dokaze o tome kako je puno omiljenih biblijskih priča i široko prihvaćenih verovanja koje se odnose na Isusovu božanstvenost, Trojstvo, božansko poreklo i nadahnutost Biblije, nastalo kao plod namernih i slučajnih izmena načinjenih od strane drevnih pisara - a ove izmene su, pak, dramatično uticale na sve naredne verzije Biblije.', 1, 2019),
+new book("Nemački_za_neupućene", 'Jezici', 'Wendy Foster', 'Guten Tag! Ukoliko želite da naučite nemački jezik – bilo radi posla, putovanja ili zabave – Nemački za neupućene će zadovoljiti sve vaše potrebe. Pored poglavlja koja objašnjavaju gramatiku i njenu primenu, knjiga sadrži i dijaloge koji će vam omogućiti da koristite i govorite nemački jezik kao maternji. Osim toga, ona sadrži i CD koji pruža dodatne mogućnosti za vežbanje govornog jezika. ', 1, 2018)
 ];
 //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
@@ -349,7 +356,7 @@ if(sPage === "knjige.html"){
    //Dynamically generate the books
    let columns = document.querySelectorAll(".mk-book-holder")
    //Prepare the books to be displayed
-   generateBooks(columns, 4, numberOfBooksToLoad);
+   loadMore();
    loadMoreButton.addEventListener("click", loadMore);
 }
 if(sPage === "knjiga.html"){
