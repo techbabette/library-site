@@ -136,6 +136,9 @@ a.active{
   transform: scale(1.02);
   transition: 0.2s;
 }
+#loadMore{
+  margin-bottom: 10px;
+}
 #bookPage{
   padding: 20px;
   background-color: #333333;
