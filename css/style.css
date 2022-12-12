@@ -137,7 +137,13 @@ a.active{
   transition: 0.2s;
 }
 #loadMore{
+  border-radius: 5%;
   margin-bottom: 10px;
+  background-color: #333333;
+  width: 100%;
+}
+#loadMore:hover{
+  background-color: #222222;
 }
 #bookPage{
   padding: 20px;
@@ -402,5 +408,8 @@ footer{
   }
   input{
     text-align: left;
+  }
+  #loadMore{
+    width: 45%;
   }
 }

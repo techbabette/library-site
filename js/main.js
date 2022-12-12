@@ -234,7 +234,7 @@ function bookToElement(currentBook){
    }
    if(prefix != undefined){
       return(`
-      <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -248,7 +248,7 @@ function bookToElement(currentBook){
    }
    else{
       return(`
-      <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -284,7 +284,7 @@ function moveBooks(columns, direction){
 var books = 
 [
 new book('Manipulacija_i_moć', 'Popularna_psihologija', 'Henrik_Feksevs', 'Želite da odmah primetite da vas neko laže? Flertujete na pravi način? Prodate svoju priču svima? Naravno, reći ćete, ko ne želi da poseduje ove veštine? Henrik Feksevs je fascinantna ličnost. Neki bi ga mogli opisati kao pomalo luckastog ekscentrika, ali ako pročitate njegovu knjigu, otkrićete da on savršeno dobro zna o čemu priča. A uz to je i duhovit.Verovatno se pitate da li je ova knjiga praktični vodič za iluzioniste? Ili možda priručnik za mađioničare početnike? Ili čak neki ezoterijski tekst? Ne, ova knjiga nije ništa od toga. Ona je namenjena svima koji žele da čitaju misli, bez potrebe da budu čarobnjaci. Položaj tela, intonacija govora, korak, pogled i pokreti otkrivaju naša osećanja. Često će ti neverbalni signali biti u direktnom sukobu sa porukom koju izražavamo rečima. ', 5, 2022),
-new book("Francuski_jezik", "Jezici", "Biljana_Aksentijević", "Udžbenik iz francuskog", 2, 2022),
+new book("Francuski_jezik", "Jezici", "Biljana_Aksentijević", "Udžbenik iz francuskog", 2, 2021),
 new book('Sapijens', 'Istorijska_dela', 'Juval_Noa_Harari', 'Pre stotinu hiljada godina na Zemlji je živelo najmanje šest ljudskih vrsta. Danas postoji samo jedna – homo sapijens. Kako je naša vrsta uspela da pobedi u bici za prevlast? Zašto su naši preci lovci-sakupljači udružili snage da bi gradili gradove i osnivali carstva? Kako smo počeli da verujemo u bogove, nacije i ljudska prava, u novac, knjige i zakone; kako smo pali u ropstvo birokratije, radnog vremena i konzumerizma? Kako će naš svet izgledati u budućnosti?', 3, 2022),
 new book("Umeće_ratovanja", "Istorijska_dela", "Sun_Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3, -500),
 new book('Intelektom_ispred_svih', 'Popularna_psihologija', 'Henrik_Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, 2022),
