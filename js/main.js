@@ -266,7 +266,7 @@ function moveBooks(columns, direction){
       bookId++;
       for(let i = 0; i<columns.length; i++){
          console.log((i+bookId)%books.length);
-         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length], "pages/");
+         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length]);
       }
       console.log("Break");
    }
@@ -275,7 +275,7 @@ function moveBooks(columns, direction){
       if(bookId < 0)bookId = books.length - columns.length;
       for(let i = 0; i<columns.length; i++){
          console.log((i+bookId)%books.length);
-         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length], "pages/");
+         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length]);
       }
       console.log("Break");
    }
@@ -297,15 +297,12 @@ if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
    let popularColumns = document.querySelectorAll(".pop")
    let numberOfColumns = popularColumns.length;
-   let elementList = new Array();
-   for(let i = 0; i < numberOfColumns; i++){
-      elementList[i] = bookToElement(books[i], prefix);
-   }
-   fillColumns(elementList, popularColumns, numberOfColumns)
+   generateBooks(popularColumns, popularColumns.length, popularColumns.length);
    elementList = new Array();
    recentColumns = document.querySelectorAll(".rec")
    numberOfColumns = recentColumns.length;
-   let sortedBooks = books.sort(function(a ,b){
+   let copyOfBooks = books;
+   books = books.sort(function(a ,b){
       if(a.releaseDate > b.releaseDate){
          console.log("Sorted");
          return -1
@@ -316,10 +313,8 @@ if(sPage === "index.html" || sPage.length === 0){
       }
       else return 0;
    })
-   for(let i = 0; i < numberOfColumns; i++){
-      elementList[i] = bookToElement(sortedBooks[i], prefix);
-   }
-   fillColumns(elementList, recentColumns, numberOfColumns)
+   generateBooks(recentColumns, recentColumns.length, recentColumns.length);
+   books = copyOfBooks;
    let timeToLoad = 2500;
    document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularColumns, -1)});
    document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularColumns, 1)});
