@@ -3,7 +3,6 @@ var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 window.onload = function(){
    var categories = ['Jezici', 'Popularna_nauka', 'Popularna_psihologija', 'Istorijska_dela'];
-   if(sPage === "index.html" || sPage.length === 0) prefix = "pages/";
    var holder = document.querySelector('.dropdown-menu');
    let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
    holder.innerHTML += element;
@@ -301,7 +300,7 @@ if(sPage === "index.html" || sPage.length === 0){
    elementList = new Array();
    recentColumns = document.querySelectorAll(".rec")
    numberOfColumns = recentColumns.length;
-   let copyOfBooks = books;
+   let copyOfBooks = new Array(...books);
    books = books.sort(function(a ,b){
       if(a.releaseDate > b.releaseDate){
          console.log("Sorted");
