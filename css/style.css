@@ -148,7 +148,7 @@ a.active{
   margin: 10px auto;
   margin-bottom: 10px;
   background-color: #333333;
-  color: white;
+  color: white !important;
   padding: 5px;
   width: 100%;
   border: 2px solid #f7bd2f;
@@ -328,13 +328,17 @@ color: #f5af05;
   bottom: 10vh;
   border-radius: 50%;
   background-color: #333333;
-  border: 1px solid #f5af05;
+  color: white !important;
+  border: 2px solid #f5af05;
   width: 2.5em;
   height: 2.5em;
   font-size: 22px;
   text-align: center;
   line-height: 2.5em;
   display: none;
+}
+.invisible{
+  visibility: none;
 }
 .hidden{
   display: none;

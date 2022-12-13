@@ -16,10 +16,10 @@ window.onscroll = function(){
    console.log($(window).scrollTop());
    let upButton = $("#goBackUp");
    if ($(window).scrollTop()>300){
-      upButton.removeClass("hidden");
+      upButton.removeClass("invisible");
    } 
    else{
-      upButton.addClass("hidden");
+      upButton.addClass("invisible");
    }
 }
 function book(name, category, author, description, copies, releaseDate){
