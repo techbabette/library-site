@@ -48,17 +48,17 @@
           <div class="mb-3 col-12 col-md-6">
             <label for="firstName" class="form-label">Ime<span class="mk-red">*</span></label>
             <input type="text" class="form-control" id="firstName" aria-describedby="emailHelp"/>
-            <p id="firstNameError" hidden="hidden" class="form-text mk-red error-alert"></p>
+            <p id="firstNameError" class="form-text mk-red error-alert hidden"></p>
           </div>
           <div class="mb-3 col-12 col-md-6">
             <label for="lastName" class="form-label">Prezime<span class="mk-red">*</span></label>
             <input type="text" class="form-control" id="lastName" aria-describedby="emailHelp"/>
-            <p id="lastNameError" hidden="hidden" class="form-text mk-red error-alert"></p>
+            <p id="lastNameError" class="form-text mk-red error-alert hidden"></p>
           </div>
           <div class="mb-3 col-md-7">
             <label for="address" id="addDesc" class="form-label">Adresa (ulica i broj)<span class="mk-red">*</span></label>
             <input type="text" class="form-control" id="address">
-            <p hidden="hidden" class="form-text mk-red error-alert"></p>
+            <p class="form-text mk-red error-alert hidden"></p>
           </div>
           <div class="mb-3 form-check m-0 col-md-5">
             <p>Preuzimanje<span class="mk-red">*</span></p>
@@ -71,24 +71,24 @@
                   <input name="delivery" id="personal" value="0" type="radio" class="form-check-input">
                   <label class="form-check-label" for="personal">Lično</label>
                   </div>
-                <p id="deliveryError" hidden="hidden" class="form-text mk-red error-alert"></p>
+                <p id="deliveryError" class="form-text mk-red error-alert hidden"></p>
             </div>
           </div>
           <div class="mb-3 col-md-5">
             <label for="reserveStart">Rezervisati od<span class="mk-red">*</span></label>
             <input type="date" id="reserveStart" name="reserveStart"/>
-            <p hidden="hidden" class="form-text mk-red error-alert"></p>
+            <p class="form-text mk-red error-alert hidden"></p>
           </div>
           <div class="mb-3 col-md-7">
               <label for="length">Broj dana rezervacije<span class="mk-red">*</span></label>
               <input type="number" id="length" name="quantity" min="1" placeholder="20" max="40"/>
-              <p hidden="hidden" class="form-text mk-red error-alert"></p>
+              <p class="form-text mk-red error-alert"></p>
           </div>
           <div class="col-12 mk-modal-buttons">
             <button class="btn mk-send">Rezerviši</button>
             <button type="submit" class="mk-close btn btn-danger">Odustani</button>
           </div>
-          <p hidden="hidden" id="successAlert" class="form-text mk-yellow error-alert"></p>
+          <p id="successAlert" class="form-text mk-yellow error-alert hidden"></p>
         </form>
       </div>
     </div>

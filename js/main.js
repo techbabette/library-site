@@ -22,10 +22,6 @@ window.onscroll = function(){
       upButton.addClass("hidden");
    }
 }
-function hide(element){
-   if(element.hasClass("hidden"))element.removeClass("hidden");
-   else element.addClass("hidden");
-}
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
    this.name = name;
@@ -157,11 +153,11 @@ function checkForm(){
 function showSuccess(){
    let element = document.querySelector("#successAlert");
    element.innerText = "Uspešno ste rezervisali knjigu";
-   element.removeAttribute("hidden");
+   show(element);
 }
 function hideSuccess(){
    let element = document.querySelector("#successAlert");
-   element.setAttribute("hidden", "hidden");
+   hide(element);
 }
 function checkLength(){
    let reserveLength = document.querySelector("#length");
@@ -212,16 +208,21 @@ function displayError(element, message){
    element.classList.add("failure");
    element.classList.remove("success");
    errorHolder.innerText = message;
-   errorHolder.removeAttribute("hidden");
+   show(errorHolder)
 }
 function removeError(element){
    let errorHolder = element.nextElementSibling;
-   errorHolder.setAttribute("hidden", "hidden");
    element.classList.remove("failure");
    element.classList.add("success");
+   hide(errorHolder);
+}
+function show(element){
+   if(element.classList.contains("hidden")) element.classList.remove("hidden");
+}
+function hide(element){
+   element.classList.add("hidden");
 }
 function checkFormRegex(element, test, message){
-   let errorHolder = element.nextElementSibling;
    if(test.test(element.value)){
       removeError(element);
       return 0;

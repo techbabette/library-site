@@ -337,7 +337,7 @@ color: #f5af05;
   display: none;
 }
 .hidden{
-  visibility: hidden;
+  display: none;
 }
 footer .row{
   height: 100%;
