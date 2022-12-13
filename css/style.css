@@ -122,13 +122,17 @@ a.active{
   box-shadow: none;
   display: none;
   background-color: #333333;
-  color: aliceblue;
-  width: 50%;
-  border-radius: 10%;
+  color: aliceblue !important;
+  text-decoration: none;
+  width: 2.5em;
+  height: 2.5em;
+  line-height: 2.2em;
+  border-radius: 20%;
   border: 2px solid #f7bd2f;
 }
 .moveButton:hover{
   background-color: #222222;
+  color: aliceblue !important;
 }
 .mk-mb{
   transform: scale(1.0);
@@ -380,9 +384,6 @@ footer{
     min-height: 60vh;
     border-radius: 1%;
   }
-  .mk-sorted-book-holder{
-    margin-top: 0px;
-  }
   .mk-modal-content{
     width: 90%;
   }
@@ -427,6 +428,9 @@ footer{
   }
   .mk-card-holder{
     margin-bottom: 0%;
+  }
+  .mk-sorted-book-holder{
+    margin-top: 0px;
   }
   .mk-modal-content{
     width: 40%;

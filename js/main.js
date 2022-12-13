@@ -12,8 +12,7 @@ window.onload = function(){
    }
    let upButton = $("#goBackUp");
    upButton.click(function(event){
-      console.log("Caught click");
-      event.preventDefault;
+      event.preventDefault();
       $(window).scrollTop(0);
    })
    generateFooter();
@@ -348,8 +347,14 @@ if(sPage === "index.html" || sPage.length === 0){
    generateBooks(recentHolder, 4);
    books = copyOfBooks;
    let timeToLoad = 2500;
-   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularHolder, -1)});
-   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularHolder, 1)});
+   $("#moveLeftButton").click(function(event){
+      event.preventDefault(); 
+      moveBooks(popularHolder, -1);
+   });
+   $("#moveRightButton").click(function(event){
+      event.preventDefault();
+      moveBooks(popularHolder, 1);
+   })
    countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
    countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
    countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
@@ -393,8 +398,10 @@ if(sPage === "knjiga.html"){
    let currentBook = books.filter(book => book.name === urlBook)[0] 
    if(currentBook === undefined)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
    console.log(currentBook);
-   document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
-   document.title = currentBook.name.replaceAll("_", " ");
+   let bookImage = document.querySelector("#bookImage")
+   bookImage.src=`../imgs/${currentBook.name.toLowerCase()}.jpg`;
+   bookImage.setAttribute("alt", currentBook.name.replaceAll("_", " "));
+   document.title = currentBook.name.replaceAll("_", currentBook.name.replaceAll("_", " "));
    $('#bookImage')
     .wrap('<span class="zoom-span"></span>')
     .css('display', 'block')
