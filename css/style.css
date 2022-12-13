@@ -114,6 +114,7 @@ a.active{
 #mk-book-category{
   color: #333333;
   font-weight: bold;
+  margin-top: 10px;
 }
 .card-title{
   font-weight: bold;
@@ -456,5 +457,8 @@ footer{
   }
   #goBackUp{
     display: block;
+  }
+  .mk-book-category{
+    margin-top: 0px;
   }
 }

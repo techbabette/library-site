@@ -58,8 +58,8 @@ function fillColumns(elementList, columns, numberOfColumns){
       columns[element % numberOfColumns].innerHTML += elementList[element];
    }
 }
+
 function fillBooks(elementList, holder){
-   holder.innerHTML = "";
    for(let element of elementList){
       holder.innerHTML+=element
    }
@@ -76,14 +76,16 @@ function generateFooter(){
    };
    fillColumns(elementList, columns, 4);
 }
-let numberOfBooksToLoad = 0;
-function generateBooks(columns, numberOfBooks){
+let booksLoaded = 0;
+function generateBooks(columns){
    let elementList = new Array();
+   let startingId = booksLoaded;
+   let increment = 4;
    let returnCode = false;
-   for(let i = 0; i<numberOfBooks;i++){
-      if(i>=books.length){returnCode = true; break;}
-      if(i== books.length - 1){returnCode = true;}
-      let currentBook = books[i];
+   for(booksLoaded; booksLoaded<startingId+increment;booksLoaded++){
+      if(booksLoaded>=books.length){returnCode = true; break;}
+      if(booksLoaded== books.length - 1){returnCode = true;}
+      let currentBook = books[booksLoaded];
       elementList.push(bookToElement(currentBook));
    }
    fillBooks(elementList, columns);
@@ -92,8 +94,7 @@ function generateBooks(columns, numberOfBooks){
 function loadMore(){
    let holder = document.querySelector("#event-div")
    let button = document.querySelector("#loadMore")
-   numberOfBooksToLoad += 4;
-   if(generateBooks(holder, numberOfBooksToLoad)){
+   if(generateBooks(holder)){
       hide(button);
    }
 }
@@ -330,7 +331,7 @@ new book("Nemački_za_neupućene", 'Jezici', 'Wendy Foster', 'Guten Tag! Ukoliko
 if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
    let popularHolder = document.querySelector("#pop")
-   generateBooks(popularHolder, 4);
+   generateBooks(popularHolder);
    recentHolder = document.querySelector("#rec")
    let copyOfBooks = new Array(...books);
    books = books.sort(function(a ,b){
@@ -344,7 +345,7 @@ if(sPage === "index.html" || sPage.length === 0){
       }
       else return 0;
    })
-   generateBooks(recentHolder, 4);
+   generateBooks(recentHolder);
    books = copyOfBooks;
    let timeToLoad = 2500;
    $("#moveLeftButton").click(function(event){
