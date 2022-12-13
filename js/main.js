@@ -392,6 +392,7 @@ if(sPage === "knjiga.html"){
    const urlParams = new URLSearchParams(queryString);
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
+   if(currentBook === undefined)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
    console.log(currentBook);
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
    document.title = currentBook.name.replaceAll("_", " ");
