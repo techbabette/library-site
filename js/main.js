@@ -123,7 +123,7 @@ function checkForm(){
    let firstName = document.querySelector("#firstName");
    let lastName = document.querySelector("#lastName");
    let radioSelected;
-
+   let reName = /^[A-ZŠĆČĐŽ][a-zšđčćž]{2,13}(\s[A-ZŽŠĆČĐ][a-zžšđčć]{2,13}){0,3}$/
    for(let radio of deliveryRadios){
       if(radio.checked){
          radioSelected = radio.value;
@@ -145,6 +145,8 @@ function checkForm(){
       let errorHolder = deliveryRadios[0].parentNode.parentNode.lastElementChild;
       errorHolder.setAttribute("hidden", "hidden");
    }
+   success += checkFormRegex(firstName, reName,"Ime sme da sadrži samo slova i ne sme biti prazno");
+   success += checkFormRegex(lastName, reName,"Prezime sme da sadrži samo slova i ne sme biti prazno");
    success += checkAddress();
    success += checkDate();
    success += checkLength();
