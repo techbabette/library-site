@@ -12,6 +12,20 @@ window.onload = function(){
    }
    generateFooter();
 }
+window.onscroll = function(){
+   console.log($(window).scrollTop());
+   let upButton = $("#goBackUp");
+   if ($(window).scrollTop()>300){
+      upButton.removeClass("hidden");
+   } 
+   else{
+      upButton.addClass("hidden");
+   }
+}
+function hide(element){
+   if(element.hasClass("hidden"))element.removeClass("hidden");
+   else element.addClass("hidden");
+}
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
    this.name = name;

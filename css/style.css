@@ -322,6 +322,23 @@ a:hover{
 text-decoration: none;
 color: #f5af05;
 }
+#goBackUp{
+  position: fixed;
+  right: 50px;
+  bottom: 10vh;
+  border-radius: 50%;
+  background-color: #333333;
+  border: 1px solid #f5af05;
+  width: 2.5em;
+  height: 2.5em;
+  font-size: 22px;
+  text-align: center;
+  line-height: 2.5em;
+  display: none;
+}
+.hidden{
+  visibility: hidden;
+}
 footer .row{
   height: 100%;
   margin: 0%;
@@ -429,5 +446,8 @@ footer{
   }
   #loadMore{
     width: 30%;
+  }
+  #goBackUp{
+    display: block;
   }
 }
