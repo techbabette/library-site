@@ -19,7 +19,6 @@ window.onload = function(){
    generateFooter();
 }
 window.onscroll = function(){
-   console.log($(window).scrollTop());
    let upButton = $("#goBackUp");
    if ($(window).scrollTop()>300){
       upButton.removeClass("invisible");
@@ -95,7 +94,6 @@ function loadMore(){
    let holder = document.querySelector("#event-div")
    let button = document.querySelector("#loadMore")
    numberOfBooksToLoad += 4;
-   console.log(numberOfBooksToLoad);
    if(generateBooks(holder, numberOfBooksToLoad)){
       hide(button);
    }
@@ -144,7 +142,6 @@ function checkForm(){
       success -= 1;
    }
    else{
-      console.log(radioSelected);
       let errorHolder = deliveryRadios[0].parentNode.parentNode.lastElementChild;
       errorHolder.setAttribute("hidden", "hidden");
    }
@@ -156,6 +153,7 @@ function checkForm(){
       showSuccess();
    }
    else{
+      console.log("Fail");
       hideSuccess();
    }
 }
@@ -170,7 +168,6 @@ function hideSuccess(){
 }
 function checkLength(){
    let reserveLength = document.querySelector("#length");
-   console.log(reserveLength.value);
    if(reserveLength.value == ""){
       displayError(reserveLength,"Morate odabrati trajanje rezervacije [1-40]");
       return -1;
@@ -183,7 +180,7 @@ function checkLength(){
    return 0;
 }
 function checkAddress(){
-   let reAddress = /^(([A-ZŠĐČĆŽ][\wŠĐŽĆČščćđž\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđž\d\.\-]+){0,7}\s(([1-9][0-9]{0,5}\/?[A-Z])|([1-9][0-9]{0,5})|(BB))\.?/
+   let reAddress = /^(([A-ZŠĐČĆŽ][a-zščćđž\d]+)|([0-9][1-9]*\.?))(\s[A-Za-zŠĐŽĆČščćđž\d]+){0,7}\s(([1-9][0-9]{0,5}[\/-]?[A-Z])|([1-9][0-9]{0,5})|(BB))\.?$/
    let address = document.querySelector("#address");
    if(addressBool){
       if(address.value === ""){
@@ -191,6 +188,7 @@ function checkAddress(){
          return -1;
       }
       else{
+         console.log(checkFormRegex(address, reAddress, "Adresa ne odgovara formatu, primer: 'Kralja Aleksandra 13'"));
          return checkFormRegex(address, reAddress, "Adresa ne odgovara formatu, primer: 'Kralja Aleksandra 13'");
       }
    }
@@ -301,7 +299,6 @@ function moveBooks(holder, direction){
    if(direction === 1){
       bookId++;
       for(let i = 0; i<4; i++){
-         console.log((i+bookId)%books.length);
          holder.innerHTML += bookToElement(books[(i+bookId)%books.length]);
       }
    }
