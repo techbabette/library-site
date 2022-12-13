@@ -88,9 +88,6 @@ function loadMore(){
       button.setAttribute("hidden", "hidden");
    }
 }
-function getRandomInt(max){
-   return Math.floor(Math.random() * max);
-}
 let addressBool;
 function addressRequired(req){
    let address = document.querySelector("#addDesc");
@@ -416,7 +413,7 @@ if(sPage === "knjiga.html"){
    let deliveryRadios = $("input[name='delivery']");
    deliveryRadios[0].addEventListener("click",function(){addressRequired(true)});
    deliveryRadios[1].addEventListener("click",function(){addressRequired(false)});
-   let reName = /^[A-ZŠĆČĐ][a-zšđčć]{2,13}(\s[A-ZŠĆČĐ][a-zšđčć]{2,13}){0,3}$/
+   let reName = /^[A-ZŠĆČĐŽ][a-zšđčćž]{2,13}(\s[A-ZŽŠĆČĐ][a-zžšđčć]{2,13}){0,3}$/
    let firstName = document.querySelector("#firstName")
    let lastName = document.querySelector("#lastName")
    let address = document.querySelector("#address")
