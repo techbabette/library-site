@@ -183,7 +183,7 @@ function checkLength(){
    return 0;
 }
 function checkAddress(){
-   let reAddress = /^(([A-ZŠĐČĆŽ][\wŠĐŽĆČščćđž\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđž\d\.\-]+){0,7}\s(([\d]{1,5}((\/(([\d]{1,5}[\w]?)|([\w]{1,2}))))?)|((BB)|(bb)))(\.)?$/
+   let reAddress = /^(([A-ZŠĐČĆŽ][\wŠĐŽĆČščćđž\d\.\-]+)|([\d]+\.?))(\s[\wŠĐŽĆČščćđž\d\.\-]+){0,7}\s(([1-9][0-9]{0,5}\/?[A-Z])|([1-9][0-9]{0,5})|(BB))\.?/
    let address = document.querySelector("#address");
    if(addressBool){
       if(address.value === ""){
