@@ -335,18 +335,17 @@ if(sPage === "index.html" || sPage.length === 0){
 if(sPage === "knjige.html"){
    const queryString = window.location.search;
    const urlParams = new URLSearchParams(queryString);
-   const loadMoreButton = document.querySelector("#loadMore");
    //If the category paramater is set, filter the books by category, else show all books
    if(urlParams.has('kategorija')){
       let kategorija = urlParams.get('kategorija')
       document.title = kategorija.replaceAll("_", " ");
-      books = books.filter(book => book.category == kategorija);
+      books = books.filter(book => book.category.toLowerCase() == kategorija.toLowerCase());
       document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
    }
    if(urlParams.has('autor')){
       let autor = urlParams.get('autor');
       document.title = autor.replaceAll("_", " ");
-      books = books.filter(book => book.author == autor);
+      books = books.filter(book => book.author.toLowerCase() == autor.toLowerCase());
       document.getElementById('mk-book-category').innerHTML = autor.replaceAll("_"," ") ;
    }
    if(urlParams.has('godina')){
@@ -355,11 +354,13 @@ if(sPage === "knjige.html"){
       books = books.filter(book => book.releaseDate === parseInt(year));
       document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
    }
-   //Dynamically generate the books
-   let columns = document.querySelectorAll(".mk-book-holder")
    //Prepare the books to be displayed
+   const loadMoreButton = $("#loadMore");
    loadMore();
-   loadMoreButton.addEventListener("click", loadMore);
+   loadMoreButton.click(function(event){
+      event.preventDefault();
+      loadMore();
+   })
 }
 if(sPage === "knjiga.html"){
    const queryString = window.location.search;
