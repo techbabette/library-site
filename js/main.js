@@ -45,7 +45,7 @@ function fillColumns(elementList, columns, numberOfColumns){
    }
 }
 function generateFooter(){
-   let links = new Array('https://www.facebook.com/','https://www.twitter.com/','#', 'sitemap.xml');
+   let links = new Array('https://www.facebook.com/','https://www.twitter.com/',(prefix?'' : '../') + 'documentation.pdf', (prefix?'' : '../') + 'sitemap.xml');
    let names = new Array('facebook', 'twitter', 'fa-light', 'sitemap');
    let icons = new Array('icomoon-free:facebook', 'la:twitter', 'fa-file', 'bx:sitemap')
    let columns = document.getElementsByClassName("icon-holder");

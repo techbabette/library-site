@@ -143,7 +143,9 @@ a.active{
   transition: 0.2s;
 }
 #loadMore{
+  display: block;
   border-radius: 5%;
+  margin: 10px auto;
   margin-bottom: 10px;
   background-color: #333333;
   color: white;
@@ -215,7 +217,7 @@ a.active{
 }
 #openModal{
   background-color: #f7bd2f;
-  color: #333333;
+  color: #333333 !important;
   border: 1px solid #333333;
 }
 #openModal:hover{
