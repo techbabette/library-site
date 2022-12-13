@@ -130,17 +130,19 @@ a.active{
 .moveButton:hover{
   background-color: #222222;
 }
+.mk-mb{
+  transform: scale(1.0);
+  transition: 0.2s;
+}
+.mk-mb:hover{
+  transform: scale(1.02);
+  transition: 0.2s;
+}
 .book{
   min-height: 25vh;
   color: white;
   background-color: #333333;
   border: 1px solid #333333;
-  transform: scale(1.0);
-  transition: 0.2s;
-}
-.book:hover{
-  transform: scale(1.02);
-  transition: 0.2s;
 }
 #loadMore{
   display: block;
@@ -280,15 +282,9 @@ input{
   flex-direction: row;
   justify-content: flex-start;
 }
-.mk-event-holder{
-  height: 100%;
+.mk-mb{
+  padding: 0px;
   margin-bottom: 10px;
-  gap: 10px;
-}
-.mk-book-holder{
-  height: 100%;
-  margin-bottom: 10px;
-  gap: 10px;
 }
 .mk-clear{
   --bs-gutter-x: 0rem;

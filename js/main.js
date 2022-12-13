@@ -10,6 +10,12 @@ window.onload = function(){
    let element =`<li><a class="dropdown-item" href="${prefix}knjige.html?kategorija=${category}">${category.replace("_", " ")}</a></li>`;
    holder.innerHTML += element;
    }
+   let upButton = $("#goBackUp");
+   upButton.click(function(event){
+      console.log("Caught click");
+      event.preventDefault;
+      $(window).scrollTop(0);
+   })
    generateFooter();
 }
 window.onscroll = function(){
@@ -257,8 +263,8 @@ function bookToElement(currentBook){
    }
    if(prefix.length < 1){
       return(`
-      <div class="col-12 mk-flex-column-center  mk-book-holder col-md-6 col-lg-3">
-      <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
+      <div class="mk-mb col-12 col-md-6 col-lg-3">
+      <a class="flex align-center justify-content-center" href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -274,8 +280,8 @@ function bookToElement(currentBook){
    }
    else{
       return(`
-      <div class="col-12 mk-flex-column-center mk-book-holder col-md-6 col-lg-3">
-      <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      <div class="mk-mb col-12 col-md-6 col-lg-3">
+      <a class="flex align-center justify-content-center" href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
