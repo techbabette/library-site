@@ -54,6 +54,12 @@ function fillColumns(elementList, columns, numberOfColumns){
       columns[element % numberOfColumns].innerHTML += elementList[element];
    }
 }
+function fillBooks(elementList, holder){
+   holder.innerHTML = "";
+   for(let element of elementList){
+      holder.innerHTML+=element
+   }
+}
 function generateFooter(){
    let links = new Array('https://www.facebook.com/','https://www.twitter.com/',(prefix?'' : '../') + 'documentation.pdf', (prefix?'' : '../') + 'sitemap.xml');
    let names = new Array('facebook', 'twitter', 'fa-light', 'sitemap');
@@ -67,7 +73,7 @@ function generateFooter(){
    fillColumns(elementList, columns, 4);
 }
 let numberOfBooksToLoad = 0;
-function generateBooks(columns, numberOfColumns, numberOfBooks){
+function generateBooks(columns, numberOfBooks){
    let elementList = new Array();
    let returnCode = false;
    for(let i = 0; i<numberOfBooks;i++){
@@ -76,16 +82,16 @@ function generateBooks(columns, numberOfColumns, numberOfBooks){
       let currentBook = books[i];
       elementList.push(bookToElement(currentBook));
    }
-   fillColumns(elementList, columns, numberOfColumns);
+   fillBooks(elementList, columns);
    return returnCode;
 }
 function loadMore(){
-   let columns = document.querySelectorAll(".mk-book-holder")
+   let holder = document.querySelector("#event-div")
    let button = document.querySelector("#loadMore")
    numberOfBooksToLoad += 4;
    console.log(numberOfBooksToLoad);
-   if(generateBooks(columns, columns.length, numberOfBooksToLoad)){
-      button.setAttribute("hidden", "hidden");
+   if(generateBooks(holder, numberOfBooksToLoad)){
+      hide(button);
    }
 }
 let addressBool;
@@ -251,6 +257,7 @@ function bookToElement(currentBook){
    }
    if(prefix.length < 1){
       return(`
+      <div class="col-12 mk-flex-column-center  mk-book-holder col-md-6 col-lg-3">
       <a class="flex align-center justify-content-center"  href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
@@ -261,10 +268,13 @@ function bookToElement(currentBook){
           <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
       </div>
       </div>
-      </a>`)
+      </a>
+      </div>
+      `)
    }
    else{
       return(`
+      <div class="col-12 mk-flex-column-center mk-book-holder col-md-6 col-lg-3">
       <a class="flex align-center justify-content-center"  href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
@@ -275,26 +285,26 @@ function bookToElement(currentBook){
           <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
       </div>
       </div>
-      </a>`)};
+      </a>
+      </div>`
+      )};
 }
 let bookId = 0;
-function moveBooks(columns, direction){
+function moveBooks(holder, direction){
+   holder.innerHTML = '';
    if(direction === 1){
       bookId++;
-      for(let i = 0; i<columns.length; i++){
+      for(let i = 0; i<4; i++){
          console.log((i+bookId)%books.length);
-         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length]);
+         holder.innerHTML += bookToElement(books[(i+bookId)%books.length]);
       }
-      console.log("Break");
    }
    if(direction === -1){
       bookId--;
-      if(bookId < 0)bookId = books.length - columns.length;
-      for(let i = 0; i<columns.length; i++){
-         console.log((i+bookId)%books.length);
-         columns[i].innerHTML = bookToElement(books[(i+bookId)%books.length]);
+      if(bookId < 0)bookId = books.length - 1;
+      for(let i = 0; i<4; i++){
+         holder.innerHTML += bookToElement(books[(i+bookId)%books.length]);
       }
-      console.log("Break");
    }
 }
 //Initializing all books
@@ -315,12 +325,9 @@ new book("Nemački_za_neupućene", 'Jezici', 'Wendy Foster', 'Guten Tag! Ukoliko
 //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
    prefix = "pages/";
-   let popularColumns = document.querySelectorAll(".pop")
-   let numberOfColumns = popularColumns.length;
-   generateBooks(popularColumns, popularColumns.length, popularColumns.length);
-   elementList = new Array();
-   recentColumns = document.querySelectorAll(".rec")
-   numberOfColumns = recentColumns.length;
+   let popularHolder = document.querySelector("#pop")
+   generateBooks(popularHolder, 4);
+   recentHolder = document.querySelector("#rec")
    let copyOfBooks = new Array(...books);
    books = books.sort(function(a ,b){
       if(a.releaseDate > b.releaseDate){
@@ -333,11 +340,11 @@ if(sPage === "index.html" || sPage.length === 0){
       }
       else return 0;
    })
-   generateBooks(recentColumns, recentColumns.length, recentColumns.length);
+   generateBooks(recentHolder, 4);
    books = copyOfBooks;
    let timeToLoad = 2500;
-   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularColumns, -1)});
-   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularColumns, 1)});
+   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularHolder, -1)});
+   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularHolder, 1)});
    countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
    countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
    countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
@@ -367,8 +374,8 @@ if(sPage === "knjige.html"){
       document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
    }
    //Prepare the books to be displayed
-   const loadMoreButton = $("#loadMore");
    loadMore();
+   const loadMoreButton = $("#loadMore");
    loadMoreButton.click(function(event){
       event.preventDefault();
       loadMore();

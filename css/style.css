@@ -278,7 +278,7 @@ input{
 }
 #event-div{
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .mk-event-holder{
   height: 100%;
@@ -344,7 +344,7 @@ color: #f5af05;
   visibility: none;
 }
 .hidden{
-  display: none;
+  display: none !important;
 }
 footer .row{
   height: 100%;
