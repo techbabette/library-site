@@ -175,7 +175,7 @@ function checkLength(){
       return -1;
    }
    if(reserveLength.value < 0 || reserveLength.value > 40){
-      displayError(reserveLength,"Broj ne pripada opsegu od 1 do 40");
+      displayError(reserveLength,"Broj dana trajanja rezervacije može biti od 1 do 40");
       return -1;
    }
    removeError(reserveLength);
