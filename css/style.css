@@ -135,11 +135,7 @@ a.active{
   background-color: #222222;
   color: aliceblue !important;
 }
-.mk-mb{
-  transform: scale(1.0);
-  transition: 0.2s;
-}
-.mk-mb:hover{
+.book:hover{
   transform: scale(1.02);
   transition: 0.2s;
 }
@@ -148,6 +144,10 @@ a.active{
   color: white;
   background-color: #333333;
   border: 1px solid #333333;
+  transform: scale(1.0);
+  transition: 0.2s;
+  padding: 0px;
+  margin-bottom: 10px;
 }
 #loadMore{
   display: block;
@@ -286,10 +286,6 @@ input{
 #event-div{
   flex-direction: row;
   justify-content: flex-start;
-}
-.mk-mb{
-  padding: 0px;
-  margin-bottom: 10px;
 }
 .mk-clear{
   --bs-gutter-x: 0rem;

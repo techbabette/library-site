@@ -204,7 +204,7 @@ function checkDate(){
    let inputDate = new Date(reserveStart.value);
    let currentDate = new Date()
    if(inputDate < currentDate){
-      displayError(reserveStart, "Datum rezerve ne može biti u prošlosti")
+      displayError(reserveStart, "Rezerva ne može početi pre sutradašnjeg dana")
       return -1;
    }
    else{
@@ -263,8 +263,7 @@ function bookToElement(currentBook){
    }
    if(prefix.length < 1){
       return(`
-      <div class="mk-mb col-12 col-md-6 col-lg-3">
-      <a class="flex align-center justify-content-center" href="knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center  col-12 col-md-6 col-lg-3 justify-content-center" href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -275,13 +274,11 @@ function bookToElement(currentBook){
       </div>
       </div>
       </a>
-      </div>
       `)
    }
    else{
       return(`
-      <div class="mk-mb col-12 col-md-6 col-lg-3">
-      <a class="flex align-center justify-content-center" href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center col-12 col-md-6 col-lg-3 justify-content-center" href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -292,7 +289,7 @@ function bookToElement(currentBook){
       </div>
       </div>
       </a>
-      </div>`
+      `
       )};
 }
 let bookId = 0;
@@ -449,7 +446,6 @@ if(sPage === "knjiga.html"){
       }
    }
    addressBool = radioSelected>0? true:false;
-   console.log(addressBool);
    addressRequired(addressBool);
    firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Ime sme da sadrži samo slova i ne sme biti prazno");})
    lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Prezime sme da sadrži samo slova i ne sme biti prazno");})
