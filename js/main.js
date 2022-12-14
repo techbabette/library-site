@@ -10,21 +10,21 @@ window.onload = function(){
    let element =`<li><a class="dropdown-item" href="${prefix}knjige.html?kategorija=${category}">${category.replace("_", " ")}</a></li>`;
    holder.innerHTML += element;
    }
+   window.onscroll = function(){
+      let upButton = $("#goBackUp");
+      if ($(window).scrollTop()>300){
+         upButton.removeClass("invisible");
+      } 
+      else{
+         upButton.addClass("invisible");
+      }
+   }
    let upButton = $("#goBackUp");
    upButton.click(function(event){
       event.preventDefault();
       $(window).scrollTop(0);
    })
    generateFooter();
-}
-window.onscroll = function(){
-   let upButton = $("#goBackUp");
-   if ($(window).scrollTop()>300){
-      upButton.removeClass("invisible");
-   } 
-   else{
-      upButton.addClass("invisible");
-   }
 }
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
@@ -130,7 +130,10 @@ function checkForm(){
          break;
       }
    }
-   addressBool = radioSelected>0? true:false;
+   if(typeof radioSelected !== 'undefined'){
+      addressBool = radioSelected>0? true:false;
+   }
+   else success-=1;
    if(firstName.value == ""){displayError(firstName, "Ime ne sme biti prazno")
    success--};
    if(lastName.value == ""){displayError(lastName, "Prezime ne sme biti prazno")
@@ -410,7 +413,7 @@ if(sPage === "knjiga.html"){
    document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
    document.querySelector('#book-description').innerHTML = currentBook.description;
    document.querySelector('#author-field').innerHTML = "Autor: " +  ` <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a>`;
-   document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
+   document.querySelector("#availability-field").innerHTML = "Broj dostupnih kopija: " +currentBook.copies;
    document.querySelector('#date-field').innerHTML = "Godina izdavanja: " + `<a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>` + negativeToBCE(currentBook.releaseDate) + "</a>"
    $('#openModal').click(function(event) {
       event.preventDefault();

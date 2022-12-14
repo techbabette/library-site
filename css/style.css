@@ -1,7 +1,3 @@
-:root{
-  --mk-background:#d2946b;
-}
-
 body{
   overflow-x:hidden;
 }
@@ -28,6 +24,9 @@ hr{
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.mk-part-page{
+  min-height: 60vh;
 }
 .mk-page{
     min-height: 92vh;
