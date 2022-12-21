@@ -148,7 +148,7 @@ if(sPage === "knjiga.html"){
    const queryString = window.location.search;
    const urlParams = new URLSearchParams(queryString);
    const urlBook = urlParams.get('knjiga')
-   zoomOnHover("#bookImage", urlBook);
+   zoomOnHover("#bookImage", urlBook.toLowerCase());
 }
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
