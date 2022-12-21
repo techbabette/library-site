@@ -4,28 +4,146 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 window.onload = function(){
    var categories = ['Jezici', 'Popularna_nauka', 'Popularna_psihologija', 'Istorijska_dela'];
    var holder = document.querySelector('.dropdown-menu');
+   if(sPage === "index.html" || sPage.length === 0) prefix="pages/";
    let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
    holder.innerHTML += element;
    for(category of categories){
    let element =`<li><a class="dropdown-item" href="${prefix}knjige.html?kategorija=${category}">${category.replace("_", " ")}</a></li>`;
    holder.innerHTML += element;
    }
+   window.onscroll = function(){
+      let upButton = $("#goBackUp");
+      if ($(window).scrollTop()>300){
+         upButton.removeClass("invisible");
+      } 
+      else{
+         upButton.addClass("invisible");
+      }
+   }
    let upButton = $("#goBackUp");
    upButton.click(function(event){
-      console.log("Caught click");
       event.preventDefault;
       $(window).scrollTop(0);
    })
    generateFooter();
+   //If currently on index page
+if(sPage === "index.html" || sPage.length === 0){
+   prefix = "pages/";
+   let popularHolder = document.querySelector("#pop")
+   generateBooks(popularHolder, 4);
+   recentHolder = document.querySelector("#rec")
+   let copyOfBooks = new Array(...books);
+   books = books.sort(function(a ,b){
+      if(a.releaseDate > b.releaseDate){
+         return -1
+      }
+      else if (a.releaseDate < b.releaseDate){
+         return 1;
+      }
+      else return 0;
+   })
+   generateBooks(recentHolder, 4);
+   books = copyOfBooks;
+   let timeToLoad = 2500;
+   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularHolder, -1)});
+   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularHolder, 1)});
+   countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
+   countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
+   countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
+   countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
+   countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
 }
-window.onscroll = function(){
-   let upButton = $("#goBackUp");
-   if ($(window).scrollTop()>300){
-      upButton.removeClass("invisible");
-   } 
-   else{
-      upButton.addClass("invisible");
+if(sPage === "knjige.html"){
+   const queryString = window.location.search;
+   const urlParams = new URLSearchParams(queryString);
+   //If the category paramater is set, filter the books by category, else show all books
+   if(urlParams.has('kategorija')){
+      let kategorija = urlParams.get('kategorija')
+      document.title = kategorija.replaceAll("_", " ");
+      books = books.filter(book => book.category.toLowerCase() == kategorija.toLowerCase());
+      document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
    }
+   if(urlParams.has('autor')){
+      let autor = urlParams.get('autor');
+      document.title = autor.replaceAll("_", " ");
+      books = books.filter(book => book.author.toLowerCase() == autor.toLowerCase());
+      document.getElementById('mk-book-category').innerHTML = autor.replaceAll("_"," ") ;
+   }
+   if(urlParams.has('godina')){
+      let year = urlParams.get('godina');
+      document.title = "Knjige iz " + negativeToBCE(year) + ". godine";
+      books = books.filter(book => book.releaseDate === parseInt(year));
+      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
+   }
+   //Prepare the books to be displayed
+   loadMore();
+   const loadMoreButton = $("#loadMore");
+   loadMoreButton.click(function(event){
+      event.preventDefault();
+      loadMore();
+   })
+}
+if(sPage === "knjiga.html"){
+   const queryString = window.location.search;
+   const urlParams = new URLSearchParams(queryString);
+   const urlBook = urlParams.get('knjiga')
+   let currentBook = books.filter(book => book.name === urlBook)[0] 
+   if(currentBook === undefined)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
+   document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
+   document.title = currentBook.name.replaceAll("_", " ");
+   document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
+   document.querySelector('#book-description').innerHTML = currentBook.description;
+   setLinkValue("#author-link","autor", currentBook.author, currentBook.author.replaceAll("_", " "));
+   setLinkValue("#category-link","kategorija", currentBook.category, currentBook.category.replaceAll("_", " "))
+   setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
+   document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
+   $('#openModal').click(function(event) {
+      event.preventDefault();
+      $("#myModal").show("fast")
+   });; 
+   $('.mk-close').click(function(event){
+      event.preventDefault();
+      $("#myModal").hide("fast")
+   }) 
+   $(window).click(function(event){
+      if (event.target === $('#myModal')[0])
+      $("#myModal").hide("fast")
+   })
+   $(".mk-send").click(function(event){
+      event.preventDefault();
+      checkForm();
+   })
+   let deliveryRadios = $("input[name='delivery']");
+   deliveryRadios[0].addEventListener("click",function(){addressRequired(true)});
+   deliveryRadios[1].addEventListener("click",function(){addressRequired(false)});
+   let reName = /^[A-ZŠĆČĐŽ][a-zšđčćž]{2,13}(\s[A-ZŽŠĆČĐ][a-zžšđčć]{2,13}){0,3}$/
+   let firstName = document.querySelector("#firstName")
+   let lastName = document.querySelector("#lastName")
+   let address = document.querySelector("#address")
+   let reserveDate = document.querySelector("#reserveStart");
+   let length = document.querySelector("#length");
+   let radioSelected;
+   for(let radio of deliveryRadios){
+      if(radio.checked){
+         radioSelected = radio.value;
+         break;
+      }
+   }
+   addressBool = radioSelected>0? true:false;
+   addressRequired(addressBool);
+   firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Ime sme da sadrži samo slova i ne sme biti prazno");})
+   lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Prezime sme da sadrži samo slova i ne sme biti prazno");})
+   address.addEventListener("blur", checkAddress);
+   reserveDate.addEventListener('blur', checkDate);
+   length.addEventListener('blur', checkLength);
+}
+}
+//Funkcija .zoom plugina se vidi samo u globalnom scopu iz nekog razloga
+if(sPage === "knjiga.html"){
+   const queryString = window.location.search;
+   const urlParams = new URLSearchParams(queryString);
+   const urlBook = urlParams.get('knjiga')
+   zoomOnHover("#bookImage", urlBook);
 }
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
@@ -35,6 +153,16 @@ function book(name, category, author, description, copies, releaseDate){
    this.description = description;
    this.copies = copies;
    this.releaseDate = releaseDate;
+}
+function zoomOnHover(zoomElement, zoomImg)
+{
+   $(zoomElement)
+   .wrap('<span class="zoom-span"></span>')
+   .css('display', 'block')
+   .parent()
+   .zoom({
+     url: `../imgs/${zoomImg}.jpg`
+   })
 }
 function limitToFullWords(text, length){
    let textSplit = text.split(" ");
@@ -89,6 +217,11 @@ function generateBooks(columns, numberOfBooks){
    }
    fillBooks(elementList, columns);
    return returnCode;
+}
+function setLinkValue(selector,filter, href, text)
+{
+   document.querySelector(selector).setAttribute("href",`knjige.html?${filter}=${href}`);
+   document.querySelector(selector).innerText = text;
 }
 function loadMore(){
    let holder = document.querySelector("#event-div")
@@ -150,12 +283,10 @@ function checkForm(){
    success += checkAddress();
    success += checkDate();
    success += checkLength();
-   console.log(success);
    if(success == 0){
       showSuccess();
    }
    else{
-      console.log("Fail");
       hideSuccess();
    }
 }
@@ -190,7 +321,6 @@ function checkAddress(){
          return -1;
       }
       else{
-         console.log(checkFormRegex(address, reAddress, "Adresa ne odgovara formatu, primer: 'Kralja Aleksandra 13'"));
          return checkFormRegex(address, reAddress, "Adresa ne odgovara formatu, primer: 'Kralja Aleksandra 13'");
       }
    }
@@ -327,125 +457,3 @@ new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan_Bosnić", "„Nema g
 new book('Isus_to_nije_rekao','Istorijska_dela','Bart_D._Erman', 'Rafinirano, ali i na jedan krajnje izazovan način, Erman iznosi dokaze o tome kako je puno omiljenih biblijskih priča i široko prihvaćenih verovanja koje se odnose na Isusovu božanstvenost, Trojstvo, božansko poreklo i nadahnutost Biblije, nastalo kao plod namernih i slučajnih izmena načinjenih od strane drevnih pisara - a ove izmene su, pak, dramatično uticale na sve naredne verzije Biblije.', 1, 2019),
 new book("Nemački_za_neupućene", 'Jezici', 'Wendy Foster', 'Guten Tag! Ukoliko želite da naučite nemački jezik – bilo radi posla, putovanja ili zabave – Nemački za neupućene će zadovoljiti sve vaše potrebe. Pored poglavlja koja objašnjavaju gramatiku i njenu primenu, knjiga sadrži i dijaloge koji će vam omogućiti da koristite i govorite nemački jezik kao maternji. Osim toga, ona sadrži i CD koji pruža dodatne mogućnosti za vežbanje govornog jezika. ', 1, 2018)
 ];
-//If currently on index page
-if(sPage === "index.html" || sPage.length === 0){
-   prefix = "pages/";
-   let popularHolder = document.querySelector("#pop")
-   generateBooks(popularHolder, 4);
-   recentHolder = document.querySelector("#rec")
-   let copyOfBooks = new Array(...books);
-   books = books.sort(function(a ,b){
-      if(a.releaseDate > b.releaseDate){
-         console.log("Sorted");
-         return -1
-      }
-      else if (a.releaseDate < b.releaseDate){
-         console.log("Sorted");
-         return 1;
-      }
-      else return 0;
-   })
-   generateBooks(recentHolder, 4);
-   books = copyOfBooks;
-   let timeToLoad = 2500;
-   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularHolder, -1)});
-   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularHolder, 1)});
-   countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
-   countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
-   countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
-   countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
-   countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
-}
-if(sPage === "knjige.html"){
-   const queryString = window.location.search;
-   const urlParams = new URLSearchParams(queryString);
-   //If the category paramater is set, filter the books by category, else show all books
-   if(urlParams.has('kategorija')){
-      let kategorija = urlParams.get('kategorija')
-      document.title = kategorija.replaceAll("_", " ");
-      books = books.filter(book => book.category.toLowerCase() == kategorija.toLowerCase());
-      document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
-   }
-   if(urlParams.has('autor')){
-      let autor = urlParams.get('autor');
-      document.title = autor.replaceAll("_", " ");
-      books = books.filter(book => book.author.toLowerCase() == autor.toLowerCase());
-      document.getElementById('mk-book-category').innerHTML = autor.replaceAll("_"," ") ;
-   }
-   if(urlParams.has('godina')){
-      let year = urlParams.get('godina');
-      document.title = "Knjige iz " + negativeToBCE(year) + ". godine";
-      books = books.filter(book => book.releaseDate === parseInt(year));
-      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
-   }
-   //Prepare the books to be displayed
-   loadMore();
-   const loadMoreButton = $("#loadMore");
-   loadMoreButton.click(function(event){
-      event.preventDefault();
-      loadMore();
-   })
-}
-if(sPage === "knjiga.html"){
-   const queryString = window.location.search;
-   const urlParams = new URLSearchParams(queryString);
-   const urlBook = urlParams.get('knjiga')
-   let currentBook = books.filter(book => book.name === urlBook)[0] 
-   if(currentBook === undefined)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
-   console.log(currentBook);
-   document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
-   document.title = currentBook.name.replaceAll("_", " ");
-   $('#bookImage')
-    .wrap('<span class="zoom-span"></span>')
-    .css('display', 'block')
-    .parent()
-    .zoom({
-      url: `../imgs/${currentBook.name.toLowerCase()}.jpg`
-    });
-   document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
-   document.querySelector('#book-description').innerHTML = currentBook.description;
-   document.querySelector('#author-field').innerHTML = "Autor: " +  ` <a class='mk-yellow' href='knjige.html?autor=${currentBook.author}'>${currentBook.author.replaceAll("_", " ")}</a>`;
-   document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
-   document.querySelector('#date-field').innerHTML = "Godina izdavanja: " + `<a class='mk-yellow' href='knjige.html?godina=${currentBook.releaseDate}'>` + negativeToBCE(currentBook.releaseDate) + "</a>"
-   $('#openModal').click(function(event) {
-      event.preventDefault();
-      $("#myModal").show("fast")
-   });; 
-   $('.mk-close').click(function(event){
-      event.preventDefault();
-      $("#myModal").hide("fast")
-   }) 
-   $(window).click(function(event){
-      if (event.target === $('#myModal')[0])
-      $("#myModal").hide("fast")
-   })
-   $(".mk-send").click(function(event){
-      event.preventDefault();
-      checkForm();
-   })
-   let deliveryRadios = $("input[name='delivery']");
-   deliveryRadios[0].addEventListener("click",function(){addressRequired(true)});
-   deliveryRadios[1].addEventListener("click",function(){addressRequired(false)});
-   let reName = /^[A-ZŠĆČĐŽ][a-zšđčćž]{2,13}(\s[A-ZŽŠĆČĐ][a-zžšđčć]{2,13}){0,3}$/
-   let firstName = document.querySelector("#firstName")
-   let lastName = document.querySelector("#lastName")
-   let address = document.querySelector("#address")
-   let reserveDate = document.querySelector("#reserveStart");
-   let length = document.querySelector("#length");
-   let radioSelected;
-   for(let radio of deliveryRadios){
-      if(radio.checked){
-         radioSelected = radio.value;
-         console.log(radio.value);
-         break;
-      }
-   }
-   addressBool = radioSelected>0? true:false;
-   console.log(addressBool);
-   addressRequired(addressBool);
-   firstName.addEventListener("blur", function(){checkFormRegex(firstName, reName,"Ime sme da sadrži samo slova i ne sme biti prazno");})
-   lastName.addEventListener("blur", function(){checkFormRegex(lastName, reName,"Prezime sme da sadrži samo slova i ne sme biti prazno");})
-   address.addEventListener("blur", checkAddress);
-   reserveDate.addEventListener('blur', checkDate);
-   length.addEventListener('blur', checkLength);
-}
