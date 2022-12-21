@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
    <url>
       <loc>https://techbabette.github.io/library-site/</loc>
-      <lastmod>13-12-2022</lastmod>
+      <lastmod>14-12-2022</lastmod>
       <changefreq>daily</changefreq>
       <priority>1</priority>
    </url>
     <url>
       <loc>https://techbabette.github.io/library-site/pages/knjige.html</loc>
-      <lastmod>13-12-2022</lastmod>
+      <lastmod>14-12-2022</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.95</priority>
    </url>
     <url>
       <loc>https://techbabette.github.io/library-site/pages/knjiga.html</loc>
-      <lastmod>13-12-2022</lastmod>
+      <lastmod>14-12-2022</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.90</priority>
    </url>
        <url>
-      <loc>https://techbabette.github.io/library-site/pages/oauturu.html</loc>
-      <lastmod>13-12-2022</lastmod>
+      <loc>https://techbabette.github.io/library-site/pages/autor.html</loc>
+      <lastmod>14-12-2022</lastmod>
       <changefreq>yearly</changefreq>
       <priority>0.85</priority>
    </url>

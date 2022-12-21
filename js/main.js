@@ -22,7 +22,7 @@ window.onload = function(){
    }
    let upButton = $("#goBackUp");
    upButton.click(function(event){
-      event.preventDefault;
+      event.preventDefault();
       $(window).scrollTop(0);
    })
    generateFooter();
@@ -45,8 +45,14 @@ if(sPage === "index.html" || sPage.length === 0){
    generateBooks(recentHolder, 4);
    books = copyOfBooks;
    let timeToLoad = 2500;
-   document.getElementById("moveLeftButton").addEventListener("click", function(){moveBooks(popularHolder, -1)});
-   document.getElementById("moveRightButton").addEventListener("click", function(){moveBooks(popularHolder, 1)});
+   $("#moveLeftButton").click(function(event){
+      event.preventDefault(); 
+      moveBooks(popularHolder, -1);
+   });
+   $("#moveRightButton").click(function(event){
+      event.preventDefault();
+      moveBooks(popularHolder, 1);
+   })
    countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
    countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
    countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
@@ -187,8 +193,8 @@ function fillColumns(elementList, columns, numberOfColumns){
       columns[element % numberOfColumns].innerHTML += elementList[element];
    }
 }
+
 function fillBooks(elementList, holder){
-   holder.innerHTML = "";
    for(let element of elementList){
       holder.innerHTML+=element
    }
@@ -205,14 +211,16 @@ function generateFooter(){
    };
    fillColumns(elementList, columns, 4);
 }
-let numberOfBooksToLoad = 0;
-function generateBooks(columns, numberOfBooks){
+let booksLoaded = 0;
+function generateBooks(columns){
    let elementList = new Array();
+   let startingId = booksLoaded;
+   let increment = 4;
    let returnCode = false;
-   for(let i = 0; i<numberOfBooks;i++){
-      if(i>=books.length){returnCode = true; break;}
-      if(i== books.length - 1){returnCode = true;}
-      let currentBook = books[i];
+   for(booksLoaded; booksLoaded<startingId+increment;booksLoaded++){
+      if(booksLoaded>=books.length){returnCode = true; break;}
+      if(booksLoaded== books.length - 1){returnCode = true;}
+      let currentBook = books[booksLoaded];
       elementList.push(bookToElement(currentBook));
    }
    fillBooks(elementList, columns);
@@ -226,8 +234,7 @@ function setLinkValue(selector,filter, href, text)
 function loadMore(){
    let holder = document.querySelector("#event-div")
    let button = document.querySelector("#loadMore")
-   numberOfBooksToLoad += 4;
-   if(generateBooks(holder, numberOfBooksToLoad)){
+   if(generateBooks(holder)){
       hide(button);
    }
 }
@@ -263,7 +270,10 @@ function checkForm(){
          break;
       }
    }
-   addressBool = radioSelected>0? true:false;
+   if(typeof radioSelected !== 'undefined'){
+      addressBool = radioSelected>0? true:false;
+   }
+   else success-=1;
    if(firstName.value == ""){displayError(firstName, "Ime ne sme biti prazno")
    success--};
    if(lastName.value == ""){displayError(lastName, "Prezime ne sme biti prazno")
@@ -334,7 +344,7 @@ function checkDate(){
    let inputDate = new Date(reserveStart.value);
    let currentDate = new Date()
    if(inputDate < currentDate){
-      displayError(reserveStart, "Datum rezerve ne može biti u prošlosti")
+      displayError(reserveStart, "Rezerva ne može početi pre sutradašnjeg dana")
       return -1;
    }
    else{
@@ -393,8 +403,7 @@ function bookToElement(currentBook){
    }
    if(prefix.length < 1){
       return(`
-      <div class="mk-mb col-12 col-md-6 col-lg-3">
-      <a class="flex align-center justify-content-center" href="knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center  col-12 col-md-6 col-lg-3 justify-content-center" href="knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -405,13 +414,11 @@ function bookToElement(currentBook){
       </div>
       </div>
       </a>
-      </div>
       `)
    }
    else{
       return(`
-      <div class="mk-mb col-12 col-md-6 col-lg-3">
-      <a class="flex align-center justify-content-center" href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      <a class="flex align-center col-12 col-md-6 col-lg-3 justify-content-center" href="${prefix}knjiga.html?knjiga=${currentBook.name}">
       <div class="card book mk-card-limit">
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -422,7 +429,7 @@ function bookToElement(currentBook){
       </div>
       </div>
       </a>
-      </div>`
+      `
       )};
 }
 let bookId = 0;
