@@ -28,7 +28,6 @@ window.onload = function(){
    generateFooter();
    //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
-   prefix = "pages/";
    let popularHolder = document.querySelector("#pop")
    generateBooks(popularHolder, 4);
    recentHolder = document.querySelector("#rec")
