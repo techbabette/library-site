@@ -318,6 +318,15 @@ a:hover{
 text-decoration: none;
 color: #f5af05;
 }
+ul, li{
+  display: inline;
+}
+.dynamic-field{
+  margin: 5px 0px;
+}
+.dynamic-field p{
+  display: inline;
+}
 #goBackUp{
   position: fixed;
   right: 50px;

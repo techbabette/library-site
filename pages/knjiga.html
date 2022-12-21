@@ -103,18 +103,33 @@
             </div>
             <p id="book-description" style="padding: 5%;"></p>
             <div>
-              <p id="author-field">
-                Autor: <a id="author-link" href="#"></a>
-              </p>
-              <p id="category-field">
-                Kategorija: <a id="category-link" href="#"></a>
-              </p> 
-              <p id="date-field">
-                Godina izdavanja: <a id="date-link" href="#"></a>
-              </p>
-              <p id="availability-field">
-                Broj dostupnih kopija: x
-              </p>
+              <div class="dynamic-field" id="author-field">
+                <p>Autor:</p> 
+                <ul class="list-unstyled">
+                  <li>
+                    <a id="author-link" href="#"></a>
+                  </li>
+                </ul> 
+              </div>
+              <div class="dynamic-field" id="category-field">
+                <p>Kategorija:</p> 
+                <ul class="list-unstyled">
+                  <li>
+                    <a id="category-link" href="#"></a>
+                  </li>
+                </ul> 
+              </div> 
+              <div class="dynamic-field" id="date-field">
+                <p>Godina izdavanja: </p> 
+                <ul class="list-unstyled">
+                  <li>
+                    <a id="date-link" href="#"></a>
+                  </li>
+                </ul> 
+              </div>
+              <div class="dynamic-field">
+               <p id="availability-field">Broj dostupnih kopija: x</p>
+              </div>
                 <a class="btn btn-light w-100" id="openModal">Rezerviši</a>
               </div>
             </div>
