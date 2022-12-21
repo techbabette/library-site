@@ -29,7 +29,7 @@ window.onload = function(){
    //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
    let popularHolder = document.querySelector("#pop")
-   generateBooks(popularHolder, 4);
+   generateBooks(popularHolder);
    recentHolder = document.querySelector("#rec")
    let copyOfBooks = new Array(...books);
    books = books.sort(function(a ,b){
@@ -41,7 +41,7 @@ if(sPage === "index.html" || sPage.length === 0){
       }
       else return 0;
    })
-   generateBooks(recentHolder, 4);
+   generateBooks(recentHolder);
    books = copyOfBooks;
    let timeToLoad = 2500;
    $("#moveLeftButton").click(function(event){
