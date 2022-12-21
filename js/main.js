@@ -93,7 +93,7 @@ if(sPage === "knjiga.html"){
    const urlParams = new URLSearchParams(queryString);
    const urlBook = urlParams.get('knjiga')
    let currentBook = books.filter(book => book.name === urlBook)[0] 
-   if(currentBook === undefined)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
+   if(!currentBook)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
    document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
    document.title = currentBook.name.replaceAll("_", " ");
    document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
@@ -148,7 +148,10 @@ if(sPage === "knjiga.html"){
    const queryString = window.location.search;
    const urlParams = new URLSearchParams(queryString);
    const urlBook = urlParams.get('knjiga')
-   zoomOnHover("#bookImage", urlBook.toLowerCase());
+   if(urlBook != undefined)
+   {
+      zoomOnHover("#bookImage", urlBook.toLowerCase());
+   }
 }
 function book(name, category, author, description, copies, releaseDate){
    var name, category, author;
@@ -245,7 +248,8 @@ function addressRequired(req){
    if(req){
       address.innerHTML = `Adresa (ulica i broj)<span class="mk-red">*</span>`;
       addressInput.setAttribute("required", "required");
-      addressInput.removeAttribute("disabled");
+      addressInput.removeAttribute("disabled")
+      addressInput.setAttribute("placeholder", "Kralja Aleksandra 13");
       addressInput.classList.remove("success");
    }
    else{
@@ -254,6 +258,7 @@ function addressRequired(req){
       addressInput.setAttribute("disabled", "disabled");
       addressInput.value = "";
       addressInput.removeAttribute("required");
+      addressInput.removeAttribute("placeholder");
    }
 }
 function checkForm(){
