@@ -176,6 +176,10 @@ a.active{
 }
 .book-title{
   color: #f5af05;
+  min-height: 8vh;
+}
+.bookDescription{
+  min-height: 8vh;
 }
 .book-body{
   min-height: 30vh;

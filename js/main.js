@@ -198,8 +198,8 @@ function fillColumns(elementList, columns, numberOfColumns){
 
 function fillBooks(elementList, holder){
    for(let element of elementList){
-      holder.append(element)
       $(element).hide();
+      holder.append(element)
    }
    for(let element of elementList){
       $(element).fadeIn(1000);
@@ -433,7 +433,7 @@ function bookToElement(currentBook){
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
           <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
-          <p class="card-text"><em>${bookDescription}</em></p>
+          <p class="card-text bookDescription"><em>${bookDescription}</em></p>
           <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
           <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
       </div>
