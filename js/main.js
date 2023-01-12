@@ -198,7 +198,11 @@ function fillColumns(elementList, columns, numberOfColumns){
 
 function fillBooks(elementList, holder){
    for(let element of elementList){
-      holder.innerHTML+=element
+      holder.append(element)
+      $(element).hide();
+   }
+   for(let element of elementList){
+      $(element).fadeIn(1000);
    }
 }
 function generateFooter(){
@@ -402,12 +406,15 @@ function countTo(element, from, to, timeToLoad){
 }
 function bookToElement(currentBook){
    let bookDescription = currentBook.description;
+   let wrapper = document.createElement("a");
+   wrapper.classList.add("flex", "col-12", "col-md-6", "col-lg-3", "justify-content-center")
+   wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
    }
    if(prefix.length < 1){
-      return(`
-      <a class="flex align-center  col-12 col-md-6 col-lg-3 justify-content-center" href="knjiga.html?knjiga=${currentBook.name}">
+      wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
+      wrapper.innerHTML = `
       <div class="card book mk-card-limit">
       <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -417,12 +424,11 @@ function bookToElement(currentBook){
           <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
       </div>
       </div>
-      </a>
-      `)
+      `
    }
    else{
-      return(`
-      <a class="flex align-center col-12 col-md-6 col-lg-3 justify-content-center" href="${prefix}knjiga.html?knjiga=${currentBook.name}">
+      wrapper.href = `${prefix}knjiga.html?knjiga=${currentBook.name}`
+      wrapper.innerHTML = `
       <div class="card book mk-card-limit">
       <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
       <div class="card-body book-body">
@@ -432,26 +438,27 @@ function bookToElement(currentBook){
           <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
       </div>
       </div>
-      </a>
-      `
-      )};
+      `};
+   return wrapper;
 }
 let bookId = 0;
 function moveBooks(holder, direction){
    holder.innerHTML = '';
+   let elementList = new Array()
    if(direction === 1){
       bookId++;
       for(let i = 0; i<4; i++){
-         holder.innerHTML += bookToElement(books[(i+bookId)%books.length]);
+         elementList.push(bookToElement(books[(i+bookId)%books.length]));
       }
    }
    if(direction === -1){
       bookId--;
       if(bookId < 0)bookId = books.length - 1;
       for(let i = 0; i<4; i++){
-         holder.innerHTML += bookToElement(books[(i+bookId)%books.length]);
+         elementList.push(bookToElement(books[(i+bookId)%books.length]));
       }
    }
+   fillBooks(elementList, holder);
 }
 //Initializing all books
 var books = 
