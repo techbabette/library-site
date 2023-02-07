@@ -407,6 +407,7 @@ function countTo(element, from, to, timeToLoad){
 function bookToElement(currentBook){
    let bookDescription = currentBook.description;
    let wrapper = document.createElement("a");
+   let imgPart;
    wrapper.classList.add("flex", "col-12", "col-md-6", "col-lg-3", "justify-content-center")
    wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
    if (currentBook.description.length > 30){
@@ -414,31 +415,23 @@ function bookToElement(currentBook){
    }
    if(prefix.length < 1){
       wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
-      wrapper.innerHTML = `
-      <div class="card book mk-card-limit">
-      <img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
-      <div class="card-body book-body">
-          <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
-          <p class="card-text"><em>${bookDescription}</em></p>
-          <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
-          <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
-      </div>
-      </div>
-      `
+      imgPart = `<img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">`
    }
    else{
       wrapper.href = `${prefix}knjiga.html?knjiga=${currentBook.name}`
-      wrapper.innerHTML = `
-      <div class="card book mk-card-limit">
-      <img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">
-      <div class="card-body book-body">
-          <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5>
-          <p class="card-text bookDescription"><em>${bookDescription}</em></p>
-          <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
-          <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
-      </div>
-      </div>
-      `};
+      imgPart = `<img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">`
+   };
+   wrapper.innerHTML = `
+   <div class="card book mk-card-limit">
+   ${imgPart}
+   <div class="card-body book-body">
+         <h5 class="card-title book-height book-title">${currentBook.name.replaceAll("_", " ")}</h5>
+         <p class="card-text book-height"><em>${bookDescription}</em></p>
+         <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
+         <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
+   </div>
+   </div>
+   `
    return wrapper;
 }
 let bookId = 0;

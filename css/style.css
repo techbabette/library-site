@@ -139,7 +139,6 @@ a.active{
   transition: 0.2s;
 }
 .book{
-  min-height: 25vh;
   color: white;
   background-color: #333333;
   border: 1px solid #333333;
@@ -174,15 +173,16 @@ a.active{
 .book-prev{
   border: 1px solid #f7bd2f;
 }
+.book-height{
+  min-height: 10vh;
+}
 .book-title{
   color: #f5af05;
-  min-height: 8vh;
 }
 .bookDescription{
   min-height: 8vh;
 }
 .book-body{
-  min-height: 30vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -216,7 +216,7 @@ a.active{
   background-color: rgba(0,0,0,0.4);
 }
 .mk-modal-content {
-  margin: 15% auto;
+  margin: 8% auto;
   color: #f7bd2f !important;
   background-color: #333333;
   padding: 20px;
