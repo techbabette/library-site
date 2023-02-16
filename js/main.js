@@ -1,16 +1,27 @@
-var prefix = "";
+var mainPage;
 var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 window.onload = function(){
-   var categories = ['Jezici', 'Popularna_nauka', 'Popularna_psihologija', 'Istorijska_dela'];
-   var holder = document.querySelector('.dropdown-menu');
-   if(sPage === "index.html" || sPage.length === 0) prefix="pages/";
-   let element =`<li><a class="dropdown-item" href="${prefix}knjige.html">Sve</a></li>`;
-   holder.innerHTML += element;
-   for(category of categories){
-   let element =`<li><a class="dropdown-item" href="${prefix}knjige.html?kategorija=${category}">${category.replace("_", " ")}</a></li>`;
-   holder.innerHTML += element;
-   }
+   let objects = [
+      {
+          "tekst" : "Gradska biblioteka",
+          "url" : "index.html",
+          "primary" : "true"
+      },
+      {
+          "tekst" : "Knjige",
+          "url" : "knjige.html",
+          "primary" : "false"
+      },
+      {
+          "tekst" : "O autoru",
+          "url" : "autor.html",
+          "primary" : "false"
+      }
+  ]
+  console.log(sPage);
+  mainPage = sPage == "index.html" ? true : false;
+  generateNavBar(objects, "#actual-navbar");
    window.onscroll = function(){
       let upButton = $("#goBackUp");
       if ($(window).scrollTop()>300){
@@ -205,8 +216,41 @@ function fillBooks(elementList, holder){
       $(element).fadeIn(1000);
    }
 }
+function generateNavBar(objects, holder){
+   let htmlContent = "";
+   let holderElement = document.querySelector(holder);
+   let active;
+   for(object in objects){
+      active = false;
+      if(objects[object]["url"] == sPage) active = true;
+      if(object === "0"){
+         htmlContent += 
+         `<a class="navbar-brand" href="${(mainPage?'' : '../') + objects[object]["url"]}"><h1 class="h4">${objects[object]["tekst"]}</h1></a>
+         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+         </button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ms-auto mb-2 mb-lg-0">`
+      }
+      else if(object == objects.length - 1){
+         htmlContent += 
+         `<li class="nav-item">
+         <a class="nav-link ${active ? "active" : ""}" href="${(mainPage?'pages/' : '') + objects[object]["url"]}">
+            ${objects[object]["tekst"]}
+         </a>
+         </li></ul></div>`
+      }
+      else{
+         htmlContent += 
+         `<li class="nav-item">
+         <a class="nav-link ${active ? "active" : ""}" href="${(mainPage?'pages/' : '') + objects[object]["url"]}">
+            ${objects[object]["tekst"]}
+         </a>
+         </li>`
+      }
+   }
+   holderElement.innerHTML = htmlContent;
+}
 function generateFooter(){
-   let links = new Array('https://www.facebook.com/','https://www.twitter.com/',(prefix?'' : '../') + 'documentation.pdf', (prefix?'' : '../') + 'sitemap.xml');
+   let links = new Array('https://www.facebook.com/','https://www.twitter.com/',(mainPage?'' : '../') + 'documentation.pdf', (mainPage?'' : '../') + 'sitemap.xml');
    let names = new Array('facebook', 'twitter', 'fa-light', 'sitemap');
    let icons = new Array('icomoon-free:facebook', 'la:twitter', 'fa-file', 'bx:sitemap')
    let columns = document.getElementsByClassName("icon-holder");
@@ -413,12 +457,12 @@ function bookToElement(currentBook){
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
    }
-   if(prefix.length < 1){
+   if(!mainPage){
       wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
       imgPart = `<img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">`
    }
    else{
-      wrapper.href = `${prefix}knjiga.html?knjiga=${currentBook.name}`
+      wrapper.href = `pages/knjiga.html?knjiga=${currentBook.name}`
       imgPart = `<img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">`
    };
    wrapper.innerHTML = `

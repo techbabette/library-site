@@ -1,0 +1,18 @@
+[
+    {
+        "tekst" : "Gradska biblioteka",
+        "url" : "index.html"
+    },
+    {
+        "tekst" : "Pocetna",
+        "url" : "index.html"
+    },
+    {
+        "tekst" : "Knjige",
+        "url" : "knjige.html"
+    },
+    {
+        "tekst" : "O autoru",
+        "url" : "autor.html"
+    }
+]
