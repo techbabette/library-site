@@ -1,27 +1,13 @@
 var mainPage;
 var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+const JSONPATH = "assets/"
 window.onload = function(){
-   let objects = [
-      {
-          "tekst" : "Gradska biblioteka",
-          "url" : "index.html",
-          "primary" : "true"
-      },
-      {
-          "tekst" : "Knjige",
-          "url" : "knjige.html",
-          "primary" : "false"
-      },
-      {
-          "tekst" : "O autoru",
-          "url" : "autor.html",
-          "primary" : "false"
-      }
-  ]
   console.log(sPage);
   mainPage = sPage == "index.html" ? true : false;
-  generateNavBar(objects, "#actual-navbar");
+  callback("navbar.json", generateNavBar, ["#actual-navbar"]);
+  callback("footer.json", generateFooter, ["icon-holder"])
+  //generateNavBar(objects, "#actual-navbar");
    window.onscroll = function(){
       let upButton = $("#goBackUp");
       if ($(window).scrollTop()>300){
@@ -36,7 +22,6 @@ window.onload = function(){
       event.preventDefault();
       $(window).scrollTop(0);
    })
-   generateFooter();
    //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
    let popularHolder = document.querySelector("#pop")
@@ -173,6 +158,44 @@ function book(name, category, author, description, copies, releaseDate){
    this.copies = copies;
    this.releaseDate = releaseDate;
 }
+
+function callback(file,handler, args = []){
+   let request = createRequest();
+   request.onreadystatechange = function(){
+      if(request.readyState == 4){
+         if(args == []){
+            handler(JSON.parse(this.responseText));
+         }
+         else{
+            handler(JSON.parse(this.responseText), args);
+         }
+      }
+   }
+   request.open("GET", `${mainPage? "" : "../"}${JSONPATH+file}`)
+   request.send();
+}
+
+function createRequest(){
+   let request = false;
+   try{
+      request = new XMLHttpRequest();
+   }
+   catch(windows){
+      try{
+         request = new ActiveXObject("Msxm12.XMLHTTP");
+      }
+      catch(otherWindows){
+         try{
+            request = new ActiveXObject("Microsoft.XMLHTTP");
+         }
+         catch{
+            console.log("Ajax nije podrzan");
+         }
+      }
+   }
+   return request;
+}
+
 function zoomOnHover(zoomElement, zoomImg)
 {
    $(zoomElement)
@@ -216,16 +239,32 @@ function fillBooks(elementList, holder){
       $(element).fadeIn(1000);
    }
 }
-function generateNavBar(objects, holder){
+
+function generateUrl(object, redirect = ""){
+   let url = "";
+   if(object["primary"]){
+      url += mainPage? '' : '../';
+   }
+   else{
+      url += mainPage? `${redirect}` : '';
+   }
+   url += object["url"];
+   console.log(url);
+   return url;
+}
+
+function generateNavBar(objects, args){
    let htmlContent = "";
-   let holderElement = document.querySelector(holder);
+   let holderElement = document.querySelector(args[0]);
    let active;
+   let url;
    for(object in objects){
       active = false;
+      url = generateUrl(objects[object], '/pages/');
       if(objects[object]["url"] == sPage) active = true;
       if(object === "0"){
          htmlContent += 
-         `<a class="navbar-brand" href="${(mainPage?'' : '../') + objects[object]["url"]}"><h1 class="h4">${objects[object]["tekst"]}</h1></a>
+         `<a class="navbar-brand" href="${url}"><h1 class="h4">${objects[object]["tekst"]}</h1></a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
          </button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ms-auto mb-2 mb-lg-0">`
@@ -233,7 +272,7 @@ function generateNavBar(objects, holder){
       else if(object == objects.length - 1){
          htmlContent += 
          `<li class="nav-item">
-         <a class="nav-link ${active ? "active" : ""}" href="${(mainPage?'pages/' : '') + objects[object]["url"]}">
+         <a class="nav-link ${active ? "active" : ""}" href="${url}">
             ${objects[object]["tekst"]}
          </a>
          </li></ul></div>`
@@ -241,7 +280,7 @@ function generateNavBar(objects, holder){
       else{
          htmlContent += 
          `<li class="nav-item">
-         <a class="nav-link ${active ? "active" : ""}" href="${(mainPage?'pages/' : '') + objects[object]["url"]}">
+         <a class="nav-link ${active ? "active" : ""}" href="${url}">
             ${objects[object]["tekst"]}
          </a>
          </li>`
@@ -249,15 +288,12 @@ function generateNavBar(objects, holder){
    }
    holderElement.innerHTML = htmlContent;
 }
-function generateFooter(){
-   let links = new Array('https://www.facebook.com/','https://www.twitter.com/',(mainPage?'' : '../') + 'documentation.pdf', (mainPage?'' : '../') + 'sitemap.xml');
-   let names = new Array('facebook', 'twitter', 'fa-light', 'sitemap');
-   let icons = new Array('icomoon-free:facebook', 'la:twitter', 'fa-file', 'bx:sitemap')
-   let columns = document.getElementsByClassName("icon-holder");
+function generateFooter(objects, args){
+   let columns = document.getElementsByClassName(args[0]);
    let elementList = new Array();
-   for(let i = 0; i < links.length; i++){
+   for(let i = 0; i < objects.length; i++){
    elementList.push(
-      `<a class="text-light" href="${links[i]}" ><span class="iconify" id="${names[i]}-icon" data-icon="${icons[i]}"></span></a>`)
+      `<a class="text-light" href="${generateUrl(objects[i])}" ><span class="iconify" id="${objects[i]["name"]}-icon" data-icon="${objects[i]["icon"]}"></span></a>`)
    };
    fillColumns(elementList, columns, 4);
 }

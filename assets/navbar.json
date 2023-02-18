@@ -1,18 +1,22 @@
 [
     {
         "tekst" : "Gradska biblioteka",
-        "url" : "index.html"
+        "url" : "index.html",
+        "primary" : true
     },
     {
         "tekst" : "Pocetna",
-        "url" : "index.html"
+        "url" : "index.html",
+        "primary" : true
     },
     {
         "tekst" : "Knjige",
-        "url" : "knjige.html"
+        "url" : "knjige.html",
+        "primary" : false
     },
     {
         "tekst" : "O autoru",
-        "url" : "autor.html"
+        "url" : "autor.html",
+        "primary" : false
     }
 ]

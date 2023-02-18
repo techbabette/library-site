@@ -1,0 +1,26 @@
+[
+    {
+        "url" : "https://www.facebook.com/",
+        "name" : "facebook",
+        "icon" : "icomoon-free:facebook",
+        "primary" : false
+    },
+    {
+        "url" : "https://www.twitter.com/",
+        "name" : "twitter",
+        "icon" : "la:twitter",
+        "primary" : false
+    },
+    {
+        "url" : "documentation.pdf",
+        "name" : "fa-light",
+        "icon" : "fa-file",
+        "primary" : true
+    },
+    {
+        "url" : "sitemap.xml",
+        "name" : "sitemap",
+        "icon" : "bx:sitemap",
+        "primary" : true
+    }
+]
