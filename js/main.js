@@ -264,7 +264,7 @@ function generateNavBar(objects, args){
    let url;
    for(object in objects){
       active = false;
-      url = generateUrl(objects[object], '/pages/');
+      url = generateUrl(objects[object], 'pages/');
       if(objects[object]["url"] == sPage) active = true;
       if(object === "0"){
          htmlContent += 
