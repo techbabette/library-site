@@ -4,7 +4,7 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 const JSONPATH = "assets/"
 window.onload = function(){
   console.log(sPage);
-  mainPage = sPage == "index.html" ? true : false;
+  mainPage = sPage == "index.html" || sPage.length == 0 ? true : false;
   callback("navbar.json", generateNavBar, ["#actual-navbar"]);
   callback("footer.json", generateFooter, ["icon-holder"])
   callback("books.json", saveToLocalStorage, ["books"], false);
