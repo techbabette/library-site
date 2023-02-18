@@ -7,8 +7,9 @@ window.onload = function(){
   mainPage = sPage == "index.html" ? true : false;
   callback("navbar.json", generateNavBar, ["#actual-navbar"]);
   callback("footer.json", generateFooter, ["icon-holder"])
-  //generateNavBar(objects, "#actual-navbar");
-   window.onscroll = function(){
+  callback("books.json", saveToLocalStorage, ["books"], false);
+  books = JSON.parse(localStorage.getItem("books"));
+  window.onscroll = function(){
       let upButton = $("#goBackUp");
       if ($(window).scrollTop()>300){
          upButton.removeClass("invisible");
@@ -159,7 +160,11 @@ function book(name, category, author, description, copies, releaseDate){
    this.releaseDate = releaseDate;
 }
 
-function callback(file,handler, args = []){
+function saveToLocalStorage(value, args){
+   localStorage.setItem(args[0], JSON.stringify(value));
+}
+
+function callback(file,handler, args = [], asynchronicity = true){
    let request = createRequest();
    request.onreadystatechange = function(){
       if(request.readyState == 4){
@@ -171,7 +176,7 @@ function callback(file,handler, args = []){
          }
       }
    }
-   request.open("GET", `${mainPage? "" : "../"}${JSONPATH+file}`)
+   request.open("GET", `${mainPage? "" : "../"}${JSONPATH+file}`, asynchronicity)
    request.send();
 }
 
@@ -249,7 +254,6 @@ function generateUrl(object, redirect = ""){
       url += mainPage? `${redirect}` : '';
    }
    url += object["url"];
-   console.log(url);
    return url;
 }
 
@@ -533,18 +537,3 @@ function moveBooks(holder, direction){
    }
    fillBooks(elementList, holder);
 }
-//Initializing all books
-var books = 
-[
-new book('Manipulacija_i_moć', 'Popularna_psihologija', 'Henrik_Feksevs', 'Želite da odmah primetite da vas neko laže? Flertujete na pravi način? Prodate svoju priču svima? Naravno, reći ćete, ko ne želi da poseduje ove veštine? Henrik Feksevs je fascinantna ličnost. Neki bi ga mogli opisati kao pomalo luckastog ekscentrika, ali ako pročitate njegovu knjigu, otkrićete da on savršeno dobro zna o čemu priča. A uz to je i duhovit.Verovatno se pitate da li je ova knjiga praktični vodič za iluzioniste? Ili možda priručnik za mađioničare početnike? Ili čak neki ezoterijski tekst? Ne, ova knjiga nije ništa od toga. Ona je namenjena svima koji žele da čitaju misli, bez potrebe da budu čarobnjaci. Položaj tela, intonacija govora, korak, pogled i pokreti otkrivaju naša osećanja. Često će ti neverbalni signali biti u direktnom sukobu sa porukom koju izražavamo rečima. ', 5, 2022),
-new book("Francuski_jezik", "Jezici", "Biljana_Aksentijević", "Udžbenik iz francuskog", 2, 2021),
-new book('Prosvećeni_svet', 'Popularna_nauka','Steven_Pinker', 'U ovoj elegantnoj proceni stanja čovečanstva na početku trećeg milenijuma, kognitivni psiholog, intelektualac i mislilac Stiven Pinker poziva nas da se odaljimo od zastrašujućih naslova kojima smo zasuti i crnih proročanstava „stručnjaka“, koji igraju na kartu naših psihološki uslovljenih predrasuda. Umesto toga, on predlaže da jednostavno pratimo podatke. Pinker pokazuje da su život, zdravlje, prosperitet, sigurnost, mir, znanje i sreća u porastu, ne samo na Zapadu, već u čitavom svetu. Taj napredak nije rezultat neke kosmičke sile. To je dar prosvetiteljstva, uverenja da razum i nauka mogu da dovedu do procvata čovečanstva.', 2, 2019),
-new book("Homo_Deus", 'Popularna_nauka', 'Juval_Noa_Harari','Šta će sada biti prioritetni problemi čovečanstva umesto gladi, bolesti i rata? Kakvu ćemo sudbinu nameniti ljudskom rodu, kao samoproklamovani bogovi planete Zemlje, koje korake ćemo preduzimati da to ostvarimo? Homo Deus istražuje projekte, snove i noćne more koji će oblikovati dvadeset prvi vek – od prevazilaženja smrti do stvaranja veštačkog života. Pred nama su osnovna pitanja na koja moramo da damo odgovore: u kom pravcu ćemo se dalje kretati? I kako ćemo zaštititi ovaj krhki svet od sopstvenih destruktivnih moći? Pred nama je sledeća faza evolucije: Homo Deus.', 3, 2022),
-new book('Sapijens', 'Istorijska_dela', 'Juval_Noa_Harari', 'Pre stotinu hiljada godina na Zemlji je živelo najmanje šest ljudskih vrsta. Danas postoji samo jedna – homo sapijens. Kako je naša vrsta uspela da pobedi u bici za prevlast? Zašto su naši preci lovci-sakupljači udružili snage da bi gradili gradove i osnivali carstva? Kako smo počeli da verujemo u bogove, nacije i ljudska prava, u novac, knjige i zakone; kako smo pali u ropstvo birokratije, radnog vremena i konzumerizma? Kako će naš svet izgledati u budućnosti?', 3, 2022),
-new book("Umeće_ratovanja", "Istorijska_dela", "Sun_Tzu", "Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.", 3, -500),
-new book('Intelektom_ispred_svih', 'Popularna_psihologija', 'Henrik_Feksevs', "Potreba da ostanete u formi na mentalnom nivou, koja se poslednjih decenija uvukla u kolektivnu svest, dobar je pristup i malim sivim ćelijama.Kao kada je reč o fizičkom zdravlju, postoje svojevrsni metodi za unapređenje mentalnog: vežbe i alatke koje možete koristiti da bi vaše misli postale jače, hitrije i prilagodljivije, što će vam pomoći da ostvarite i održite vrhunski učinak u životu, a koji će vas zaštititi od stresa i teškoća, s kojima ćete se neizostavno susretati.", 4, 2021),
-new book('Brojevi_ne_lažu', 'Popularna_nauka', 'Vaclav_Smit', "Kako da bolje shvatite moderni svet. Moj omiljeni autor. Bez imalo dvoumljenja preporučujem ovu knjigu svima koji vole da saznaju nešto novo.“– Bil Gejts", 2, 2022),
-new book('Stari_gradovi_srbije', 'Istorijska_dela', "Dragan_Bosnić", "„Nema grada na svetu oko koga su se jagmili toliki narodi, pod čijim su se bedemima vodile tolike bitke, koji je toliko puta menjao vlasnika i pedeset puta uništavan da bi se svih pedeset puta ponovo iz istorijskog groba podigao – kao što je naš Beograd. Pa zar ta činjenica što je taj grad srpski ni najmanje o Srbima ne govori?“ – Borislav Pekić", 2, 2019),
-new book('Isus_to_nije_rekao','Istorijska_dela','Bart_D._Erman', 'Rafinirano, ali i na jedan krajnje izazovan način, Erman iznosi dokaze o tome kako je puno omiljenih biblijskih priča i široko prihvaćenih verovanja koje se odnose na Isusovu božanstvenost, Trojstvo, božansko poreklo i nadahnutost Biblije, nastalo kao plod namernih i slučajnih izmena načinjenih od strane drevnih pisara - a ove izmene su, pak, dramatično uticale na sve naredne verzije Biblije.', 1, 2019),
-new book("Nemački_za_neupućene", 'Jezici', 'Wendy_Foster', 'Guten Tag! Ukoliko želite da naučite nemački jezik – bilo radi posla, putovanja ili zabave – Nemački za neupućene će zadovoljiti sve vaše potrebe. Pored poglavlja koja objašnjavaju gramatiku i njenu primenu, knjiga sadrži i dijaloge koji će vam omogućiti da koristite i govorite nemački jezik kao maternji. Osim toga, ona sadrži i CD koji pruža dodatne mogućnosti za vežbanje govornog jezika. ', 1, 2018)
-];
