@@ -7,8 +7,7 @@ window.onload = function(){
   mainPage = sPage == "index.html" || sPage.length == 0 ? true : false;
   callback("navbar.json", generateNavBar, ["#actual-navbar"]);
   callback("footer.json", generateFooter, ["icon-holder"])
-  callback("books.json", saveToLocalStorage, ["books"], false);
-  books = JSON.parse(localStorage.getItem("books"));
+  callback("books.json", initializeBooks);
   window.onscroll = function(){
       let upButton = $("#goBackUp");
       if ($(window).scrollTop()>300){
@@ -25,60 +24,10 @@ window.onload = function(){
    })
    //If currently on index page
 if(sPage === "index.html" || sPage.length === 0){
-   let popularHolder = document.querySelector("#pop")
-   generateBooks(popularHolder);
-   recentHolder = document.querySelector("#rec")
-   let copyOfBooks = new Array(...books);
-   books = books.sort(function(a ,b){
-      if(a.releaseDate > b.releaseDate){
-         return -1
-      }
-      else if (a.releaseDate < b.releaseDate){
-         return 1;
-      }
-      else return 0;
-   })
-   generateBooks(recentHolder);
-   books = copyOfBooks;
-   let timeToLoad = 2500;
-   $("#moveLeftButton").click(function(event){
-      event.preventDefault(); 
-      moveBooks(popularHolder, -1);
-   });
-   $("#moveRightButton").click(function(event){
-      event.preventDefault();
-      moveBooks(popularHolder, 1);
-   })
-   countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
-   countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
-   countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
-   countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
-   countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
+
 }
 if(sPage === "knjige.html"){
-   const queryString = window.location.search;
-   const urlParams = new URLSearchParams(queryString);
-   //If the category paramater is set, filter the books by category, else show all books
-   if(urlParams.has('kategorija')){
-      let kategorija = urlParams.get('kategorija')
-      document.title = kategorija.replaceAll("_", " ");
-      books = books.filter(book => book.category.toLowerCase() == kategorija.toLowerCase());
-      document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
-   }
-   if(urlParams.has('autor')){
-      let autor = urlParams.get('autor');
-      document.title = autor.replaceAll("_", " ");
-      books = books.filter(book => book.author.toLowerCase() == autor.toLowerCase());
-      document.getElementById('mk-book-category').innerHTML = autor.replaceAll("_"," ") ;
-   }
-   if(urlParams.has('godina')){
-      let year = urlParams.get('godina');
-      document.title = "Knjige iz " + negativeToBCE(year) + ". godine";
-      books = books.filter(book => book.releaseDate === parseInt(year));
-      document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
-   }
    //Prepare the books to be displayed
-   loadMore();
    const loadMoreButton = $("#loadMore");
    loadMoreButton.click(function(event){
       event.preventDefault();
@@ -86,19 +35,6 @@ if(sPage === "knjige.html"){
    })
 }
 if(sPage === "knjiga.html"){
-   const queryString = window.location.search;
-   const urlParams = new URLSearchParams(queryString);
-   const urlBook = urlParams.get('knjiga')
-   let currentBook = books.filter(book => book.name === urlBook)[0] 
-   if(!currentBook)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
-   document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
-   document.title = currentBook.name.replaceAll("_", " ");
-   document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
-   document.querySelector('#book-description').innerHTML = currentBook.description;
-   setLinkValue("#author-link","autor", currentBook.author, currentBook.author.replaceAll("_", " "));
-   setLinkValue("#category-link","kategorija", currentBook.category, currentBook.category.replaceAll("_", " "))
-   setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
-   document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
    $('#openModal').click(function(event) {
       event.preventDefault();
       $("#myModal").show("fast")
@@ -536,4 +472,78 @@ function moveBooks(holder, direction){
       }
    }
    fillBooks(elementList, holder);
+}
+
+function initializeBooks(data){
+   books = data;
+   if(mainPage){
+      let timeToLoad = 2500;
+      $("#moveLeftButton").click(function(event){
+         event.preventDefault(); 
+         moveBooks(popularHolder, -1);
+      });
+      $("#moveRightButton").click(function(event){
+         event.preventDefault();
+         moveBooks(popularHolder, 1);
+      })
+      let popularHolder = document.querySelector("#pop")
+      generateBooks(popularHolder);
+      recentHolder = document.querySelector("#rec")
+      let copyOfBooks = new Array(...books);
+      books = books.sort(function(a ,b){
+         if(a.releaseDate > b.releaseDate){
+            return -1
+         }
+         else if (a.releaseDate < b.releaseDate){
+            return 1;
+         }
+         else return 0;
+      })
+      generateBooks(recentHolder);
+      countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
+      countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
+      countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
+      countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
+      countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
+      books = copyOfBooks;
+   }
+   if(sPage == "knjige.html"){
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      //If the category paramater is set, filter the books by category, else show all books
+      if(urlParams.has('kategorija')){
+         let kategorija = urlParams.get('kategorija')
+         document.title = kategorija.replaceAll("_", " ");
+         books = books.filter(book => book.category.toLowerCase() == kategorija.toLowerCase());
+         document.getElementById('mk-book-category').innerHTML = kategorija.replaceAll("_"," ") ;
+      }
+      if(urlParams.has('autor')){
+         let autor = urlParams.get('autor');
+         document.title = autor.replaceAll("_", " ");
+         books = books.filter(book => book.author.toLowerCase() == autor.toLowerCase());
+         document.getElementById('mk-book-category').innerHTML = autor.replaceAll("_"," ") ;
+      }
+      if(urlParams.has('godina')){
+         let year = urlParams.get('godina');
+         document.title = "Knjige iz " + negativeToBCE(year) + ". godine";
+         books = books.filter(book => book.releaseDate === parseInt(year));
+         document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
+      }
+      loadMore();
+   }
+   if(sPage == "knjiga.html"){
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const urlBook = urlParams.get('knjiga')
+      let currentBook = books.filter(book => book.name === urlBook)[0] 
+      if(!currentBook)window.location.href = "https://techbabette.github.io/library-site/pages/knjige.html";
+      document.querySelector("#bookImage").src=`../imgs/${currentBook.name.toLowerCase()}.jpg`
+      document.title = currentBook.name.replaceAll("_", " ");
+      document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
+      document.querySelector('#book-description').innerHTML = currentBook.description;
+      setLinkValue("#author-link","autor", currentBook.author, currentBook.author.replaceAll("_", " "));
+      setLinkValue("#category-link","kategorija", currentBook.category, currentBook.category.replaceAll("_", " "))
+      setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
+      document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
+   }
 }
