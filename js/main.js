@@ -100,7 +100,7 @@ function saveToLocalStorage(value, args){
    localStorage.setItem(args[0], JSON.stringify(value));
 }
 
-function callback(file,handler, args = [], asynchronicity = true){
+function callback(file, handler, args = [], asynchronicity = true){
    let request = createRequest();
    request.onreadystatechange = function(){
       if(request.readyState == 4){
@@ -123,7 +123,7 @@ function createRequest(){
    }
    catch(windows){
       try{
-         request = new ActiveXObject("Msxm12.XMLHTTP");
+         request = new ActiveXObject("Msxml2.XMLHTTP");
       }
       catch(otherWindows){
          try{
