@@ -337,9 +337,7 @@ function generateBooks(args){
    }
    fillBooks(elementList, columns);
    if(paginate){
-      if(numberOfPages > 1){
-         fillPageButtons(numberOfPages)
-      }
+         fillPageButtons(numberOfPages);
    }
    return returnCode;
 }
@@ -347,6 +345,9 @@ function generateBooks(args){
 function fillPageButtons(numberOfPages){
    let holder = document.querySelector("#loadMore");
    holder.innerHTML = "";
+   if(numberOfPages < 2){
+      return;
+   }
    for(let i = 1; i <= numberOfPages; i++){
       let pageButton = document.createElement("a");
       pageButton.dataset.page = i;
@@ -623,7 +624,10 @@ function showCategories(args){
          <input type="checkbox" id="${cat.name}" name="${args[2]}" value="${cat.id}"/>
          </div>`
          resultHolder.appendChild(li);
-         document.querySelector(`#${cat.name}`).addEventListener("click", loadMore);
+         document.querySelector(`#${cat.name}`).addEventListener("click", function(){
+            currentPage = 1;
+            loadMore();
+         });
    }
 }
 
