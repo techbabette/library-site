@@ -305,6 +305,7 @@ input{
 #event-div{
   flex-direction: row;
   justify-content: flex-start;
+  text-align: center;
 }
 .mk-clear{
   --bs-gutter-x: 0rem;

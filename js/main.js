@@ -1,6 +1,7 @@
 var mainPage;
 var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
+var favoritesOnly = false;
 const JSONPATH = "assets/"
 window.onload = function(){
   console.log(sPage);
@@ -26,7 +27,7 @@ window.onload = function(){
 if(sPage === "index.html" || sPage.length === 0){
 
 }
-if(sPage === "knjige.html"){
+if(sPage === "knjige.html" || sPage === "favoriti.html"){
    //Prepare the books to be displayed
    const loadMoreButton = $("#loadMore");
    loadMoreButton.click(function(event){
@@ -307,20 +308,36 @@ function generateFooter(objects, args){
    fillColumns(elementList, columns, 4);
 }
 let booksLoaded = 0;
+let increment = 4;
 function generateBooks(columns){
    let elementList = new Array();
    let startingId = booksLoaded;
-   let increment = 4;
    let returnCode = false;
+   let filteredBooks = books;
+   if(favoritesOnly){
+      favorites = getFromLocalStorage(['favoriti']);
+      if(favorites != null){
+         filteredBooks = filteredBooks.filter(b => favorites.includes(b.id));
+      }
+      else{
+         displayNoBooksFitYourParamaters([columns, "Nemate sacuvanu ni jednu knjigu"]);
+         return true;
+      }
+   }
    for(booksLoaded; booksLoaded<startingId+increment;booksLoaded++){
-      if(booksLoaded>=books.length){returnCode = true; break;}
-      if(booksLoaded== books.length - 1){returnCode = true;}
-      let currentBook = books[booksLoaded];
+      if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
+      if(booksLoaded== filteredBooks.length - 1){returnCode = true;}
+      let currentBook = filteredBooks[booksLoaded];
       elementList.push(bookToElement(currentBook));
    }
    fillBooks(elementList, columns);
    return returnCode;
 }
+
+function displayNoBooksFitYourParamaters(args){
+   args[0].innerHTML = `<p>${args[1]}</p>`;
+}
+
 function setLinkValue(selector,filter, href, text)
 {
    document.querySelector(selector).setAttribute("href",`knjige.html?${filter}=${href}`);
@@ -618,5 +635,9 @@ function initializeBooks(data){
       setLinkValue("#category-link","kategorija", currentBook.category, currentBook.category.replaceAll("_", " "))
       setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
       document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
+   }
+   if(sPage == "favoriti.html"){
+      favoritesOnly = true;
+      loadMore();
    }
 }
