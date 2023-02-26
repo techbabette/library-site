@@ -527,7 +527,7 @@ function bookToElement(currentBook){
    }
    imgPart = `
    <div class="position-relative">
-   <a href=${href}><img src="${mainPage ? "" : ".."}/imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev img-fluid" alt="..."></a>
+   <a href=${href}><img src="${mainPage ? "" : "../"}imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev img-fluid" alt="..."></a>
    <a href="#" data-id="${currentBook.id}" class="mk-favorite-icon-holder">
    <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline"}"style="color: red;">Heart</span>
    </a>`
