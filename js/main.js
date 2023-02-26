@@ -302,10 +302,12 @@ function generateFooter(objects, args){
 }
 let currentPage = 1;
 let perPage = 4;
-function generateBooks(columns){
+function generateBooks(args){
    let elementList = new Array();
    let returnCode = false;
-   let filteredBooks = books;
+   let filteredBooks = args[0];
+   let columns = args[1];
+   let paginate = args[2];
    if(favoritesOnly){
       favorites = getFromLocalStorage(['favoriti']);
       if(favorites != null){
@@ -324,8 +326,10 @@ function generateBooks(columns){
       elementList.push(bookToElement(currentBook));
    }
    fillBooks(elementList, columns);
-   if(numberOfPages > 1){
-      fillPageButtons(numberOfPages)
+   if(paginate){
+      if(numberOfPages > 1){
+         fillPageButtons(numberOfPages)
+      }
    }
    return returnCode;
 }
@@ -337,11 +341,13 @@ function fillPageButtons(numberOfPages){
       let pageButton = document.createElement("a");
       pageButton.dataset.page = i;
       pageButton.innerText = i;
+      pageButton.href = "#";
       pageButton.addEventListener("click", function(event){
          event.preventDefault();
          currentPage = this.dataset.page;
          loadMore();
       })
+      if(pageButton.dataset.page == currentPage) pageButton.classList.add("active");
       holder.appendChild(pageButton);
    }
 }
@@ -357,7 +363,7 @@ function setLinkValue(selector,filter, href, text)
 }
 function loadMore(){
    let holder = document.querySelector("#event-div")
-   generateBooks(holder);
+   generateBooks([books, holder, true]);
 }
 let addressBool;
 function addressRequired(req){
@@ -590,10 +596,9 @@ function initializeBooks(data){
          moveBooks(popularHolder, 1);
       })
       let popularHolder = document.querySelector("#pop")
-      generateBooks(popularHolder);
+      generateBooks([books, popularHolder, false]);
       recentHolder = document.querySelector("#rec")
-      let copyOfBooks = new Array(...books);
-      books = books.sort(function(a ,b){
+      sortedByDate = books.sort(function(a ,b){
          if(a.releaseDate > b.releaseDate){
             return -1
          }
@@ -602,7 +607,7 @@ function initializeBooks(data){
          }
          else return 0;
       })
-      generateBooks(recentHolder);
+      generateBooks([sortedByDate, recentHolder, false]);
       countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
       countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
       countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
