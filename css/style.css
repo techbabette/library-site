@@ -110,6 +110,19 @@ a.active{
   margin-top: 20px;
   text-align: center;
 }
+.mk-favorite-icon-holder{
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  background-color: white;
+  border-radius : 50%;
+}
+.mk-favorite-icon-holder:hover{
+  scale: 1.10;
+}
+.mk-favorite-icon{
+  font-size: 50px;
+}
 #mk-book-category{
   color: #333333;
   font-weight: bold;

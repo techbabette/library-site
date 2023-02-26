@@ -1,5 +1,6 @@
 [
     {
+        "id" : 1,
         "name":"Manipulacija_i_moć",
         "category":"Popularna_psihologija",
         "author":"Henrik_Feksevs",
@@ -8,6 +9,7 @@
         "releaseDate":2022
     },
     {
+        "id" : 2,
         "name":"Francuski_jezik",
         "category":"Jezici",
         "author":"Biljana_Aksentijević",
@@ -16,6 +18,7 @@
         "releaseDate":2021
     },
     {
+        "id" : 3,
         "name":"Prosvećeni_svet",
         "category":"Popularna_nauka",
         "author":"Steven_Pinker",
@@ -24,6 +27,7 @@
         "releaseDate":2019
     },
     {
+        "id" : 4,
         "name":"Homo_Deus",
         "category":"Popularna_nauka",
         "author":"Juval_Noa_Harari",
@@ -32,6 +36,7 @@
         "releaseDate":2022
     },
     {
+        "id" : 5,
         "name":"Sapijens",
         "category":"Istorijska_dela",
         "author":"Juval_Noa_Harari",
@@ -40,11 +45,13 @@
         "releaseDate":2022
     },
     {
+        "id" : 6,
         "name":"Umeće_ratovanja",
         "category":"Istorijska_dela",
         "author":"Sun_Tzu",
         "description":"Sun Tzuova knjiga Umeće ratovanja, je jedno od najznačajnijih klasičnih kineskih dela.Ova knjiga ne sadrži ni jednu zastarelu maksimu ili nejasno uputstvo. Najbolje je pobediti bez borbe, rekao je Sun Tzu. Za njega je rat bio sastavni deo života.Pažljivo pročitajte ovu knjigu, i sve savremene knjige koje govore o upravljanju državom više vam se neće činiti dostojne pažnje.","copies":3,"releaseDate":-500},
     {
+        "id" : 7,
         "name":"Intelektom_ispred_svih",
         "category":"Popularna_psihologija",
         "author":"Henrik_Feksevs",
@@ -53,6 +60,7 @@
         "releaseDate":2021
     },
     {
+        "id" : 8,
         "name":"Brojevi_ne_lažu",
         "category":"Popularna_nauka",
         "author":"Vaclav_Smit",
@@ -61,6 +69,7 @@
         "releaseDate":2022
     },
     {
+        "id" : 9,
         "name":"Stari_gradovi_srbije",
         "category":"Istorijska_dela",
         "author":"Dragan_Bosnić",
@@ -69,6 +78,7 @@
         "releaseDate":2019
     },
     {
+        "id" : 10,
         "name":"Isus_to_nije_rekao",
         "category":"Istorijska_dela",
         "author":"Bart_D._Erman",
@@ -77,6 +87,7 @@
         "releaseDate":2019
     },
     {
+        "id" : 11,
         "name":"Nemački_za_neupućene",
         "category":"Jezici",
         "author":"Wendy_Foster",

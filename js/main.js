@@ -100,6 +100,10 @@ function saveToLocalStorage(value, args){
    localStorage.setItem(args[0], JSON.stringify(value));
 }
 
+function getFromLocalStorage(args){
+  return JSON.parse(localStorage.getItem(args[0]));
+}
+
 function callback(file, handler, args = [], asynchronicity = true){
    let request = createRequest();
    request.onreadystatechange = function(){
@@ -179,6 +183,68 @@ function fillBooks(elementList, holder){
    for(let element of elementList){
       $(element).fadeIn(1000);
    }
+   let newElementList = document.getElementsByClassName("mk-favorite-icon-holder")
+   for(let element of newElementList){
+      if(element.hasAttribute('listener')) continue;
+      element.addEventListener("click", function(event){
+         event.preventDefault();
+         addToFavorite(element);
+         displayNumberOFavorites(['favoriti', '#Favoriti'])
+      });
+      element.setAttribute('listener', true);
+   }
+}
+
+function displayNumberOFavorites(args){
+   let element = document.querySelector(args[1]);
+   element.innerHTML = `Favoriti: ${getNumberOfFavorites()}`
+   function getNumberOfFavorites(){
+      let arrayFromLocalStorage = getFromLocalStorage([args[0]]);
+      if(arrayFromLocalStorage == null){
+         return 0
+      }
+      return arrayFromLocalStorage.length;
+   }
+}
+
+function addToFavorite(element){
+   let idOfBookFavorited = element.dataset.id;
+   //Kod za vizuelni prikaz promene na već prikazanim knjigama
+   let allLoadedBookElements = document.getElementsByClassName("mk-favorite-icon-holder");
+   for(let iconHolder of allLoadedBookElements){
+      if(iconHolder.dataset.id == idOfBookFavorited){
+         var iconElement = iconHolder.firstElementChild;
+         console.log(iconElement.dataset.icon);
+         if(iconElement.dataset.icon == "mdi:cards-heart-outline"){
+            iconElement.dataset.icon = "mdi:cards-heart";
+            element.setAttribute('favorite', true);
+            continue;
+         }
+            iconElement.dataset.icon = "mdi:cards-heart-outline"
+            element.setAttribute('favorite', false);
+      }
+   }
+   //Kod za dodavanje u local storage
+   let arrayFromLocalStorage = getFromLocalStorage(['favoriti']);
+   idOfBookFavorited = parseInt(idOfBookFavorited);
+   if(arrayFromLocalStorage == null){
+      let arrayOfFavorites = new Array();
+      arrayOfFavorites.push(idOfBookFavorited);
+      saveToLocalStorage(arrayOfFavorites, ["favoriti"]);
+      return;
+   }
+   if(arrayFromLocalStorage.includes(idOfBookFavorited)){
+      arrayFromLocalStorage = arrayFromLocalStorage.filter(x => x != idOfBookFavorited);
+      if(arrayFromLocalStorage.length == 0){
+         localStorage.removeItem('favoriti');
+         return;
+      }
+      saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
+      return;
+   }
+   arrayFromLocalStorage.push(idOfBookFavorited);
+   saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
+   return;
 }
 
 function generateUrl(object, redirect = ""){
@@ -198,13 +264,15 @@ function generateNavBar(objects, args){
    let holderElement = document.querySelector(args[0]);
    let active;
    let url;
+   let id;
    for(object in objects){
       active = false;
       url = generateUrl(objects[object], 'pages/');
+      id = objects[object]["text"].replaceAll(" ", "_");
       if(objects[object]["url"] == sPage) active = true;
       if(object === "0"){
          htmlContent += 
-         `<a class="navbar-brand" href="${url}"><h1 class="h4">${objects[object]["tekst"]}</h1></a>
+         `<a class="navbar-brand" id=${id} href="${url}"><h1 class="h4">${objects[object]["text"]}</h1></a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
          </button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ms-auto mb-2 mb-lg-0">`
@@ -212,21 +280,22 @@ function generateNavBar(objects, args){
       else if(object == objects.length - 1){
          htmlContent += 
          `<li class="nav-item">
-         <a class="nav-link ${active ? "active" : ""}" href="${url}">
-            ${objects[object]["tekst"]}
+         <a class="nav-link ${active ? "active" : ""}" id=${id} href="${url}">
+            ${objects[object]["text"]}
          </a>
          </li></ul></div>`
       }
       else{
          htmlContent += 
          `<li class="nav-item">
-         <a class="nav-link ${active ? "active" : ""}" href="${url}">
-            ${objects[object]["tekst"]}
+         <a class="nav-link ${active ? "active" : ""}" id=${id} href="${url}">
+            ${objects[object]["text"]}
          </a>
          </li>`
       }
    }
    holderElement.innerHTML = htmlContent;
+   displayNumberOFavorites(['favoriti', '#Favoriti']);
 }
 function generateFooter(objects, args){
    let columns = document.getElementsByClassName(args[0]);
@@ -426,21 +495,25 @@ function countTo(element, from, to, timeToLoad){
 }
 function bookToElement(currentBook){
    let bookDescription = currentBook.description;
-   let wrapper = document.createElement("a");
+   let wrapper = document.createElement("div");
+   let href = `${mainPage ? "pages/" : ""}knjiga.html?knjiga=${currentBook.name}`;
+   let favorites = getFromLocalStorage(['favoriti']);
+   let favorite = false;
+   if(favorites != null){
+      favorite = favorites.includes(currentBook.id);
+   }
    let imgPart;
    wrapper.classList.add("flex", "col-12", "col-md-6", "col-lg-3", "justify-content-center")
    wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
    if (currentBook.description.length > 30){
       bookDescription = limitToFullWords(currentBook.description, 30);
    }
-   if(!mainPage){
-      wrapper.href = `knjiga.html?knjiga=${currentBook.name}`
-      imgPart = `<img src="../imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">`
-   }
-   else{
-      wrapper.href = `pages/knjiga.html?knjiga=${currentBook.name}`
-      imgPart = `<img src="imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev" alt="...">`
-   };
+   imgPart = `
+   <div class="position-relative">
+   <a href=${href}><img src="${mainPage ? "" : ".."}/imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev img-fluid" alt="..."></a>
+   <a href="#" data-id="${currentBook.id}" class="mk-favorite-icon-holder">
+   <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline"}"style="color: red;">Heart</span>
+   </a>`
    wrapper.innerHTML = `
    <div class="card book mk-card-limit">
    ${imgPart}

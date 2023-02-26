@@ -1,21 +1,26 @@
 [
     {
-        "tekst" : "Gradska biblioteka",
+        "text" : "Gradska biblioteka",
         "url" : "index.html",
         "primary" : true
     },
     {
-        "tekst" : "Pocetna",
+        "text" : "Pocetna",
         "url" : "index.html",
         "primary" : true
     },
     {
-        "tekst" : "Knjige",
+        "text" : "Knjige",
         "url" : "knjige.html",
         "primary" : false
     },
     {
-        "tekst" : "O autoru",
+        "text" : "Favoriti",
+        "url" : "favoriti.html",
+        "primary" : false
+    },
+    {
+        "text" : "O autoru",
         "url" : "autor.html",
         "primary" : false
     }
