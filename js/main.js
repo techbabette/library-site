@@ -613,7 +613,6 @@ function initializeBooks(data){
       countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
       countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
       countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
-      books = copyOfBooks;
    }
    if(sPage == "knjige.html"){
       const queryString = window.location.search;
