@@ -182,7 +182,7 @@ function fillBooks(elementList, holder){
       holder.append(element)
    }
    for(let element of elementList){
-      $(element).fadeIn(1000);
+      $(element).slideDown(200);
    }
    let newElementList = document.getElementsByClassName("mk-favorite-icon-holder")
    for(let element of newElementList){
