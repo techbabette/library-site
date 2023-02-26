@@ -168,7 +168,7 @@ a.active{
   color: white !important;
   padding: 5px;
   width: 100%;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 #loadMore a{
   padding: 20px;
