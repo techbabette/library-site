@@ -161,18 +161,22 @@ a.active{
   margin-bottom: 10px;
 }
 #loadMore{
-  display: block;
+  display: flex;
   border-radius: 5%;
   margin: 10px auto;
   margin-bottom: 10px;
-  background-color: #333333;
   color: white !important;
   padding: 5px;
   width: 100%;
-  border: 2px solid #f7bd2f;
+  justify-content: space-between;
 }
-#loadMore:hover{
+#loadMore a{
+  padding: 20px;
+  border-radius: 20%;
   background-color: #222222;
+}
+#loadMore a:hover{
+  color:#f5af05;
 }
 #bookPage{
   padding: 20px;

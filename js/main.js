@@ -27,14 +27,6 @@ window.onload = function(){
 if(sPage === "index.html" || sPage.length === 0){
 
 }
-if(sPage === "knjige.html" || sPage === "favoriti.html"){
-   //Prepare the books to be displayed
-   const loadMoreButton = $("#loadMore");
-   loadMoreButton.click(function(event){
-      event.preventDefault();
-      loadMore();
-   })
-}
 if(sPage === "knjiga.html"){
    $('#openModal').click(function(event) {
       event.preventDefault();
@@ -177,6 +169,7 @@ function fillColumns(elementList, columns, numberOfColumns){
 }
 
 function fillBooks(elementList, holder){
+   holder.innerHTML = "";
    for(let element of elementList){
       $(element).hide();
       holder.append(element)
@@ -307,11 +300,10 @@ function generateFooter(objects, args){
    };
    fillColumns(elementList, columns, 4);
 }
-let booksLoaded = 0;
-let increment = 4;
+let currentPage = 1;
+let perPage = 4;
 function generateBooks(columns){
    let elementList = new Array();
-   let startingId = booksLoaded;
    let returnCode = false;
    let filteredBooks = books;
    if(favoritesOnly){
@@ -324,14 +316,34 @@ function generateBooks(columns){
          return true;
       }
    }
-   for(booksLoaded; booksLoaded<startingId+increment;booksLoaded++){
+   numberOfPages = Math.ceil(filteredBooks.length / perPage);
+   for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
       if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
       if(booksLoaded== filteredBooks.length - 1){returnCode = true;}
       let currentBook = filteredBooks[booksLoaded];
       elementList.push(bookToElement(currentBook));
    }
    fillBooks(elementList, columns);
+   if(numberOfPages > 1){
+      fillPageButtons(numberOfPages)
+   }
    return returnCode;
+}
+
+function fillPageButtons(numberOfPages){
+   let holder = document.querySelector("#loadMore");
+   holder.innerHTML = "";
+   for(let i = 1; i <= numberOfPages; i++){
+      let pageButton = document.createElement("a");
+      pageButton.dataset.page = i;
+      pageButton.innerText = i;
+      pageButton.addEventListener("click", function(event){
+         event.preventDefault();
+         currentPage = this.dataset.page;
+         loadMore();
+      })
+      holder.appendChild(pageButton);
+   }
 }
 
 function displayNoBooksFitYourParamaters(args){
@@ -345,10 +357,7 @@ function setLinkValue(selector,filter, href, text)
 }
 function loadMore(){
    let holder = document.querySelector("#event-div")
-   let button = document.querySelector("#loadMore")
-   if(generateBooks(holder)){
-      hide(button);
-   }
+   generateBooks(holder);
 }
 let addressBool;
 function addressRequired(req){
