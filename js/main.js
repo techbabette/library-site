@@ -535,10 +535,14 @@ function bookToElement(currentBook){
    <div class="card book mk-card-limit">
    ${imgPart}
    <div class="card-body book-body">
-         <h5 class="card-title book-height book-title">${currentBook.name.replaceAll("_", " ")}</h5>
+         <a href="${href}"> <h5 class="card-title book-height book-title">${currentBook.name.replaceAll("_", " ")}</h5> </a>
          <p class="card-text book-height"><em>${bookDescription}</em></p>
-         <p class="card-text mk-light-yellow">${currentBook.category.replaceAll("_", " ")}</p>
-         <p class="card-text">${currentBook.author.replaceAll("_", " ")}</p>
+         <p class="card-text mk-light-yellow">
+         <a href="${mainPage ? "pages/" : ""}knjige.html?kategorija=${currentBook.category}"> ${currentBook.category.replaceAll("_", " ")} </a>
+         </p>
+         <p class="card-text">
+         <a href="${mainPage ? "pages/" : ""}knjige.html?autor=${currentBook.author}">${currentBook.author.replaceAll("_", " ")}</a>
+         </p>
    </div>
    </div>
    `
