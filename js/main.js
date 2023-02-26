@@ -318,6 +318,16 @@ function generateBooks(args){
          return true;
       }
    }
+   let categorySearchBoxes = document.getElementsByName("Kategorije");
+   let acceptedCategories = new Array();
+   for(let catBox of categorySearchBoxes){
+      if(catBox.checked){
+         acceptedCategories.push(parseInt(catBox.value));
+      }
+   }
+   if(acceptedCategories.length > 0){
+      filteredBooks = filteredBooks.filter(b => acceptedCategories.some(c => b.category.id == c))
+   }
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
    for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
       if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
@@ -553,7 +563,7 @@ function bookToElement(currentBook){
          <a href="${href}"> <h5 class="card-title book-height book-title">${currentBook.name.replaceAll("_", " ")}</h5> </a>
          <p class="card-text book-height"><em>${bookDescription}</em></p>
          <p class="card-text mk-light-yellow">
-         <a href="${mainPage ? "pages/" : ""}knjige.html?kategorija=${currentBook.category}"> ${currentBook.category.replaceAll("_", " ")} </a>
+         <a href="${mainPage ? "pages/" : ""}knjige.html?kategorija=${currentBook.category.name}"> ${currentBook.category.name.replaceAll("_", " ")} </a>
          </p>
          <p class="card-text">
          <a href="${mainPage ? "pages/" : ""}knjige.html?autor=${currentBook.author}">${currentBook.author.replaceAll("_", " ")}</a>
@@ -581,6 +591,40 @@ function moveBooks(holder, direction){
       }
    }
    fillBooks(elementList, holder);
+}
+
+function getCategoriesFromBooks(){
+   let uniqueCategories = new Array();
+   let categoryOfBook;
+   for(let b of books){
+      if(uniqueCategories.some(cat => cat.id == b.category.id)){
+         categoryOfBook = uniqueCategories.filter(c => c.id == b.category.id)[0];
+         categoryOfBook.count += 1;
+      }
+      else{
+         b.category.count = 1;
+         uniqueCategories.push(b.category);
+      }
+   }
+   uniqueCategories = uniqueCategories.sort((a,b) => 
+   {
+      return b.count-a.count;
+   })
+   return uniqueCategories;
+}
+
+function showCategories(args){
+   let resultHolder = args[0];
+      for(let cat of args[1]){
+         let li = document.createElement("li")
+         li.innerHTML += `
+         <div class="d-flex flex-row justify-content-between dropdown-item">
+         <label for${cat.name}>${cat.name.replaceAll("_", " ")} (${cat.count})</label>
+         <input type="checkbox" id="${cat.name}" name="${args[2]}" value="${cat.id}"/>
+         </div>`
+         resultHolder.appendChild(li);
+         document.querySelector(`#${cat.name}`).addEventListener("click", loadMore);
+   }
 }
 
 function initializeBooks(data){
@@ -617,6 +661,13 @@ function initializeBooks(data){
    if(sPage == "knjige.html"){
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
+      let searchButton = document.querySelector("#submitSearch");
+      searchButton.addEventListener("click", loadMore);
+      let categoryHolder = document.querySelector("#categoryHolder");
+      let categories = getCategoriesFromBooks();
+      console.log(categories);
+      showCategories([categoryHolder, categories, "Kategorije"])
+      console.log(categories);
       //If the category paramater is set, filter the books by category, else show all books
       if(urlParams.has('kategorija')){
          let kategorija = urlParams.get('kategorija')
@@ -637,6 +688,8 @@ function initializeBooks(data){
          document.getElementById('mk-book-category').innerHTML = "Knjige iz " + negativeToBCE(year) + " godine";
       }
       loadMore();
+
+
    }
    if(sPage == "knjiga.html"){
       const queryString = window.location.search;

@@ -23,9 +23,43 @@
         </div>
     </header>
     <div class="mk-solo-page page container-fluid">
-        <div class="row">
+        <div class="row spec-row d-flex flex-row">
+          <div id="filters">
+            <div class="d-flex flex-column text-center">
+              <label for="textSearch">Pretraga po nazivu</label>
+              <input type="text" name="textSearch" class="form-text" id="textSearch">
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Kategorije
+              </button>
+              <ul class="dropdown-menu" id="categoryHolder" aria-labelledby="dropdownMenuButton1">
+              </ul>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Autori
+              </button>
+              <ul class="dropdown-menu" id="authorHolder" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                Godina izdanja
+              </button>
+              <ul class="dropdown-menu" id="yearHolder" aria-labelledby="dropdownMenuButton1">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </div>
+            <a class="btn btn-dark w-100" id="submitSearch" href="#">Pretraži</a>
+            </div>
             <div class="mk-holder">
-                <div class="container-fluid w-100">
+                <div class="container-fluid">
                   <div class="row">
                     <h2 id="mk-book-category">Sve knjige</h2>
                     <hr>

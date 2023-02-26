@@ -19,6 +19,9 @@ hr{
   align-items: center;
   justify-content: space-around;
 }
+.spec-row{
+  width: 100vw;
+}
 .mk-flex-column-center{
   display: flex;
   flex-direction: column;
@@ -150,6 +153,58 @@ a.active{
 .book:hover{
   transform: scale(1.02);
   transition: 0.2s;
+}
+#filters{
+  margin: 0% auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  width: 100vw;
+  height: 30vh;
+  padding-bottom: 0px;
+}
+#filters .text-center{
+  width: 100%;
+}
+#filters .text-center .form-text{
+  width: 100%;
+}
+#filters .dropdown button{
+  background-color: #333333 !important;
+  color: #f5af05 !important;
+}
+#submitSearch{
+  background-color: #f7bd2f;
+  color: #333333 !important;
+}
+#submitSearch:hover{
+  background-color: #f5af05;
+}
+.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu .dropdown-item{
+  background-color: #333333 !important;
+  color: #f7bd2f;
+}
+.dropdown{
+  padding-bottom: 0px;
+  width: 100% !important;
+}
+.dropdown .btn{
+  width: 100% !important;
+}
+.dropdown-menu{
+  background-color: white !important;
+  width: 100%;
+}
+.form-check-label{
+  background-color: white;
+}
+.form-text{
+  height: 2rem;
 }
 .book{
   color: white;
@@ -336,9 +391,6 @@ a:link {
 a:hover{
   color: #f5af05 !important;
 }
-.dropdown-menu a:hover{
-  color: #333333 !important;
-}
 .mk-logo a{
 text-decoration: none;
 color: #f5af05;
@@ -448,6 +500,9 @@ footer{
   .navbar{
       height: 8vh;
       padding: 0% 2% 0% 2%;
+  }
+  #filters{
+    width: 15vw;
   }
   footer .row{
     padding: 0% 2% 0% 2% !important;
