@@ -3,6 +3,7 @@ var sPath = window.location.pathname;
 var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var favoritesOnly = false;
 const JSONPATH = "assets/"
+let books = new Array();
 window.onload = function(){
   console.log(sPage);
   mainPage = sPage == "index.html" || sPage.length == 0 ? true : false;
@@ -309,6 +310,7 @@ function generateBooks(args){
    let filteredBooks = args[0];
    let columns = args[1];
    let paginate = args[2];
+   let searchable = args[3];
    if(favoritesOnly){
       favorites = getFromLocalStorage(['favoriti']);
       if(favorites != null){
@@ -325,32 +327,56 @@ function generateBooks(args){
       textToSearch = textSearch.value.toLowerCase();      
    }
    let searchBoxes = new Array(
-      {"title" : "Kategorije", "prop" : "category", "complex" : true},
-      {"title" : "Autori", "prop" : "author", "complex" : true},
-      {"title" : "Godine", "prop" : "releaseDate", "complex" : false});
-   for(let search of searchBoxes){
-      let categorySearchBoxes = document.getElementsByName(search.title);
-      let acceptedCategories = new Array();
-      for(let catBox of categorySearchBoxes){
-         if(catBox.checked){
-            acceptedCategories.push(parseInt(catBox.value));
+      {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
+      {"title" : "Autori", "prop" : "author", "complex" : true, "holder" : "authorHolder"},
+      {"title" : "Godine", "prop" : "releaseDate", "complex" : false, "holder" : "yearHolder"});
+   if(searchable){
+      for(let search of searchBoxes){
+         let categorySearchBoxes = document.getElementsByName(search.title);
+         let acceptedCategories = new Array();
+         for(let catBox of categorySearchBoxes){
+            if(catBox.checked){
+               acceptedCategories.push(parseInt(catBox.value));
+               search.active = true;
+            }
+         }
+         if(acceptedCategories.length > 0){
+            if(search.complex){
+               filteredBooks = filteredBooks.filter(b => acceptedCategories.some(c => b[search.prop].id == c))
+            }
+            else{
+               filteredBooks = filteredBooks.filter(b => acceptedCategories.some(c => b[search.prop] == c));
+            }
          }
       }
-      if(acceptedCategories.length > 0){
-         if(search.complex){
-            filteredBooks = filteredBooks.filter(b => acceptedCategories.some(c => b[search.prop].id == c))
-         }
-         else{
-            filteredBooks = filteredBooks.filter(b => acceptedCategories.some(c => b[search.prop] == c));
+      let searchAtAll = false;
+      if(textToSearch){
+         searchAtAll = true;
+         filteredBooks = filteredBooks.filter(b => b.name.toLowerCase().includes(textToSearch));
+         generateAllFilters([searchBoxes, filteredBooks]);
+      }
+      else{
+         for(let search of searchBoxes){
+            if(search.active){
+               searchAtAll = true;
+               for(let searchY of searchBoxes){
+                  if(searchY != search){
+                     let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
+                     let propertyHolder = document.getElementById(searchY.holder);
+                     console.log(searchY.title);
+                     showCategories([propertyHolder, properties, searchY.title]);
+                  }
+               }
+            }
          }
       }
-   }
-   if(textToSearch){
-      filteredBooks = filteredBooks.filter(b => b.name.toLowerCase().includes(textToSearch));
-   }
-   if(filteredBooks.length < 1){
-      displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
-      return true;
+      if(filteredBooks.length < 1){
+         displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
+         return true;
+      }
+      if(!searchAtAll){
+         generateAllFilters([searchBoxes, filteredBooks]);
+      }
    }
    filteredBooks = sort([filteredBooks, currentSort]);
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
@@ -365,6 +391,20 @@ function generateBooks(args){
          fillPageButtons(numberOfPages);
    }
    return returnCode;
+}
+
+function generateAllFilters(args){
+   let searchBoxes = args[0];
+   let filteredBooks = args[1];
+   console.log("Called!");
+   console.log(filteredBooks);
+   for(let searchY of searchBoxes){
+      let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
+      console.log(searchY.title);
+      console.log(properties);
+      let propertyHolder = document.getElementById(searchY.holder);
+      showCategories([propertyHolder, properties, searchY.title]);
+}
 }
 
 function fillPageButtons(numberOfPages){
@@ -399,7 +439,7 @@ function setLinkValue(selector,filter, href, text)
 }
 function loadMore(){
    let holder = document.querySelector("#event-div")
-   generateBooks([books, holder, true]);
+   generateBooks([books, holder, true, true]);
 }
 let addressBool;
 function addressRequired(req){
@@ -623,9 +663,10 @@ function getPropertiesFromBooks(args){
    let uniqueProperties = new Array();
    let saughtProperty = args[0];
    let complex = args[1];
+   let booksToSearch = args[2];
    let propertyOfBook;
    if(complex){
-      for(let b of books){
+      for(let b of booksToSearch){
          if(uniqueProperties.some(cat => cat.id == b[saughtProperty].id)){
             propertyOfBook = uniqueProperties.filter(c => c.id == b[saughtProperty].id)[0];
             propertyOfBook.count += 1;
@@ -637,7 +678,7 @@ function getPropertiesFromBooks(args){
       }
    }
    else{
-      for(let b of books){
+      for(let b of booksToSearch){
          if(uniqueProperties.some(cat => cat.name == b[saughtProperty])){
             propertyOfBook = uniqueProperties.filter(c => c.name == b[saughtProperty])[0];
             propertyOfBook.count += 1;
@@ -692,18 +733,29 @@ function sort(args){
 
 function showCategories(args){
    let resultHolder = args[0];
-      for(let cat of args[1]){
-         let li = document.createElement("li")
-         li.innerHTML += `
-         <div class="d-flex flex-row justify-content-between dropdown-item">
-         <label for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
-         <input type="checkbox" id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
-         </div>`
-         resultHolder.appendChild(li);
-         document.querySelector(`#s${cat.name}`).addEventListener("click", function(){
-            currentPage = 1;
-            loadMore();
-         });
+   tempHolder = document.createDocumentFragment();
+   for(let cat of args[1]){
+      var checked;
+      var element = document.querySelector(`#s${cat.name}`)
+      if(element != null){
+         checked = element.checked;
+      }
+      let li = document.createElement("li")
+      li.innerHTML += `
+      <div class="d-flex flex-row justify-content-between dropdown-item">
+      <label for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
+      <input type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
+      </div>`
+      console.log(li);
+      tempHolder.appendChild(li);
+   }
+   resultHolder.innerHTML = "";
+   resultHolder.appendChild(tempHolder);
+   for(let elem of resultHolder.children){
+      elem.addEventListener("click", function(){
+         currentPage = 1;
+         loadMore();
+      });
    }
 }
 
@@ -720,7 +772,7 @@ function initializeBooks(data){
          moveBooks(popularHolder, 1);
       })
       let popularHolder = document.querySelector("#pop")
-      generateBooks([books, popularHolder, false]);
+      generateBooks([books, popularHolder, false, false]);
       recentHolder = document.querySelector("#rec")
       let copyOfBooks = [...books];
       sortedByDate = books.sort(function(a ,b){
@@ -733,7 +785,7 @@ function initializeBooks(data){
          else return 0;
       })
       books = copyOfBooks;
-      generateBooks([sortedByDate, recentHolder, false]);
+      generateBooks([sortedByDate, recentHolder, false, false]);
       countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
       countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
       countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
@@ -743,27 +795,14 @@ function initializeBooks(data){
    if(sPage == "knjige.html"){
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      console.log(urlParams);
       let searchButton = document.querySelector("#submitSearch");
       searchButton.addEventListener("click", loadMore);
-      let categoryHolder = document.querySelector("#categoryHolder");
-      let authorHolder = document.querySelector("#authorHolder");
-      let yearHolder = document.querySelector("#yearHolder");
-      let categories = getPropertiesFromBooks(['category', true]);
-      let authors = getPropertiesFromBooks(["author", true]);
-      let years = getPropertiesFromBooks(["releaseDate"], false);
       let textSearch = document.querySelector("#textSearch");
       let sortHolder = document.querySelector("#sortHolder");
       textSearch.addEventListener("input", function(){
          currentPage = 1;
          loadMore();
       })
-      console.log(categories);
-      console.log(authors);
-      console.log(years);
-      showCategories([categoryHolder, categories, "Kategorije"])
-      showCategories([authorHolder, authors, 'Autori'])
-      showCategories([yearHolder, years, "Godine"])
       showSortOptions([sortHolder, ["Preporučeno", "Najnovije", "Najstarije"]])
       //If the category paramater is set, filter the books by category, else show all books
       if(urlParams.has('kategorija')){
