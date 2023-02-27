@@ -363,7 +363,6 @@ function generateBooks(args){
                   if(searchY != search){
                      let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
                      let propertyHolder = document.getElementById(searchY.holder);
-                     console.log(searchY.title);
                      showCategories([propertyHolder, properties, searchY.title]);
                   }
                }
@@ -396,12 +395,8 @@ function generateBooks(args){
 function generateAllFilters(args){
    let searchBoxes = args[0];
    let filteredBooks = args[1];
-   console.log("Called!");
-   console.log(filteredBooks);
    for(let searchY of searchBoxes){
       let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
-      console.log(searchY.title);
-      console.log(properties);
       let propertyHolder = document.getElementById(searchY.holder);
       showCategories([propertyHolder, properties, searchY.title]);
 }
@@ -437,9 +432,9 @@ function setLinkValue(selector,filter, href, text)
    document.querySelector(selector).setAttribute("href",`knjige.html?${filter}=${href}`);
    document.querySelector(selector).innerText = text;
 }
-function loadMore(){
+function loadMore(searchable = true){
    let holder = document.querySelector("#event-div")
-   generateBooks([books, holder, true, true]);
+   generateBooks([books, holder, true, searchable]);
 }
 let addressBool;
 function addressRequired(req){
@@ -746,7 +741,6 @@ function showCategories(args){
       <label for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
       <input type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
       </div>`
-      console.log(li);
       tempHolder.appendChild(li);
    }
    resultHolder.innerHTML = "";
@@ -805,20 +799,23 @@ function initializeBooks(data){
       })
       showSortOptions([sortHolder, ["Preporučeno", "Najnovije", "Najstarije"]])
       //If the category paramater is set, filter the books by category, else show all books
+      loadMore();
       if(urlParams.has('kategorija')){
          let kategorija = urlParams.get('kategorija')
          console.log(kategorija);
          automaticallyCheckValue(["Kategorije", kategorija]);
+         loadMore();
       }
       if(urlParams.has('autor')){
          let autor = urlParams.get('autor');
          automaticallyCheckValue(["Autori", autor])
+         loadMore();
       }
       if(urlParams.has('godina')){
          let year = urlParams.get('godina');
          automaticallyCheckValue(["Godine", year]);
+         loadMore();
       }
-      loadMore();
    }
    if(sPage == "knjiga.html"){
       const queryString = window.location.search;
@@ -837,7 +834,7 @@ function initializeBooks(data){
    }
    if(sPage == "favoriti.html"){
       favoritesOnly = true;
-      loadMore();
+      loadMore(false);
    }
 }
 
@@ -847,6 +844,7 @@ function automaticallyCheckValue(args){
    let elements = document.getElementsByName(search)
    console.log(elements);
    for(let ele of elements){
+      console.log(ele.id.toLowerCase() == "s" + value.toLowerCase());
       if(ele.id.toLowerCase() == "s" + value.toLowerCase()){
          ele.checked = true;
          return;
