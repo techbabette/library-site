@@ -163,7 +163,7 @@ a.active{
   align-items: center;
   width: 100vw;
   height: 45vh;
-  padding-top: 20px;
+  margin-top: 40px;
   padding-bottom: 0px;
 }
 .form-check-label{
