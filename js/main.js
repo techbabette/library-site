@@ -808,6 +808,7 @@ function initializeBooks(data){
       }
       if(urlParams.has('autor')){
          let autor = urlParams.get('autor');
+         console.log(autor);
          automaticallyCheckValue(["Autori", autor])
          loadMore();
       }
@@ -827,8 +828,8 @@ function initializeBooks(data){
       document.title = currentBook.name.replaceAll("_", " ");
       document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
       document.querySelector('#book-description').innerHTML = currentBook.description;
-      setLinkValue("#author-link","autor", currentBook.author, currentBook.author.name.replaceAll("_", " "));
-      setLinkValue("#category-link","kategorija", currentBook.category, currentBook.category.name.replaceAll("_", " "))
+      setLinkValue("#author-link","autor", currentBook.author.name, currentBook.author.name.replaceAll("_", " "));
+      setLinkValue("#category-link","kategorija", currentBook.category.name, currentBook.category.name.replaceAll("_", " "))
       setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
       document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
    }
