@@ -738,8 +738,8 @@ function showCategories(args){
       let li = document.createElement("li")
       li.innerHTML += `
       <div class="d-flex flex-row justify-content-between dropdown-item">
-      <label class="form-check-label" for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
-      <input class="form-check-input" type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
+      <label class="form-check-label text-wrap" for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
+      <input class="form-check-input float-right" type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
       </div>`
       tempHolder.appendChild(li);
    }

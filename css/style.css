@@ -498,6 +498,9 @@ footer{
   .mk-close{
     margin-left: 10px;
   }
+  .dropdown-menu{
+    padding: 0px;
+  }
 }
 @media screen and (min-width: 992px) {
   .navbar{
