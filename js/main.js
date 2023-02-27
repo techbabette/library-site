@@ -387,7 +387,7 @@ function generateBooks(args){
    }
    fillBooks(elementList, columns);
    if(paginate){
-         fillPageButtons(numberOfPages);
+         fillPageButtons(numberOfPages, searchable);
    }
    return returnCode;
 }
@@ -402,7 +402,7 @@ function generateAllFilters(args){
 }
 }
 
-function fillPageButtons(numberOfPages){
+function fillPageButtons(numberOfPages, searchable){
    let holder = document.querySelector("#loadMore");
    holder.innerHTML = "";
    if(numberOfPages < 2){
@@ -416,7 +416,7 @@ function fillPageButtons(numberOfPages){
       pageButton.addEventListener("click", function(event){
          event.preventDefault();
          currentPage = this.dataset.page;
-         loadMore();
+         loadMore(searchable);
       })
       if(pageButton.dataset.page == currentPage) pageButton.classList.add("active");
       holder.appendChild(pageButton);
@@ -738,8 +738,8 @@ function showCategories(args){
       let li = document.createElement("li")
       li.innerHTML += `
       <div class="d-flex flex-row justify-content-between dropdown-item">
-      <label for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
-      <input type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
+      <label class="form-check-label" for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
+      <input class="form-check-input" type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
       </div>`
       tempHolder.appendChild(li);
    }

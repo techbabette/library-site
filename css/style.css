@@ -162,8 +162,11 @@ a.active{
   gap: 10px;
   align-items: center;
   width: 100vw;
-  height: 40vh;
+  height: 45vh;
   padding-bottom: 0px;
+}
+.form-check-label{
+  background-color: #333333 !important;
 }
 #filters .text-center{
   width: 100%;
@@ -502,7 +505,7 @@ footer{
       padding: 0% 2% 0% 2%;
   }
   #filters{
-    width: 15vw;
+    width: 19vw;
   }
   footer .row{
     padding: 0% 2% 0% 2% !important;
