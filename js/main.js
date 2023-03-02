@@ -385,8 +385,8 @@ function generateBooks(args){
       if(!searchAtAll){
          generateAllFilters([searchBoxes, filteredBooks]);
       }
+      filteredBooks = sort([filteredBooks, currentSort]);
    }
-   filteredBooks = sort([filteredBooks, currentSort]);
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
    for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
       if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
