@@ -4,8 +4,8 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var favoritesOnly = false;
 const JSONPATH = "assets/"
 let books = new Array();
-let currentSort = "Preporučeno";
 let sortOptions = ["Najdostupnije", "Najnovije", "Najstarije"];
+let currentSort = sortOptions[0];
 let searchBoxes = new Array(
    {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
    {"title" : "Autori", "prop" : "author", "complex" : true, "holder" : "authorHolder"},
@@ -705,7 +705,7 @@ function showSortOptions(args){
       active = dataName == currentSort;
       li.innerHTML = `
       <div class="d-flex flex-row justify-content-between dropdown-item">
-      <a id="${opt.replaceAll(" ", "_")}" class="w-100 ${active ? "active" : ""}" data-sort="${opt.replaceAll(" ", "_")}" href="#">${opt}</a>
+      <a id="${opt.replaceAll(" ", "_")}" class="w-100 ${active ? "active" : ""}" data-sort="${dataName}" href="#">${opt}</a>
       </div>
       `
       resultHolder.appendChild(li);
@@ -785,7 +785,6 @@ function saveValueOfSort(args){
 }
 
 function saveValueOfFilter(args){
-   console.log("Here");
    let storeName = args[0];
    let elems = document.getElementsByName(storeName);
    localStorage.removeItem(storeName);
