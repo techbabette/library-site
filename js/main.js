@@ -4,8 +4,15 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var favoritesOnly = false;
 const JSONPATH = "assets/"
 let books = new Array();
+let currentSort = "Preporučeno";
+let sortOptions = ["Najdostupnije", "Najnovije", "Najstarije"];
+let searchBoxes = new Array(
+   {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
+   {"title" : "Autori", "prop" : "author", "complex" : true, "holder" : "authorHolder"},
+   {"title" : "Godine", "prop" : "releaseDate", "complex" : false, "holder" : "yearHolder"});
+let currentPage = 1;
+let perPage = 4;
 window.onload = function(){
-  console.log(sPage);
   mainPage = sPage == "index.html" || sPage.length == 0 ? true : false;
   callback("navbar.json", generateNavBar, ["#actual-navbar"]);
   callback("footer.json", generateFooter, ["icon-holder"])
@@ -209,7 +216,6 @@ function addToFavorite(element){
    for(let iconHolder of allLoadedBookElements){
       if(iconHolder.dataset.id == idOfBookFavorited){
          var iconElement = iconHolder.firstElementChild;
-         console.log(iconElement.dataset.icon);
          if(iconElement.dataset.icon == "mdi:cards-heart-outline"){
             iconElement.dataset.icon = "mdi:cards-heart";
             element.setAttribute('favorite', true);
@@ -220,26 +226,27 @@ function addToFavorite(element){
       }
    }
    //Kod za dodavanje u local storage
-   let arrayFromLocalStorage = getFromLocalStorage(['favoriti']);
-   idOfBookFavorited = parseInt(idOfBookFavorited);
-   if(arrayFromLocalStorage == null){
-      let arrayOfFavorites = new Array();
-      arrayOfFavorites.push(idOfBookFavorited);
-      saveToLocalStorage(arrayOfFavorites, ["favoriti"]);
-      return;
-   }
-   if(arrayFromLocalStorage.includes(idOfBookFavorited)){
-      arrayFromLocalStorage = arrayFromLocalStorage.filter(x => x != idOfBookFavorited);
-      if(arrayFromLocalStorage.length == 0){
-         localStorage.removeItem('favoriti');
-         return;
-      }
-      saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
-      return;
-   }
-   arrayFromLocalStorage.push(idOfBookFavorited);
-   saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
-   return;
+   addToLocalStorage(["favoriti", idOfBookFavorited, false, true]);
+   // let arrayFromLocalStorage = getFromLocalStorage(['favoriti']);
+   // idOfBookFavorited = parseInt(idOfBookFavorited);
+   // if(arrayFromLocalStorage == null){
+   //    let arrayOfFavorites = new Array();
+   //    arrayOfFavorites.push(idOfBookFavorited);
+   //    saveToLocalStorage(arrayOfFavorites, ["favoriti"]);
+   //    return;
+   // }
+   // if(arrayFromLocalStorage.includes(idOfBookFavorited)){
+   //    arrayFromLocalStorage = arrayFromLocalStorage.filter(x => x != idOfBookFavorited);
+   //    if(arrayFromLocalStorage.length == 0){
+   //       localStorage.removeItem('favoriti');
+   //       return;
+   //    }
+   //    saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
+   //    return;
+   // }
+   // arrayFromLocalStorage.push(idOfBookFavorited);
+   // saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
+   // return;
 }
 
 function generateUrl(object, redirect = ""){
@@ -301,9 +308,6 @@ function generateFooter(objects, args){
    };
    fillColumns(elementList, columns, 4);
 }
-let currentPage = 1;
-let currentSort = "Preporučeno"
-let perPage = 4;
 function generateBooks(args){
    let elementList = new Array();
    let returnCode = false;
@@ -326,10 +330,6 @@ function generateBooks(args){
    if(textSearch != null){
       textToSearch = textSearch.value.toLowerCase();      
    }
-   let searchBoxes = new Array(
-      {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
-      {"title" : "Autori", "prop" : "author", "complex" : true, "holder" : "authorHolder"},
-      {"title" : "Godine", "prop" : "releaseDate", "complex" : false, "holder" : "yearHolder"});
    if(searchable){
       for(let search of searchBoxes){
          let categorySearchBoxes = document.getElementsByName(search.title);
@@ -366,6 +366,7 @@ function generateBooks(args){
                      showCategories([propertyHolder, properties, searchY.title]);
                   }
                }
+               saveValueOfFilter([search.title]);
             }
          }
       }
@@ -692,16 +693,23 @@ function getPropertiesFromBooks(args){
 
 function showSortOptions(args){
    let resultHolder = args[0];
+   resultHolder.innerHTML = "";
+   let active;
    for(let opt of args[1]){
       let li = document.createElement("li");
+      let dataName = opt.replaceAll(" ", "_");
+      active = dataName == currentSort;
       li.innerHTML = `
       <div class="d-flex flex-row justify-content-between dropdown-item">
-      <a id="${opt.replaceAll(" ", "_")}" class="w-100" data-sort="${opt.replaceAll(" ", "_")}" href="#">${opt}</a>
+      <a id="${opt.replaceAll(" ", "_")}" class="w-100 ${active ? "active" : ""}" data-sort="${opt.replaceAll(" ", "_")}" href="#">${opt}</a>
       </div>
       `
       resultHolder.appendChild(li);
       document.querySelector(`#${opt.replaceAll(" ", "_")}`).addEventListener("click", function(){
          currentSort = this.dataset.sort;
+         currentPage = 1;
+         showSortOptions([sortHolder, sortOptions]);
+         saveValueOfSort(["sacuvanSort"]);
          loadMore();
       })
    }
@@ -710,8 +718,10 @@ function showSortOptions(args){
 function sort(args){
    let booksToSort = args[0];
    let sortType = args[1];
-   if(sortType == "Preporučeno"){
-      return booksToSort
+   if(sortType == "Najdostupnije"){
+      return booksToSort.sort((a,b) => {
+         return b.copies - a.copies;
+      })
    }
    if(sortType == "Najnovije"){
       return booksToSort.sort((a,b) => {
@@ -728,9 +738,18 @@ function sort(args){
 
 function showCategories(args){
    let resultHolder = args[0];
+   let storeName = args[2];
+   let currentlySelected = getFromLocalStorage([storeName]);
    tempHolder = document.createDocumentFragment();
    for(let cat of args[1]){
-      var checked;
+      let checked;
+      let value = cat.id ? cat.id : cat.name;
+      if(currentlySelected != null){
+         if(currentlySelected.includes(value)) {
+            currentPage = 1;
+            checked = true
+         };
+      }
       var element = document.querySelector(`#s${cat.name}`)
       if(element != null){
          checked = element.checked;
@@ -739,18 +758,95 @@ function showCategories(args){
       li.innerHTML += `
       <div class="d-flex flex-row justify-content-between dropdown-item">
       <label class="form-check-label text-wrap" for="s${cat.name}">${String(cat.name).replaceAll("_", " ")} (${cat.count})</label>
-      <input class="form-check-input float-right" type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${cat.id ? cat.id : cat.name}"/>
+      <input class="form-check-input float-right" type="checkbox" ${checked? "checked='checked'" : ""} id="s${cat.name}" name="${args[2]}" value="${value}"/>
       </div>`
       tempHolder.appendChild(li);
    }
    resultHolder.innerHTML = "";
    resultHolder.appendChild(tempHolder);
    for(let elem of resultHolder.children){
-      elem.addEventListener("click", function(){
+      elem = elem.firstElementChild.lastElementChild;
+      elem.addEventListener("change", function(){
          currentPage = 1;
+         saveValueOfFilter([storeName]);
          loadMore();
       });
    }
+}
+
+function saveValueOfSort(args){
+   let storeName = args[0];
+   localStorage.removeItem(storeName);
+   addToLocalStorage([storeName, currentSort, true, false]);
+}
+
+function saveValueOfFilter(args){
+   console.log("Here");
+   let storeName = args[0];
+   let elems = document.getElementsByName(storeName);
+   localStorage.removeItem(storeName);
+   let exists = false;
+   for(let elem of elems){
+      if(elem.checked){
+         addToLocalStorage([storeName, elem.value, true, true]);
+         exists = true;
+      }
+   }
+   if(!exists){
+      localStorage.removeItem(storeName);
+   }
+}
+
+function addToLocalStorage(args){
+   let storeName = args[0];
+   let value = args[1];
+   let alreadyFiltered = args[2];
+   let numeric = args[3];
+   let arrayFromLocalStorage = getFromLocalStorage([storeName]);
+   if(numeric) value = parseInt(value);
+   if(alreadyFiltered){
+      addAlreadyFiltered();
+   }
+   else{
+      addIfNotThereElseRemove();
+   }
+   //Removes items if clicked twice
+   function addIfNotThereElseRemove(){
+      if(arrayFromLocalStorage == null){
+         let arrayOfFavorites = new Array();
+         arrayOfFavorites.push(value);
+         saveToLocalStorage(arrayOfFavorites, [storeName]);
+         return;
+      }
+      if(arrayFromLocalStorage.includes(value)){
+         arrayFromLocalStorage = arrayFromLocalStorage.filter(x => x != value);
+         if(arrayFromLocalStorage.length == 0){
+            localStorage.removeItem(storeName);
+            return;
+         }
+         saveToLocalStorage(arrayFromLocalStorage, [storeName]);
+         return;
+      }
+      arrayFromLocalStorage.push(value);
+      saveToLocalStorage(arrayFromLocalStorage, [storeName]);
+      return;
+   }
+   //Doesn't remove items, doesn't add copies
+   function addAlreadyFiltered(){
+      if(arrayFromLocalStorage == null){
+         let arrayOfFavorites = new Array();
+         arrayOfFavorites.push(value);
+         saveToLocalStorage(arrayOfFavorites, [storeName]);
+         return;
+      }
+      if(arrayFromLocalStorage.includes(value)){;
+         return;
+      }
+      arrayFromLocalStorage.push(value);
+      saveToLocalStorage(arrayFromLocalStorage, [storeName]);
+      return;
+   }
+   
 }
 
 function initializeBooks(data){
@@ -787,6 +883,10 @@ function initializeBooks(data){
       countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
    }
    if(sPage == "knjige.html"){
+      let localSort = getFromLocalStorage(["sacuvanSort"]);
+      if(localSort) {
+         currentSort = localSort[0];
+      };
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       let searchButton = document.querySelector("#submitSearch");
@@ -797,25 +897,46 @@ function initializeBooks(data){
          currentPage = 1;
          loadMore();
       })
-      showSortOptions([sortHolder, ["Preporučeno", "Najnovije", "Najstarije"]])
+      generateAllFilters([searchBoxes, books]);
+      showSortOptions([sortHolder, sortOptions])
+      let urlFilter = false;
       //If the category paramater is set, filter the books by category, else show all books
-      loadMore();
       if(urlParams.has('kategorija')){
+         urlFilter = true;
          let kategorija = urlParams.get('kategorija')
-         console.log(kategorija);
+         clearAllFilters();
+         generateAllFilters([searchBoxes, books]);
          automaticallyCheckValue(["Kategorije", kategorija]);
          loadMore();
+         return;
       }
       if(urlParams.has('autor')){
+         urlFilter = true;
          let autor = urlParams.get('autor');
-         console.log(autor);
+         clearAllFilters();
+         generateAllFilters([searchBoxes, books]);
          automaticallyCheckValue(["Autori", autor])
          loadMore();
+         return;
       }
       if(urlParams.has('godina')){
+         urlFilter = true;
          let year = urlParams.get('godina');
+         clearAllFilters();
+         generateAllFilters([searchBoxes, books]);
          automaticallyCheckValue(["Godine", year]);
          loadMore();
+         return;
+      }
+      if(!urlFilter){
+         loadMore();
+         generateAllFilters([searchBoxes, books]);
+      }
+      function clearAllFilters(){
+         for(let sb of searchBoxes){
+            console.log(sb.title);
+            localStorage.removeItem(sb.title);
+         }
       }
    }
    if(sPage == "knjiga.html"){
@@ -828,6 +949,14 @@ function initializeBooks(data){
       document.title = currentBook.name.replaceAll("_", " ");
       document.querySelector("#book-title").innerHTML = currentBook.name.replaceAll("_", " ");
       document.querySelector('#book-description').innerHTML = currentBook.description;
+      var iconHolder = document.querySelector(".mk-favorite-icon-holder");
+      iconHolder.dataset.id = currentBook.id;
+      iconHolder.addEventListener("click", function(event){
+         event.preventDefault();
+         addToFavorite(iconHolder);
+         displayNumberOFavorites(['favoriti', '#Favoriti'])
+      });
+      document.querySelector(".mk-favorite-icon").dataset.icon = currentBook.favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline";
       setLinkValue("#author-link","autor", currentBook.author.name, currentBook.author.name.replaceAll("_", " "));
       setLinkValue("#category-link","kategorija", currentBook.category.name, currentBook.category.name.replaceAll("_", " "))
       setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
@@ -843,9 +972,7 @@ function automaticallyCheckValue(args){
    let search = args[0];
    let value = args[1];
    let elements = document.getElementsByName(search)
-   console.log(elements);
    for(let ele of elements){
-      console.log(ele.id.toLowerCase() == "s" + value.toLowerCase());
       if(ele.id.toLowerCase() == "s" + value.toLowerCase()){
          ele.checked = true;
          return;
