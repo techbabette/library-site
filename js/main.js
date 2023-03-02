@@ -190,11 +190,15 @@ function fillBooks(elementList, holder){
       if(element.hasAttribute('listener')) continue;
       element.addEventListener("click", function(event){
          event.preventDefault();
-         addToFavorite(element);
-         displayNumberOFavorites(['favoriti', '#Favoriti'])
+         eventAddToFavorite(element);
       });
       element.setAttribute('listener', true);
    }
+}
+
+function eventAddToFavorite(element){
+   addToFavorite(element);
+   displayNumberOFavorites(['favoriti', '#Favoriti'])
 }
 
 function displayNumberOFavorites(args){
@@ -616,7 +620,7 @@ function bookToElement(currentBook){
    <div class="position-relative">
    <a href=${href}><img src="${mainPage ? "" : "../"}imgs/${currentBook.name.toLowerCase()}.jpg" alt="${currentBook.name.replaceAll('_', ' ')}" class="card-img-top book-prev img-fluid" alt="..."></a>
    <a href="#" data-id="${currentBook.id}" class="mk-favorite-icon-holder">
-   <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline"}"style="color: red;">Heart</span>
+   <span class="iconify mk-favorite-icon" data-icon="${favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline"}">Heart</span>
    </a>`
    wrapper.innerHTML = `
    <div class="card book mk-card-limit">
@@ -953,10 +957,12 @@ function initializeBooks(data){
       iconHolder.dataset.id = currentBook.id;
       iconHolder.addEventListener("click", function(event){
          event.preventDefault();
-         addToFavorite(iconHolder);
-         displayNumberOFavorites(['favoriti', '#Favoriti'])
+         eventAddToFavorite(iconHolder);
       });
-      document.querySelector(".mk-favorite-icon").dataset.icon = currentBook.favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline";
+      var favorite;
+      var favorites = getFromLocalStorage(["favoriti"]);
+      favorite = favorites.includes(currentBook.id);
+      document.querySelector(".mk-favorite-icon").dataset.icon = favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline";
       setLinkValue("#author-link","autor", currentBook.author.name, currentBook.author.name.replaceAll("_", " "));
       setLinkValue("#category-link","kategorija", currentBook.category.name, currentBook.category.name.replaceAll("_", " "))
       setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));

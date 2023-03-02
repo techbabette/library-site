@@ -118,7 +118,12 @@ a.active{
   top: 20px;
   right: 10px;
   background-color: white;
+  padding: 4px;
+  color: red !important;
   border-radius : 50%;
+}
+.mk-favorite-icon-holder:hover{
+  color: red !important;
 }
 .mk-favorite-icon-holder:hover{
   scale: 1.10;
