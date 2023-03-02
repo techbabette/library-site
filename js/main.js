@@ -375,7 +375,12 @@ function generateBooks(args){
          }
       }
       if(filteredBooks.length < 1){
+         console.log("here");
          displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
+         if(paginate){
+            fillPageButtons(0, searchable);
+         };
+         return;
       }
       if(!searchAtAll){
          generateAllFilters([searchBoxes, filteredBooks]);
