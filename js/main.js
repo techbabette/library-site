@@ -4,7 +4,7 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var favoritesOnly = false;
 const JSONPATH = "assets/"
 let books = new Array();
-let sortOptions = ["Najdostupnije", "Najnovije", "Najstarije"];
+let sortOptions = ["Po nazivu (od a)","Po nazivu (od z)", "Najnovije", "Najstarije"];
 let currentSort = sortOptions[0];
 let searchBoxes = new Array(
    {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
@@ -376,7 +376,6 @@ function generateBooks(args){
       }
       if(filteredBooks.length < 1){
          displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
-         return true;
       }
       if(!searchAtAll){
          generateAllFilters([searchBoxes, filteredBooks]);
@@ -701,15 +700,16 @@ function showSortOptions(args){
    let active;
    for(let opt of args[1]){
       let li = document.createElement("li");
-      let dataName = opt.replaceAll(" ", "_");
+      let replaceRegex = new RegExp(/[()]/, "g");
+      let dataName = sanitizeForIdentifier(opt)
       active = dataName == currentSort;
       li.innerHTML = `
       <div class="d-flex flex-row justify-content-between dropdown-item">
-      <a id="${opt.replaceAll(" ", "_")}" class="w-100 ${active ? "active" : ""}" data-sort="${dataName}" href="#">${opt}</a>
+      <a id="${dataName}" class="w-100 ${active ? "active" : ""}" data-sort="${dataName}" href="#">${opt}</a>
       </div>
       `
       resultHolder.appendChild(li);
-      document.querySelector(`#${opt.replaceAll(" ", "_")}`).addEventListener("click", function(){
+      document.querySelector(`#${dataName}`).addEventListener("click", function(){
          currentSort = this.dataset.sort;
          currentPage = 1;
          showSortOptions([sortHolder, sortOptions]);
@@ -719,24 +719,37 @@ function showSortOptions(args){
    }
 }
 
+function sanitizeForIdentifier(string){
+   let replaceRegex = new RegExp(/[()]/, "g");
+   string = string.replaceAll(" ", "_").replaceAll(replaceRegex, "");
+   return string
+}
+
 function sort(args){
    let booksToSort = args[0];
    let sortType = args[1];
-   if(sortType == "Najdostupnije"){
-      return booksToSort.sort((a,b) => {
-         return b.copies - a.copies;
-      })
+   console.log(sortType);
+   if(sortType == sanitizeForIdentifier(sortOptions[0])){
+      return booksToSort.sort((a,b) => 
+         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+      )
    }
-   if(sortType == "Najnovije"){
+   if(sortType == sanitizeForIdentifier(sortOptions[1])){
+      return booksToSort.sort((b,a) =>          
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+      )
+   }
+   if(sortType == sanitizeForIdentifier(sortOptions[2])){
       return booksToSort.sort((a,b) => {
          return b.releaseDate - a.releaseDate;
       })
    }
-   if(sortType == "Najstarije"){
+   if(sortType == sanitizeForIdentifier(sortOptions[3])){
       return booksToSort.sort((a,b) => {
          return a.releaseDate - b.releaseDate;
       })
    }
+   console.log("Here");
    return booksToSort;
 }
 
