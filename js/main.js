@@ -5,7 +5,7 @@ var favoritesOnly = false;
 const JSONPATH = "assets/"
 let books = new Array();
 let sortOptions = ["Po nazivu (od a)","Po nazivu (od z)", "Najnovije", "Najstarije"];
-let currentSort = sortOptions[0];
+let currentSort = sanitizeForIdentifier(sortOptions[0]);
 let searchBoxes = new Array(
    {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
    {"title" : "Autori", "prop" : "author", "complex" : true, "holder" : "authorHolder"},
