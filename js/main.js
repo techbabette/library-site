@@ -972,7 +972,9 @@ function initializeBooks(data){
       });
       var favorite;
       var favorites = getFromLocalStorage(["favoriti"]);
-      favorite = favorites.includes(currentBook.id);
+      if(favorites != null){
+         favorite = favorites.includes(currentBook.id);
+      }
       document.querySelector(".mk-favorite-icon").dataset.icon = favorite ? "mdi:cards-heart" : "mdi:cards-heart-outline";
       setLinkValue("#author-link","autor", currentBook.author.name, currentBook.author.name.replaceAll("_", " "));
       setLinkValue("#category-link","kategorija", currentBook.category.name, currentBook.category.name.replaceAll("_", " "))
