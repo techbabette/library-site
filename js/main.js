@@ -315,6 +315,7 @@ function generateBooks(args){
       textToSearch = textSearch.value.toLowerCase();      
    }
    if(searchable){
+      let searchAtAll = false;
       for(let search of searchBoxes){
          let categorySearchBoxes = document.getElementsByName(search.title);
          let acceptedCategories = new Array();
@@ -322,6 +323,7 @@ function generateBooks(args){
             if(catBox.checked){
                acceptedCategories.push(parseInt(catBox.value));
                search.active = true;
+               searchAtAll = true;
             }
          }
          if(acceptedCategories.length > 0){
@@ -331,28 +333,26 @@ function generateBooks(args){
             else{
                filteredBooks = filteredBooks.filter(b => acceptedCategories.some(c => b[search.prop] == c));
             }
-         }
-      }
-      let searchAtAll = false;
-      if(textToSearch){
-         searchAtAll = true;
-         filteredBooks = filteredBooks.filter(b => b.name.toLowerCase().includes(textToSearch));
-         generateAllFilters([searchBoxes, filteredBooks]);
-      }
-      else{
-         for(let search of searchBoxes){
-            if(search.active){
-               searchAtAll = true;
-               for(let searchY of searchBoxes){
+            for(let searchY of searchBoxes){
+               if(search.active == true){
                   if(searchY != search){
+                     console.log(searchY.title + ` ${search.title}`);
                      let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
                      let propertyHolder = document.getElementById(searchY.holder);
                      showCategories([propertyHolder, properties, searchY.title]);
                   }
                }
-               saveValueOfFilter([search.title]);
             }
          }
+         saveValueOfFilter([search.title]);
+      }
+      let textSearch = false; 
+      if(textToSearch){
+         textSearch = true;
+         filteredBooks = filteredBooks.filter(b => b.name.toLowerCase().includes(textToSearch));
+      }
+      if(!searchAtAll || textSearch){
+         generateAllFilters([searchBoxes, filteredBooks]);
       }
       if(filteredBooks.length < 1){
          displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
@@ -360,9 +360,6 @@ function generateBooks(args){
             fillPageButtons(0, searchable);
          };
          return;
-      }
-      if(!searchAtAll){
-         generateAllFilters([searchBoxes, filteredBooks]);
       }
       filteredBooks = sort([filteredBooks, currentSort]);
    }
@@ -422,6 +419,7 @@ function setLinkValue(selector,filter, href, text)
 }
 function loadMore(searchable = true){
    let holder = document.querySelector("#event-div")
+   console.log("Book creation called");
    generateBooks([books, holder, true, searchable]);
 }
 let addressBool;
@@ -711,7 +709,6 @@ function sanitizeForIdentifier(string){
 function sort(args){
    let booksToSort = args[0];
    let sortType = args[1];
-   console.log(sortType);
    if(sortType == sanitizeForIdentifier(sortOptions[0])){
       return sortBooksByPopularity([booksToSort, ["desc"]]);
    }
@@ -745,6 +742,7 @@ function showCategories(args){
    let resultHolder = args[0];
    let storeName = args[2];
    let currentlySelected = getFromLocalStorage([storeName]);
+   console.log(storeName + " regenerated");
    tempHolder = document.createDocumentFragment();
    for(let cat of args[1]){
       let checked;
@@ -856,7 +854,6 @@ function addToLocalStorage(args){
 function initializeBooks(data){
    books = data;
    popularBooks = sortBooksByPopularity([books, "desc"]);
-   console.log(popularBooks);
    if(mainPage){
       let timeToLoad = 2500;
       $("#moveLeftButton").click(function(event){
@@ -942,7 +939,6 @@ function initializeBooks(data){
       }
       function clearAllFilters(){
          for(let sb of searchBoxes){
-            console.log(sb.title);
             localStorage.removeItem(sb.title);
          }
       }
@@ -1016,6 +1012,5 @@ function sortBooksByPopularity(args){
    let booksToReturn = arrayOfBooks.sort((a,b) => {
       return (a.timeLoaned - b.timeLoaned) * helperVariable;
    })
-   console.log(booksToReturn);
    return booksToReturn;
 }
