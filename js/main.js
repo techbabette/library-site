@@ -231,26 +231,6 @@ function addToFavorite(element){
    }
    //Kod za dodavanje u local storage
    addToLocalStorage(["favoriti", idOfBookFavorited, false, true]);
-   // let arrayFromLocalStorage = getFromLocalStorage(['favoriti']);
-   // idOfBookFavorited = parseInt(idOfBookFavorited);
-   // if(arrayFromLocalStorage == null){
-   //    let arrayOfFavorites = new Array();
-   //    arrayOfFavorites.push(idOfBookFavorited);
-   //    saveToLocalStorage(arrayOfFavorites, ["favoriti"]);
-   //    return;
-   // }
-   // if(arrayFromLocalStorage.includes(idOfBookFavorited)){
-   //    arrayFromLocalStorage = arrayFromLocalStorage.filter(x => x != idOfBookFavorited);
-   //    if(arrayFromLocalStorage.length == 0){
-   //       localStorage.removeItem('favoriti');
-   //       return;
-   //    }
-   //    saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
-   //    return;
-   // }
-   // arrayFromLocalStorage.push(idOfBookFavorited);
-   // saveToLocalStorage(arrayFromLocalStorage, ["favoriti"]);
-   // return;
 }
 
 function generateUrl(object, redirect = ""){
@@ -375,7 +355,6 @@ function generateBooks(args){
          }
       }
       if(filteredBooks.length < 1){
-         console.log("here");
          displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
          if(paginate){
             fillPageButtons(0, searchable);
@@ -705,7 +684,6 @@ function showSortOptions(args){
    let active;
    for(let opt of args[1]){
       let li = document.createElement("li");
-      let replaceRegex = new RegExp(/[()]/, "g");
       let dataName = sanitizeForIdentifier(opt)
       active = dataName == currentSort;
       li.innerHTML = `
@@ -760,7 +738,6 @@ function sort(args){
          return a.releaseDate - b.releaseDate;
       })
    }
-   console.log("Here");
    return booksToSort;
 }
 
