@@ -250,6 +250,7 @@ a.active{
   border-radius: 1.5%;
   text-align: center;
   width: 100%;
+  margin-top: 2%;
 }
 .book-prev{
   border: 1px solid #f7bd2f;

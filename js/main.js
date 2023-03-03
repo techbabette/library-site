@@ -4,7 +4,7 @@ var sPage = sPath.substring(sPath.lastIndexOf('/') + 1);
 var favoritesOnly = false;
 const JSONPATH = "assets/"
 let books = new Array();
-let sortOptions = ["Po nazivu (od a)","Po nazivu (od z)", "Najnovije", "Najstarije"];
+let sortOptions = ["Najpopularnije","Najmanje popularno","Po nazivu (od a)","Po nazivu (od z)", "Najnovije", "Najstarije"];
 let currentSort = sanitizeForIdentifier(sortOptions[0]);
 let searchBoxes = new Array(
    {"title" : "Kategorije", "prop" : "category", "complex" : true, "holder" : "categoryHolder"},
@@ -108,7 +108,7 @@ function getFromLocalStorage(args){
 function callback(file, handler, args = [], asynchronicity = true){
    let request = createRequest();
    request.onreadystatechange = function(){
-      if(request.readyState == 4){
+      if(request.readyState == 4 && request.status >= 200 && request.status < 300){
          if(args == []){
             handler(JSON.parse(this.responseText));
          }
@@ -644,7 +644,7 @@ function bookToElement(currentBook){
    return wrapper;
 }
 let bookId = 0;
-function moveBooks(holder, direction){
+function moveBooks(books, holder, direction){
    holder.innerHTML = '';
    let elementList = new Array()
    if(direction === 1){
@@ -735,21 +735,27 @@ function sort(args){
    let sortType = args[1];
    console.log(sortType);
    if(sortType == sanitizeForIdentifier(sortOptions[0])){
+      return sortBooksByPopularity([booksToSort, ["desc"]]);
+   }
+   if(sortType == sanitizeForIdentifier(sortOptions[1])){
+      return sortBooksByPopularity([booksToSort, ["asc"]]);
+   }
+   if(sortType == sanitizeForIdentifier(sortOptions[2])){
       return booksToSort.sort((a,b) => 
          a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
    }
-   if(sortType == sanitizeForIdentifier(sortOptions[1])){
+   if(sortType == sanitizeForIdentifier(sortOptions[3])){
       return booksToSort.sort((b,a) =>          
       a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
    }
-   if(sortType == sanitizeForIdentifier(sortOptions[2])){
+   if(sortType == sanitizeForIdentifier(sortOptions[4])){
       return booksToSort.sort((a,b) => {
          return b.releaseDate - a.releaseDate;
       })
    }
-   if(sortType == sanitizeForIdentifier(sortOptions[3])){
+   if(sortType == sanitizeForIdentifier(sortOptions[5])){
       return booksToSort.sort((a,b) => {
          return a.releaseDate - b.releaseDate;
       })
@@ -872,18 +878,20 @@ function addToLocalStorage(args){
 
 function initializeBooks(data){
    books = data;
+   popularBooks = sortBooksByPopularity([books, "desc"]);
+   console.log(popularBooks);
    if(mainPage){
       let timeToLoad = 2500;
       $("#moveLeftButton").click(function(event){
          event.preventDefault(); 
-         moveBooks(popularHolder, -1);
+         moveBooks(popularBooks, popularHolder, -1);
       });
       $("#moveRightButton").click(function(event){
          event.preventDefault();
-         moveBooks(popularHolder, 1);
+         moveBooks(popularBooks, popularHolder, 1);
       })
       let popularHolder = document.querySelector("#pop")
-      generateBooks([books, popularHolder, false, false]);
+      generateBooks([popularBooks, popularHolder, false, false]);
       recentHolder = document.querySelector("#rec")
       let copyOfBooks = [...books];
       sortedByDate = books.sort(function(a ,b){
@@ -896,12 +904,14 @@ function initializeBooks(data){
          else return 0;
       })
       books = copyOfBooks;
+      let numberOfLentBooks = 0;
+      books.forEach(el => numberOfLentBooks += el.timeLoaned);
       generateBooks([sortedByDate, recentHolder, false, false]);
       countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
       countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
       countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
-      countTo(document.querySelector("#leNum"), 0, 131, timeToLoad);
-      countTo(document.querySelector("#leNum"), 131, 1000, 7000000);
+      countTo(document.querySelector("#leNum"), 0, numberOfLentBooks, timeToLoad);
+      countTo(document.querySelector("#leNum"), numberOfLentBooks, 1000, 7000000);
    }
    if(sPage == "knjige.html"){
       let localSort = getFromLocalStorage(["sacuvanSort"]);
@@ -987,9 +997,14 @@ function initializeBooks(data){
       let relatedHolder = document.querySelector("#relatedBooks");
       relatedHolder.style.visibility = currentBook.relatedBooks.length > 0;
       let relatedBookHolder = document.querySelector("#event-div");
-      let bookList = findBooksFromId([currentBook.relatedBooks]);
-      console.log(bookList);
-      generateBooks([bookList, relatedBookHolder, false, false]);
+      document.querySelector("#loaned-field").innerText = `Pozajmljena ${currentBook.timeLoaned} ${currentBook.timeLoaned != 1 ? "puta" : "put"}`
+      if(currentBook.relatedBooks.length > 0){
+         let bookList = findBooksFromId([currentBook.relatedBooks]);
+         generateBooks([bookList, relatedBookHolder, false, false]);
+      }
+      else{
+         relatedHolder.classList.add("hidden");
+      }
    }
    if(sPage == "favoriti.html"){
       favoritesOnly = true;
@@ -1011,8 +1026,19 @@ function automaticallyCheckValue(args){
 
 function findBooksFromId(args){
    let arrayOfIds = args[0];
-   console.log(arrayOfIds);
    let bookList = new Array();
    bookList = books.filter(b => arrayOfIds.includes(b.id));
    return bookList;
+}
+
+function sortBooksByPopularity(args){
+   let arrayOfBooks = args[0];
+   let direction = args[1];
+   let helperVariable = -1;
+   if (direction == "asc") helperVariable = 1;
+   let booksToReturn = arrayOfBooks.sort((a,b) => {
+      return (a.timeLoaned - b.timeLoaned) * helperVariable;
+   })
+   console.log(booksToReturn);
+   return booksToReturn;
 }
