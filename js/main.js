@@ -375,6 +375,7 @@ function generateBooks(args){
    }
    filteredBooks = sort([filteredBooks, currentSort]);
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
+   if(numberOfPages == 1) currentPage = 1;
    for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
       if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
       if(booksLoaded== filteredBooks.length - 1){returnCode = true;}
@@ -391,7 +392,6 @@ function generateBooks(args){
 function generateAllFilters(args){
    let searchBoxes = args[0];
    let filteredBooks = args[1];
-   console.log(filteredBooks);
    for(let searchY of searchBoxes){
       let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
       let propertyHolder = document.getElementById(searchY.holder);
@@ -753,7 +753,6 @@ function showCategories(args){
    let resultHolder = args[0];
    let storeName = args[2];
    let currentlySelected = getFromLocalStorage([storeName]);
-   console.log(currentlySelected)
    tempHolder = document.createDocumentFragment();
    for(let cat of args[1]){
       let checked;
