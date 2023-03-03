@@ -354,6 +354,7 @@ function generateBooks(args){
          numberOfSearchFactors++;
          filteredBooks = filteredBooks.filter(b => b.name.toLowerCase().includes(textToSearch));
       }
+
       if(numberOfSearchFactors < 2){
          generateAllFilters([activeSearches, books]);
       }
@@ -780,6 +781,7 @@ function showCategories(args){
       elem.addEventListener("change", function(){
          currentPage = 1;
          saveValueOfFilter([storeName]);
+         loadMore();
       });
    }
 }
@@ -907,6 +909,7 @@ function initializeBooks(data){
       let sortHolder = document.querySelector("#sortHolder");
       textSearch.addEventListener("input", function(){
          currentPage = 1;
+         loadMore();
       })
       generateAllFilters([searchBoxes, books]);
       showSortOptions([sortHolder, sortOptions])
