@@ -309,14 +309,14 @@ function generateBooks(args){
          return true;
       }
    }
-   let textSearch = document.querySelector("#textSearch");
-   let textToSearch 
-   if(textSearch != null){
-      textToSearch = textSearch.value.toLowerCase();      
-   }
    if(searchable){
       let numberOfSearchFactors = 0;
       let activeSearches = new Array();
+      let textSearch = document.querySelector("#textSearch");
+      let textToSearch 
+      if(textSearch != null){
+         textToSearch = textSearch.value.toLowerCase();      
+      }
       for(let search of searchBoxes){
          search.active = false;
          let categorySearchBoxes = document.getElementsByName(search.title);
@@ -358,7 +358,7 @@ function generateBooks(args){
       if(numberOfSearchFactors < 2){
          generateAllFilters([activeSearches, books]);
       }
-      if(numberOfSearchFactors >= 2){
+      if(numberOfSearchFactors >= 2 || textToSearch){
          generateAllFilters([searchBoxes, filteredBooks]);
       }
       if(numberOfSearchFactors == 0){
