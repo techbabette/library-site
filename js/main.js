@@ -315,16 +315,21 @@ function generateBooks(args){
       textToSearch = textSearch.value.toLowerCase();      
    }
    if(searchable){
-      let searchAtAll = false;
+      let numberOfSearchFactors = 0;
+      let activeSearches = new Array();
       for(let search of searchBoxes){
+         search.active = false;
          let categorySearchBoxes = document.getElementsByName(search.title);
          let acceptedCategories = new Array();
          for(let catBox of categorySearchBoxes){
             if(catBox.checked){
                acceptedCategories.push(parseInt(catBox.value));
                search.active = true;
-               searchAtAll = true;
             }
+         }
+         if(search.active) {
+            activeSearches.push(search);
+            numberOfSearchFactors++;
          }
          if(acceptedCategories.length > 0){
             if(search.complex){
@@ -335,8 +340,7 @@ function generateBooks(args){
             }
             for(let searchY of searchBoxes){
                if(search.active == true){
-                  if(searchY != search){
-                     console.log(searchY.title + ` ${search.title}`);
+                  if(searchY.title != search.title){
                      let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
                      let propertyHolder = document.getElementById(searchY.holder);
                      showCategories([propertyHolder, properties, searchY.title]);
@@ -346,14 +350,20 @@ function generateBooks(args){
          }
          saveValueOfFilter([search.title]);
       }
-      let textSearch = false; 
       if(textToSearch){
-         textSearch = true;
+         numberOfSearchFactors++;
          filteredBooks = filteredBooks.filter(b => b.name.toLowerCase().includes(textToSearch));
       }
-      if(!searchAtAll || textSearch){
+      if(numberOfSearchFactors < 2){
+         generateAllFilters([activeSearches, books]);
+      }
+      else{
          generateAllFilters([searchBoxes, filteredBooks]);
       }
+      if(numberOfSearchFactors == 0){
+         generateAllFilters([searchBoxes, books]);
+      }
+
       if(filteredBooks.length < 1){
          displayNoBooksFitYourParamaters([columns, "Ni jedna knjiga ne odgovara pretrazi"]);
          if(paginate){
@@ -361,8 +371,8 @@ function generateBooks(args){
          };
          return;
       }
-      filteredBooks = sort([filteredBooks, currentSort]);
    }
+   filteredBooks = sort([filteredBooks, currentSort]);
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
    for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
       if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
@@ -419,7 +429,6 @@ function setLinkValue(selector,filter, href, text)
 }
 function loadMore(searchable = true){
    let holder = document.querySelector("#event-div")
-   console.log("Book creation called");
    generateBooks([books, holder, true, searchable]);
 }
 let addressBool;
@@ -742,7 +751,6 @@ function showCategories(args){
    let resultHolder = args[0];
    let storeName = args[2];
    let currentlySelected = getFromLocalStorage([storeName]);
-   console.log(storeName + " regenerated");
    tempHolder = document.createDocumentFragment();
    for(let cat of args[1]){
       let checked;
@@ -772,7 +780,6 @@ function showCategories(args){
       elem.addEventListener("change", function(){
          currentPage = 1;
          saveValueOfFilter([storeName]);
-         loadMore();
       });
    }
 }
@@ -900,7 +907,6 @@ function initializeBooks(data){
       let sortHolder = document.querySelector("#sortHolder");
       textSearch.addEventListener("input", function(){
          currentPage = 1;
-         loadMore();
       })
       generateAllFilters([searchBoxes, books]);
       showSortOptions([sortHolder, sortOptions])
@@ -935,7 +941,6 @@ function initializeBooks(data){
       }
       if(!urlFilter){
          loadMore();
-         generateAllFilters([searchBoxes, books]);
       }
       function clearAllFilters(){
          for(let sb of searchBoxes){
