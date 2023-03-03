@@ -358,7 +358,7 @@ function generateBooks(args){
       if(numberOfSearchFactors < 2){
          generateAllFilters([activeSearches, books]);
       }
-      else{
+      if(numberOfSearchFactors >= 2){
          generateAllFilters([searchBoxes, filteredBooks]);
       }
       if(numberOfSearchFactors == 0){
@@ -391,6 +391,7 @@ function generateBooks(args){
 function generateAllFilters(args){
    let searchBoxes = args[0];
    let filteredBooks = args[1];
+   console.log(filteredBooks);
    for(let searchY of searchBoxes){
       let properties = getPropertiesFromBooks([searchY.prop, searchY.complex, filteredBooks]);
       let propertyHolder = document.getElementById(searchY.holder);
@@ -752,6 +753,7 @@ function showCategories(args){
    let resultHolder = args[0];
    let storeName = args[2];
    let currentlySelected = getFromLocalStorage([storeName]);
+   console.log(currentlySelected)
    tempHolder = document.createDocumentFragment();
    for(let cat of args[1]){
       let checked;
@@ -761,10 +763,6 @@ function showCategories(args){
             currentPage = 1;
             checked = true
          };
-      }
-      var element = document.querySelector(`#s${cat.name}`)
-      if(element != null){
-         checked = element.checked;
       }
       let li = document.createElement("li")
       li.innerHTML += `
@@ -903,8 +901,13 @@ function initializeBooks(data){
       };
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      let searchButton = document.querySelector("#submitSearch");
-      searchButton.addEventListener("click", loadMore);
+      let resetFilterButton = document.querySelector("#resetFilterButton");
+      resetFilterButton.addEventListener("click", function () {
+         currentPage = 1;
+         clearAllFilters();
+         generateAllFilters([searchBoxes, books]);
+         loadMore();
+      });
       let textSearch = document.querySelector("#textSearch");
       let sortHolder = document.querySelector("#sortHolder");
       textSearch.addEventListener("input", function(){

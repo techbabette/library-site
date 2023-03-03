@@ -183,11 +183,11 @@ a.active{
   background-color: #333333 !important;
   color: #f5af05 !important;
 }
-#submitSearch{
+#resetFilterButton{
   background-color: #f7bd2f;
   color: #333333 !important;
 }
-#submitSearch:hover{
+#resetFilterButton:hover{
   background-color: #f5af05;
 }
 .dropdown-menu{
