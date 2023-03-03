@@ -231,7 +231,8 @@ a.active{
   color: white !important;
   padding: 5px;
   width: 100%;
-  justify-content: space-around;
+  gap: 15px;
+  justify-content: center;
 }
 #loadMore a{
   padding: 20px;
@@ -252,15 +253,14 @@ a.active{
 }
 .book-prev{
   border: 1px solid #f7bd2f;
-}
-.book-height{
-  min-height: 10vh;
+  height: 300px;
 }
 .book-title{
   color: #f5af05;
+  min-height: 3rem;
 }
-.bookDescription{
-  min-height: 8vh;
+.book-desc{
+  min-height: 3rem;
 }
 .book-body{
   display: flex;
@@ -505,6 +505,9 @@ footer{
   }
   .dropdown-menu{
     padding: 0px;
+  }
+  #loadMore{
+    gap: 40px;
   }
 }
 @media screen and (min-width: 992px) {

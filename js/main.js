@@ -630,8 +630,8 @@ function bookToElement(currentBook){
    <div class="card book mk-card-limit">
    ${imgPart}
    <div class="card-body book-body">
-         <a href="${href}"> <h5 class="card-title book-height book-title">${currentBook.name.replaceAll("_", " ")}</h5> </a>
-         <p class="card-text book-height"><em>${bookDescription}</em></p>
+         <a href="${href}"> <h5 class="card-title book-title">${currentBook.name.replaceAll("_", " ")}</h5> </a>
+         <p class="card-text book-desc"><em>${bookDescription}</em></p>
          <p class="card-text mk-light-yellow">
          <a href="${mainPage ? "pages/" : ""}knjige.html?kategorija=${currentBook.category.name}"> ${currentBook.category.name.replaceAll("_", " ")} </a>
          </p>
@@ -984,6 +984,12 @@ function initializeBooks(data){
       setLinkValue("#category-link","kategorija", currentBook.category.name, currentBook.category.name.replaceAll("_", " "))
       setLinkValue("#date-link","godina", currentBook.releaseDate, negativeToBCE(currentBook.releaseDate));
       document.querySelector("#availability-field").innerHTML = "Broj kopija: " +currentBook.copies;
+      let relatedHolder = document.querySelector("#relatedBooks");
+      relatedHolder.style.visibility = currentBook.relatedBooks.length > 0;
+      let relatedBookHolder = document.querySelector("#event-div");
+      let bookList = findBooksFromId([currentBook.relatedBooks]);
+      console.log(bookList);
+      generateBooks([bookList, relatedBookHolder, false, false]);
    }
    if(sPage == "favoriti.html"){
       favoritesOnly = true;
@@ -1001,4 +1007,12 @@ function automaticallyCheckValue(args){
          return;
       }
    }
+}
+
+function findBooksFromId(args){
+   let arrayOfIds = args[0];
+   console.log(arrayOfIds);
+   let bookList = new Array();
+   bookList = books.filter(b => arrayOfIds.includes(b.id));
+   return bookList;
 }
