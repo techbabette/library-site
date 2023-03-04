@@ -312,6 +312,7 @@ function generateBooks(args){
       favorites = getFromLocalStorage(['favoriti']);
       if(favorites != null){
          filteredBooks = filteredBooks.filter(b => favorites.includes(b.id));
+         filteredBooks = sort([filteredBooks,  sortOptions[0]]);
       }
       else{
          displayNoBooksFitYourParamaters([columns, "Nemate sacuvanu ni jednu knjigu"]);
@@ -381,8 +382,8 @@ function generateBooks(args){
          };
          return;
       }
+      filteredBooks = sort([filteredBooks, currentSort]);
    }
-   filteredBooks = sort([filteredBooks, currentSort]);
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
    if(numberOfPages == 1) currentPage = 1;
    for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
