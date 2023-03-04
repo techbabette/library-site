@@ -12,9 +12,10 @@ let searchBoxes = new Array(
    {"title" : "Godine", "prop" : "releaseDate", "complex" : false, "holder" : "yearHolder"});
 let currentPage = 1;
 let perPage = 4;
+let currentYear = new Date().getFullYear();
 window.onload = function(){
   mainPage = sPage == "index.html" || sPage.length == 0 ? true : false;
-  callback("navbar.json", generateNavBar, ["#actual-navbar"]);
+  callback("navbar.json", generateNavBar, ["#actual-navbar", "#footer-title"]);
   callback("footer.json", generateFooter, ["icon-holder"])
   callback("books.json", initializeBooks);
   window.onscroll = function(){
@@ -291,6 +292,21 @@ function generateNavBar(objects, args){
    }
    holderElement.innerHTML = htmlContent;
    displayNumberOFavorites(['favoriti', '#Favoriti']);
+
+   generateFooterTitle();
+
+   function generateFooterTitle(){
+      let footerTitleHolder = document.querySelector(args[1]);
+      let firstObject = objects[0];
+      let linkWrap = document.createElement("a");
+      linkWrap.href = generateUrl(firstObject, 'pages/');
+      linkWrap.innerHTML = "&copy;";
+      linkWrap.innerHTML += currentYear + " ";
+      let header = document.createElement("h2");
+      header.textContent = firstObject.text;
+      linkWrap.appendChild(header);
+      footerTitleHolder.appendChild(linkWrap);
+   }
 }
 function generateFooter(objects, args){
    let columns = document.getElementsByClassName(args[0]);
@@ -899,7 +915,7 @@ function initializeBooks(data){
       generateBooks([sortedByDate, recentHolder, false, false]);
       countTo(document.querySelector("#titNum"), 0, books.length, timeToLoad);
       countTo(document.querySelector("#memNum"), 0, 75, timeToLoad);
-      countTo(document.querySelector("#yrNum"), 0, new Date().getFullYear() - 1930, timeToLoad);
+      countTo(document.querySelector("#yrNum"), 0, currentYear - 1930, timeToLoad);
       countTo(document.querySelector("#leNum"), 0, numberOfLentBooks, timeToLoad);
       countTo(document.querySelector("#leNum"), numberOfLentBooks, 1000, 7000000);
    }
