@@ -913,16 +913,24 @@ function initializeBooks(data){
       resetFilterButton.addEventListener("click", function () {
          currentPage = 1;
          clearAllFilters();
-         generateAllFilters([searchBoxes, books]);
          loadMore();
       });
       let textSearch = document.querySelector("#textSearch");
+      let savedTextSearch = localStorage.getItem("savedText");
+      if(savedTextSearch){
+         textSearch.text = savedTextSearch;
+      }
       let sortHolder = document.querySelector("#sortHolder");
       textSearch.addEventListener("input", function(){
          currentPage = 1;
+         if(textSearch.value.length > 0){
+            localStorage.setItem("savedText", textSearch.value);
+         }
+         else{
+            localStorage.removeItem("savedText");
+         }
          loadMore();
       })
-      generateAllFilters([searchBoxes, books]);
       showSortOptions([sortHolder, sortOptions])
       let urlFilter = false;
       //If the category paramater is set, filter the books by category, else show all books
@@ -930,7 +938,6 @@ function initializeBooks(data){
          urlFilter = true;
          let kategorija = urlParams.get('kategorija')
          clearAllFilters();
-         generateAllFilters([searchBoxes, books]);
          automaticallyCheckValue(["Kategorije", kategorija]);
          loadMore();
          return;
@@ -939,7 +946,6 @@ function initializeBooks(data){
          urlFilter = true;
          let autor = urlParams.get('autor');
          clearAllFilters();
-         generateAllFilters([searchBoxes, books]);
          automaticallyCheckValue(["Autori", autor])
          loadMore();
          return;
@@ -948,18 +954,20 @@ function initializeBooks(data){
          urlFilter = true;
          let year = urlParams.get('godina');
          clearAllFilters();
-         generateAllFilters([searchBoxes, books]);
          automaticallyCheckValue(["Godine", year]);
          loadMore();
          return;
       }
       if(!urlFilter){
+         generateAllFilters([searchBoxes, books]);
          loadMore();
       }
       function clearAllFilters(){
          for(let sb of searchBoxes){
             localStorage.removeItem(sb.title);
          }
+         localStorage.removeItem("savedText");
+         generateAllFilters([searchBoxes, books]);
       }
    }
    if(sPage == "knjiga.html"){
