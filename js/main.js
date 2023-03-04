@@ -108,12 +108,18 @@ function getFromLocalStorage(args){
 function callback(file, handler, args = [], asynchronicity = true){
    let request = createRequest();
    request.onreadystatechange = function(){
-      if(request.readyState == 4 && request.status >= 200 && request.status < 300){
-         if(args == []){
-            handler(JSON.parse(this.responseText));
+      if(request.readyState == 4){
+         if(request.status >= 200 && request.status < 300){
+            if(args == []){
+               handler(JSON.parse(this.responseText));
+            }
+            else{
+               handler(JSON.parse(this.responseText), args);
+            }
          }
-         else{
-            handler(JSON.parse(this.responseText), args);
+         else if(request.status >= 400 && request.status < 600){
+           let errorModal = $("#errorModal");
+            errorModal.show("fast");
          }
       }
    }
@@ -191,6 +197,9 @@ function fillBooks(elementList, holder){
       element.addEventListener("click", function(event){
          event.preventDefault();
          eventAddToFavorite(element);
+         if(favoritesOnly){
+            loadMore(false);
+         }
       });
       element.setAttribute('listener', true);
    }
