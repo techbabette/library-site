@@ -12,7 +12,7 @@ let searchBoxes = new Array(
    {"title" : "Godine", "prop" : "releaseDate", "complex" : false, "holder" : "yearHolder"});
 let currentPage = 1;
 let perPage = 4;
-let currentYear = new Date().getFullYear();
+const currentYear = new Date().getFullYear();
 window.onload = function(){
   mainPage = sPage == "index.html" || sPage.length == 0 ? true : false;
   callback("navbar.json", generateNavBar, ["#actual-navbar", "#footer-title"]);
@@ -120,7 +120,12 @@ function callback(file, handler, args = [], asynchronicity = true){
          }
          else if(request.status >= 400 && request.status < 600){
            let errorModal = $("#errorModal");
-            errorModal.show("fast");
+           let errorModalP = $("#error-content");
+           errorModalP.text("Dogodila se greška pri komunikaciji sa bazom");
+           errorModal.show("fast");
+           errorModal.click(function(){
+            errorModal.hide("fast");
+         })
          }
       }
    }
@@ -952,27 +957,15 @@ function initializeBooks(data){
       let urlFilter = false;
       //If the category paramater is set, filter the books by category, else show all books
       if(urlParams.has('kategorija')){
-         urlFilter = true;
-         let kategorija = urlParams.get('kategorija')
-         clearAllFilters();
-         automaticallyCheckValue(["Kategorije", kategorija]);
-         loadMore();
+         urlSearch(["Kategorije", "kategorija"]);
          return;
       }
       if(urlParams.has('autor')){
-         urlFilter = true;
-         let autor = urlParams.get('autor');
-         clearAllFilters();
-         automaticallyCheckValue(["Autori", autor])
-         loadMore();
+         urlSearch(["Autori", "autor"]);
          return;
       }
       if(urlParams.has('godina')){
-         urlFilter = true;
-         let year = urlParams.get('godina');
-         clearAllFilters();
-         automaticallyCheckValue(["Godine", year]);
-         loadMore();
+         urlSearch(["Godine", "godina"]);
          return;
       }
       if(!urlFilter){
@@ -985,6 +978,15 @@ function initializeBooks(data){
          }
          localStorage.removeItem("savedText");
          generateAllFilters([searchBoxes, books]);
+      }
+      function urlSearch(args){
+         let propertyToCheck = args[0];
+         let urlParamName = args[1];
+         urlFilter = true;
+         let propValue = urlParams.get(urlParamName);
+         clearAllFilters();
+         automaticallyCheckValue([propertyToCheck, propValue]);
+         loadMore();
       }
    }
    if(sPage == "knjiga.html"){

@@ -457,6 +457,9 @@ footer{
   align-items: center;
   text-align: center;
 }
+#error-content{
+  text-align: center;
+}
 @media screen and (min-width: 768px){
   .mk-full-page{
     padding: 0px;
