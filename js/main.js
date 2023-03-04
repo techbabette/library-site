@@ -207,7 +207,7 @@ function fillBooks(elementList, holder){
             loadMore(false);
          }
       });
-      element.setAttribute('listener', true);
+      element.setAttribute("listener", true);
    }
 }
 
@@ -237,11 +237,9 @@ function addToFavorite(element){
          var iconElement = iconHolder.firstElementChild;
          if(iconElement.dataset.icon == "mdi:cards-heart-outline"){
             iconElement.dataset.icon = "mdi:cards-heart";
-            element.setAttribute('favorite', true);
             continue;
          }
             iconElement.dataset.icon = "mdi:cards-heart-outline"
-            element.setAttribute('favorite', false);
       }
    }
    //Kod za dodavanje u local storage
@@ -1001,10 +999,13 @@ function initializeBooks(data){
       document.querySelector('#book-description').innerHTML = currentBook.description;
       var iconHolder = document.querySelector(".mk-favorite-icon-holder");
       iconHolder.dataset.id = currentBook.id;
-      iconHolder.addEventListener("click", function(event){
-         event.preventDefault();
-         eventAddToFavorite(iconHolder);
-      });
+      if(!iconHolder.hasAttribute("listener")){
+         iconHolder.addEventListener("click", function(event){
+            event.preventDefault();
+            eventAddToFavorite(iconHolder);
+         });
+         iconHolder.setAttribute("listener", "true");
+      }
       var favorite;
       var favorites = getFromLocalStorage(["favoriti"]);
       if(favorites != null){
