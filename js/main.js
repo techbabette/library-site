@@ -404,7 +404,6 @@ function generateBooks(args){
       filteredBooks = sort([filteredBooks, currentSort]);
    }
    numberOfPages = Math.ceil(filteredBooks.length / perPage);
-   if(numberOfPages == 1) currentPage = 1;
    for(let booksLoaded = (currentPage - 1) * perPage; booksLoaded<currentPage*perPage;booksLoaded++){
       if(booksLoaded>=filteredBooks.length){returnCode = true; break;}
       if(booksLoaded== filteredBooks.length - 1){returnCode = true;}
@@ -788,7 +787,6 @@ function showCategories(args){
       let value = cat.id ? cat.id : cat.name;
       if(currentlySelected != null){
          if(currentlySelected.includes(value)) {
-            currentPage = 1;
             checked = true
          };
       }
@@ -804,7 +802,7 @@ function showCategories(args){
    resultHolder.appendChild(tempHolder);
    for(let elem of resultHolder.children){
       elem = elem.firstElementChild.lastElementChild;
-      elem.addEventListener("change", function(){
+      elem.addEventListener("click", function(){
          currentPage = 1;
          saveValueOfFilter([storeName]);
          loadMore();
